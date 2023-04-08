@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 type BaseConnect = {
   id: number
   type: ConnectType
-  lastConnectAt: Date
+  lastConnectAt: Date | null
 };
 type ConnectType = 'amazon' | 'localfile';
 
@@ -39,8 +39,10 @@ export const useConnectsStore = defineStore('connects', {
       // Todo
     },
     fillSample () {
-      this.amazon.push({id:0, type:'amazon', lastConnectAt:new Date, userid:'user', password:'password'});
-      this.localfile.push({id:1, type:'localfile', lastConnectAt: new Date, path:'./'});
+      if (this.amazon.length == 0) {
+        this.amazon.push({id:0, type:'amazon', lastConnectAt:null, userid:'sample', password:'sample'});
+        this.localfile.push({id:1, type:'localfile', lastConnectAt:null, path:'./sample'});
+      }
     },
     addAmazon (setting:AmazonConnect) {
       // Todo
