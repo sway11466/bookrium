@@ -7,6 +7,7 @@
         <q-toolbar-title>
           bookrium
         </q-toolbar-title>
+        <q-btn dense flat round icon="menu" />
       </q-toolbar>
     </q-header>
 
