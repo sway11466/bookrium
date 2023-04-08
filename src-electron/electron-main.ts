@@ -1,6 +1,7 @@
-import { app, BrowserWindow, nativeTheme } from 'electron';
+import { app, BrowserWindow, nativeTheme, ipcMain, dialog } from 'electron';
 import path from 'path';
 import os from 'os';
+import useStore from 'electron-store';
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -61,3 +62,12 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+ipcMain.handle('saveConfig', (event, config) => {
+  const store = new useStore()
+  store.set('bookrium', config)
+})
+ipcMain.handle('loadConfig', (event, config) => {
+  const store = new useStore()
+  return store.get('bookrium')
+})

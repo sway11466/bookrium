@@ -27,3 +27,10 @@
  *   }
  * }
  */
+
+const { contextBridge, ipcRenderer } = require("electron");
+contextBridge.exposeInMainWorld('native', {
+    saveConfig: async (config:any) => await ipcRenderer.invoke('saveConfig', config),
+    loadConfig: async () => await ipcRenderer.invoke('loadConfig')
+  }
+)

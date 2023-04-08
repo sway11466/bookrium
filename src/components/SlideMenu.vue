@@ -58,7 +58,7 @@
       </q-item-section>
     </q-item>
 
-</q-list>
+  </q-list>
 </template>
 
 <script lang="ts">
