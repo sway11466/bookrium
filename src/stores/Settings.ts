@@ -2,13 +2,10 @@ import { defineStore } from 'pinia';
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
-    settingFilePath: './' as string
+    dataFolderPath: null
   }),
 
   getters: {
-    doubleCount (state) {
-      return state;
-    }
   },
 
   actions: {

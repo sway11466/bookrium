@@ -1,6 +1,7 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, dialog } from 'electron';
 import path from 'path';
 import os from 'os';
+import fs from 'fs';
 import useStore from 'electron-store';
 
 // needed in case process is undefined under Linux
@@ -66,8 +67,43 @@ app.on('activate', () => {
 ipcMain.handle('saveConfig', (event, config) => {
   const store = new useStore()
   store.set('bookrium', config)
-})
-ipcMain.handle('loadConfig', (event, config) => {
+});
+
+ipcMain.handle('loadConfig', (event) => {
   const store = new useStore()
   return store.get('bookrium')
-})
+});
+
+/**
+ * Get User App Data Folder Path.
+ * 
+ * @return user app data folfder path
+ * @see https://www.electronjs.org/docs/latest/api/app#appgetpathname
+ */
+ipcMain.handle('getUserAppDataFolder', async (event) => {
+  return app.getAppPath('appData ');
+});
+
+/**
+ * Show Folder Select Dialog.
+ * 
+ * @return canceled return true if dailog canceled.
+ * @return filePaths selected folder paths.
+ * @see https://www.electronjs.org/docs/latest/api/dialog
+ */
+ipcMain.handle('selectFolder', async (event) => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ['openDirectory'],
+  });
+  return { canceled, filePaths }
+});
+
+/**
+ * Save a JSON object to a File.
+ * 
+ * @param path 
+ * @param json
+ */
+ipcMain.handle('saveFile', async (event, path, json) => {
+  fs.writeFileSync(path, JSON.stringify(json));
+});
