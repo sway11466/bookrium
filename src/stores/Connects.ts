@@ -44,7 +44,7 @@ export const useConnectsStore = defineStore('connects', {
         this.localfile.push({id:1, type:'localfile', lastConnectAt:null, path:'./sample'});
       }
     },
-    addAmazon (setting:AmazonConnect) {
+    addAmazon () {
       // Todo
     },
     addLocalFile () {

@@ -6,6 +6,9 @@ export const useSettingsStore = defineStore('settings', {
   }),
 
   getters: {
+    doubleCount (state) {
+      return state;
+    }
   },
 
   actions: {

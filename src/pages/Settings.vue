@@ -25,23 +25,12 @@
 import { defineComponent } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
 
-function useTest() {
-  async function test() {
-    // await window.native.saveConfig({a: 'yes', b: 'no'});
-    // const message = await window.native.loadConfig();
-    // const hoge = await window.native.selectFolder();
-    // console.log(hoge)
-
-  }
-  return { test };
-}
-
 function functions() {
   async function selectDataFolderPath () {
     const { canceled, filePaths } = await window.native.selectFolder();
     if (canceled) { return }
     const settings = useSettingsStore();
-    settings.dataFolderPath = filePaths[0]
+    settings.dataFolderPath = filePaths[0];
   }
   return { selectDataFolderPath }
 }

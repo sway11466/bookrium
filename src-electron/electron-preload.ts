@@ -28,12 +28,16 @@
  * }
  */
 
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('native', {
-    saveConfig: async (config:any) => await ipcRenderer.invoke('saveConfig', config),
-    loadConfig: async () => await ipcRenderer.invoke('loadConfig'),
+    // ./modules/ls
     getUserAppDataFolder: async () => await ipcRenderer.invoke('getUserAppDataFolder'),
     selectFolder: async () => await ipcRenderer.invoke('selectFolder'),
-    saveFile: async (path:string, json:any) => await ipcRenderer.invoke('saveFile', path, json),
+    saveFile: async (path:string, json:object) => await ipcRenderer.invoke('saveFile', path, json),
+    // ./modules/config
+    saveConfig: async (config:object) => await ipcRenderer.invoke('saveConfig', config),
+    loadConfig: async () => await ipcRenderer.invoke('loadConfig'),
+    // ./modules/connects/kindle
+    test: async () => await  ipcRenderer.invoke('test'),
   }
 )
