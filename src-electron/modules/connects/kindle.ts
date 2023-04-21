@@ -4,9 +4,9 @@
 
 import { BrowserWindow, app, IpcMainInvokeEvent } from 'electron';
 import pie from 'puppeteer-in-electron';
-import puppeteer from 'puppeteer-core';
+import puppeteer, { Browser } from 'puppeteer-core';
 
-let browser = null;
+let browser: Browser;
 const init = async () => {
   await pie.initialize(app);
   browser = await pie.connect(app, puppeteer);
@@ -15,7 +15,7 @@ init();
 
 export default {
 
-  test: async (event:IpcMainInvokeEvent) => {
+  kindleTest: async (event:IpcMainInvokeEvent, userid:string, password:string) => {
     // const window = new BrowserWindow({show: false});
     const window = new BrowserWindow();
     const page = await pie.getPage(browser, window);
@@ -27,7 +27,16 @@ export default {
     await page.waitForSelector('#top-sign-in-btn')
     await page.click('#top-sign-in-btn')
 
+    console.log(event)
+    console.log(userid);
+    console.log(password);
+
     // window.destroy();
   },
-  
+
+  kindleCollect: async (event:IpcMainInvokeEvent) => {
+    console.log('not implements');
+    console.log(event)
+  },
+
 }

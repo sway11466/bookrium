@@ -30,14 +30,17 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('native', {
-    // ./modules/ls
-    getUserAppDataFolder: async () => await ipcRenderer.invoke('getUserAppDataFolder'),
-    selectFolder: async () => await ipcRenderer.invoke('selectFolder'),
-    saveFile: async (path:string, json:object) => await ipcRenderer.invoke('saveFile', path, json),
-    // ./modules/config
-    saveConfig: async (config:object) => await ipcRenderer.invoke('saveConfig', config),
-    loadConfig: async () => await ipcRenderer.invoke('loadConfig'),
-    // ./modules/connects/kindle
-    test: async () => await  ipcRenderer.invoke('test'),
-  }
-)
+  // ./modules/ls
+  getUserAppDataFolder: async () => await ipcRenderer.invoke('getUserAppDataFolder'),
+  selectFolder: async () => await ipcRenderer.invoke('selectFolder'),
+  saveFile: async (path:string, json:object) => await ipcRenderer.invoke('saveFile', path, json),
+  // ./modules/config
+  saveConfig: async (config:object) => await ipcRenderer.invoke('saveConfig', config),
+  loadConfig: async () => await ipcRenderer.invoke('loadConfig'),
+})
+
+contextBridge.exposeInMainWorld('connectApi', {
+  // ./modules/connects/kindle
+  kindleTest: async (userid:string, password:string) => await ipcRenderer.invoke('kindleTest', userid, password),
+  kindleCollect: async () => await ipcRenderer.invoke('kindleCollect'),
+})

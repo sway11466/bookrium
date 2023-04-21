@@ -5,9 +5,9 @@ type BaseConnect = {
   type: ConnectType
   lastConnectAt: Date | null
 };
-type ConnectType = 'amazon' | 'localfile';
+type ConnectType = 'kindle' | 'localfile';
 
-type AmazonConnect = BaseConnect & {
+type KindleConnect = BaseConnect & {
   userid: string
   password: string
 };
@@ -16,42 +16,55 @@ type LocalFileConnect = BaseConnect & {
   path: string
 };
 
+interface ConnectApi {
+  kindleTest: (userid: string, password: string) => Promise<void>
+  kindleCollect: () => Promise<string>
+}
+
 export const useConnectsStore = defineStore('connects', {
+  
   state: () => ({
-    amazon: [] as AmazonConnect[],
+    connectApi: {} as ConnectApi,
+    kindle: [] as KindleConnect[],
     localfile: [] as LocalFileConnect[]
   }),
-
+  
   getters: {
     all (state) {
       const all : BaseConnect[] = []
-      state.amazon.forEach(e => all.push(e as BaseConnect))
+      state.kindle.forEach(e => all.push(e as BaseConnect))
       state.localfile.forEach(e => all.push(e as BaseConnect))
       return all
     }
   },
 
   actions: {
-    loadFile () {
-      // Todo
+    bind (connectApi:ConnectApi) {
+      this.connectApi = connectApi;
+      console.log(typeof(connectApi));
     },
-    saveFile () {
-      // Todo
+
+    async kindleTest (userid:string, password:string) {
+      await this.connectApi.kindleTest(userid, password);
     },
+
+    kindleAdd () {
+      console.log('not implements');
+    },
+
+    async kindleCollect () {
+      await this.connectApi.kindleCollect();
+    },
+
+    kindleDelete () {
+      console.log('not implements');
+    },
+
     fillSample () {
-      if (this.amazon.length == 0) {
-        this.amazon.push({id:0, type:'amazon', lastConnectAt:null, userid:'sample', password:'sample'});
+      if (this.all() == 0) {
+        this.kindle.push({id:0, type:'kindle', lastConnectAt:null, userid:'sample', password:'sample'});
         this.localfile.push({id:1, type:'localfile', lastConnectAt:null, path:'./sample'});
       }
     },
-    addAmazon () {
-      // Todo
-    },
-    addLocalFile () {
-      // Todo
-    },
-    delete () {
-      // Todo
-    }
   }
 });
