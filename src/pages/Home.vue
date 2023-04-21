@@ -13,6 +13,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useConnectsStore } from 'src/stores/Connects.js';
+import { ConnectApi } from '../stores/ConnectsTypes';
+
+// Suppress ts lint message.
+export interface Window {
+  connectApi: ConnectApi
+}
+export declare var window: Window
+
 
 function useTest() {
   async function test() {

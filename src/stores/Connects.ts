@@ -1,25 +1,5 @@
 import { defineStore } from 'pinia';
-
-type BaseConnect = {
-  id: number
-  type: ConnectType
-  lastConnectAt: Date | null
-};
-type ConnectType = 'kindle' | 'localfile';
-
-type KindleConnect = BaseConnect & {
-  userid: string
-  password: string
-};
-
-type LocalFileConnect = BaseConnect & {
-  path: string
-};
-
-interface ConnectApi {
-  kindleTest: (userid: string, password: string) => Promise<void>
-  kindleCollect: () => Promise<string>
-}
+import { ConnectApi, BaseConnect, KindleConnect, LocalFileConnect } from './ConnectsTypes';
 
 export const useConnectsStore = defineStore('connects', {
   
@@ -61,7 +41,7 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     fillSample () {
-      if (this.all() == 0) {
+      if (this.all.length == 0) {
         this.kindle.push({id:0, type:'kindle', lastConnectAt:null, userid:'sample', password:'sample'});
         this.localfile.push({id:1, type:'localfile', lastConnectAt:null, path:'./sample'});
       }
