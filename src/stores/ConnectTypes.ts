@@ -17,7 +17,7 @@ export type DisplayConnect = {
 };
 
 export type KindleConnect = {
-  userid: string
+  email: string
   password: string
 };
 

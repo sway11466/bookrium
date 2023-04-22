@@ -13,9 +13,9 @@ export const useConnectsStore = defineStore('connects', {
     all (state) {
       const all : DisplayConnect[] = []
       state.kindle.forEach(e => all.push({
-        id: e.userid,
+        id: e.email,
         type: 'kindle',
-        description: e.userid,
+        description: e.email,
         lastConnectAt: null,
         kindleConnect: e,
         LocalStrageConnect: null
@@ -38,12 +38,13 @@ export const useConnectsStore = defineStore('connects', {
       console.log(typeof(connectApi));
     },
 
-    async testKindleSetting (userid:string, password:string) {
-      await this.connectApi.testKindle(userid, password);
+    async testKindleSetting (setting:KindleConnect) {
+      await this.connectApi.testKindle(setting.email, setting.password);
     },
 
-    addKindleSetting (userid:string, password:string) {
-      console.log('not implements');
+    addKindleSetting (setting:KindleConnect) {
+      // Todo: Exists validation
+      this.kindle.push(setting);
     },
 
     async collectKindleBooks () {
@@ -57,7 +58,7 @@ export const useConnectsStore = defineStore('connects', {
 
     fillSample () {
       if (this.all.length == 0) {
-        this.kindle.push({userid:'sample', password:'sample'});
+        this.addKindleSetting({email:'sample@booklium', password:'sample'});
         this.localstrage.push({path:'./sample'});
       }
     },

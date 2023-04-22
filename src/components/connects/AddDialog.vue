@@ -1,12 +1,16 @@
 <template>
   <q-dialog v-model="visible" persistent>
     <q-card style="min-width: 350px">
-      <q-card-section>
-        Enter the collection destination settings.
+      <q-card-section class="row items-center q-pb-none">
+        <div>Select collection pattern and enter source settings.</div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
       <q-tabs v-model="tab" no-caps>
-        <q-tab label="Kindle" name="kindle" />
+        <q-tab name="kindle">
+          <div><q-img src="icons/icons8-amazon-kindle-48.svg" width="32px" />kindle</div>
+        </q-tab>
         <q-tab label="Local Strage" name="localstrage" />
       </q-tabs>
       <q-separator />

@@ -3,9 +3,9 @@
  */
 
 import { BrowserWindow, app, IpcMainInvokeEvent } from 'electron';
-import pie from 'puppeteer-in-electron';
 import puppeteer, { Browser } from 'puppeteer-core';
-import { KindleBook } from '../../../src/stores/BookTypes';
+import pie from 'puppeteer-in-electron';
+import { KindleBook } from 'src/stores/BookTypes';
 
 let browser: Browser;
 const init = async () => {
@@ -41,8 +41,8 @@ export default {
     return [
       {
           asin: 'B079Y1WDVZ',
-          webReaderUrl: 'https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ',
-          productUrl: 'https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg',
+          webReaderUrl: new URL('https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ'),
+          productUrl: new URL('https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg'),
           title: 'Dr.STONE 5 (ジャンプコミックスDIGITAL) (Japanese Edition)',
           percentageRead: 0,
           authors: [
