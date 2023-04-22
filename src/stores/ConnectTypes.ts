@@ -5,19 +5,22 @@ export interface ConnectApi {
   collectKindle: () => Promise<KindleBook[]>
 };
 
-export type ConnectType = 'kindle' | 'localfile';
+export type ConnectType = 'kindle' | 'localstrage';
 
-export type BaseConnect = {
-  id: number
+export type DisplayConnect = {
+  id: string
   type: ConnectType
+  description: string
   lastConnectAt: Date | null
+  kindleConnect: KindleConnect | null
+  LocalStrageConnect: LocalStrageConnect | null
 };
 
-export type KindleConnect = BaseConnect & {
+export type KindleConnect = {
   userid: string
   password: string
 };
 
-export type LocalFileConnect = BaseConnect & {
+export type LocalStrageConnect = {
   path: string
 };

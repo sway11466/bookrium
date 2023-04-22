@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/connects',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Connects.vue') }],
+    children: [{ path: '', component: () => import('src/pages/ConnectsPage.vue') }],
   },
   {
     path: '/settings',

@@ -7,6 +7,9 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <dive>
+      <a target="_blank" href="https://icons8.com/icon/qpuOQzhOVZ0a/amazon-kindle">Amazon Kindle</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+    </dive>
   </q-page>
 </template>
 

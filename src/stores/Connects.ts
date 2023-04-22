@@ -1,19 +1,33 @@
 import { defineStore } from 'pinia';
-import { ConnectApi, BaseConnect, KindleConnect, LocalFileConnect } from './ConnectTypes';
+import { ConnectApi, DisplayConnect, KindleConnect, LocalStrageConnect } from './ConnectTypes';
 
 export const useConnectsStore = defineStore('connects', {
   
   state: () => ({
     connectApi: {} as ConnectApi,
     kindle: [] as KindleConnect[],
-    localfile: [] as LocalFileConnect[]
+    localstrage: [] as LocalStrageConnect[]
   }),
   
   getters: {
     all (state) {
-      const all : BaseConnect[] = []
-      state.kindle.forEach(e => all.push(e as BaseConnect))
-      state.localfile.forEach(e => all.push(e as BaseConnect))
+      const all : DisplayConnect[] = []
+      state.kindle.forEach(e => all.push({
+        id: e.userid,
+        type: 'kindle',
+        description: e.userid,
+        lastConnectAt: null,
+        kindleConnect: e,
+        LocalStrageConnect: null
+      }));
+      state.localstrage.forEach(e => all.push({ 
+        id: e.path,
+        type: 'localstrage',
+        description: e.path,
+        lastConnectAt: null,
+        kindleConnect: null,
+        LocalStrageConnect: e
+      }));
       return all
     }
   },
@@ -28,7 +42,7 @@ export const useConnectsStore = defineStore('connects', {
       await this.connectApi.testKindle(userid, password);
     },
 
-    addKindleSetting () {
+    addKindleSetting (userid:string, password:string) {
       console.log('not implements');
     },
 
@@ -43,8 +57,8 @@ export const useConnectsStore = defineStore('connects', {
 
     fillSample () {
       if (this.all.length == 0) {
-        this.kindle.push({id:0, type:'kindle', lastConnectAt:null, userid:'sample', password:'sample'});
-        this.localfile.push({id:1, type:'localfile', lastConnectAt:null, path:'./sample'});
+        this.kindle.push({userid:'sample', password:'sample'});
+        this.localstrage.push({path:'./sample'});
       }
     },
   }
