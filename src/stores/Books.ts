@@ -1,35 +1,36 @@
 import { defineStore } from 'pinia';
-
-type BaseBook = {
-  bookriumid: number
-  type: ConnectType
-  title: string
-  author: string
-  image: string
-};
-type ConnectType = 'kindle' | 'pdf';
-
-type KindleBook = BaseBook & {
-  gp: string
-};
+import { DisplayBook, KindleBook, KindleSamples } from './BookTypes';
 
 export const useBooksStore = defineStore('books', {
   state: () => ({
-    kindles: [] as KindleBook[]
+    kindles: new Map() as Map<string, KindleBook>
   }),
 
   getters: {
-    all (state) {
-      return state.kindles
+    display (state) :DisplayBook[] {
+      const books :DisplayBook[] = [];
+      [...state.kindles.values()].forEach(kindle => {
+        books.push({
+          type: 'kindle',
+          bookriumid: kindle.asin,
+          title: kindle.title,
+          author: kindle.authors.join(','),
+          image: kindle.productUrl,
+        })
+      })
+      return books;
     }
   },
 
   actions: {
     fillSample () {
-      if (this.kindles.length == 0) {
-        this.kindles.push({bookriumid:0, type:'kindle', title:'プログラマー脳', author:'フェリエンヌ・ヘルマンス, 水野貴明他', image:'https://m.media-amazon.com/images/I/41u4r0mRSeL.jpg', gp:'B0BVDQM5H1'});
-        this.kindles.push({bookriumid:1, type:'kindle', title:'Vue.js 3 超入門', author:'掌田津耶乃', image:'https://m.media-amazon.com/images/I/51l49nHkKQL.jpg', gp:'B08WYKVPF5'});
+      if (this.kindles.size == 0) {
+        KindleSamples.forEach(i => this.kindles.set(i.asin, i))
       }
     },
+
+    addKindleBooks (books: KindleBook[]) {
+      books.forEach(book => this.kindles.set(book.asin, book));
+    }
   }
 });

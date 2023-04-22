@@ -41,6 +41,6 @@ contextBridge.exposeInMainWorld('native', {
 
 contextBridge.exposeInMainWorld('connectApi', {
   // ./modules/connects/kindle
-  kindleTest: async (userid:string, password:string) => await ipcRenderer.invoke('kindleTest', userid, password),
-  kindleCollect: async () => await ipcRenderer.invoke('kindleCollect'),
+  testKindle: async (userid:string, password:string) => await ipcRenderer.invoke('testKindle', userid, password),
+  collectKindle: async () :Promise<object> => await ipcRenderer.invoke('collectKindle'),
 })

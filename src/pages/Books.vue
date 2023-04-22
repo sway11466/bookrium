@@ -1,10 +1,10 @@
 <template>
   <q-page>
     <q-list>
-      <template v-for="book in books.all" :key="book.id">
+      <template v-for="book in books.display" :key="book.id">
         <q-item clickable v-ripple>
           <q-item-section avatar>
-            <q-img :src="book.image" fit="fill" />
+            <q-img :src="book.image.toString()" fit="fill" />
           </q-item-section>
           <q-item-section>
             <q-item-label>{{book.title}}</q-item-label>

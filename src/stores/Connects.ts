@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ConnectApi, BaseConnect, KindleConnect, LocalFileConnect } from './ConnectsTypes';
+import { ConnectApi, BaseConnect, KindleConnect, LocalFileConnect } from './ConnectTypes';
 
 export const useConnectsStore = defineStore('connects', {
   
@@ -24,19 +24,20 @@ export const useConnectsStore = defineStore('connects', {
       console.log(typeof(connectApi));
     },
 
-    async kindleTest (userid:string, password:string) {
-      await this.connectApi.kindleTest(userid, password);
+    async testKindleSetting (userid:string, password:string) {
+      await this.connectApi.testKindle(userid, password);
     },
 
-    kindleAdd () {
+    addKindleSetting () {
       console.log('not implements');
     },
 
-    async kindleCollect () {
-      await this.connectApi.kindleCollect();
+    async collectKindleBooks () {
+      const json = await this.connectApi.collectKindle();
+      return json;
     },
 
-    kindleDelete () {
+    deleteKindleSetting () {
       console.log('not implements');
     },
 

@@ -12,8 +12,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useConnectsStore } from 'src/stores/Connects.js';
-import { ConnectApi } from '../stores/ConnectsTypes';
+import { useBooksStore } from 'src/stores/Books';
+import { useConnectsStore } from 'src/stores/Connects';
+import { ConnectApi } from '../stores/ConnectTypes';
 
 // Suppress ts lint message.
 export interface Window {
@@ -25,7 +26,10 @@ export declare var window: Window
 function useTest() {
   async function test() {
     const connects = useConnectsStore();
-    await connects.kindleTest('userid', 'password');
+    const books = useBooksStore();
+    // await connects.kindleTest('userid', 'password');
+    const collects = await connects.collectKindleBooks();
+    books.addKindleBooks(collects);
   }
   return { test };
 }

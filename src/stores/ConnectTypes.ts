@@ -1,6 +1,8 @@
+import { KindleBook } from './BookTypes';
+
 export interface ConnectApi {
-  kindleTest: (userid: string, password: string) => Promise<void>
-  kindleCollect: () => Promise<string>
+  testKindle: (userid: string, password: string) => Promise<void>
+  collectKindle: () => Promise<KindleBook[]>
 };
 
 export type ConnectType = 'kindle' | 'localfile';
