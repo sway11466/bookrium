@@ -1,19 +1,35 @@
 <template>
   <q-page class="col">
-    <connect-list />
+    <ConnectList @showEditDialog="showEditDialog"/>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="add" color="accent" @click="showAddDialog" />
     </q-page-sticky>
-    <add-dialog ref="addDialog" />
+    <AddDialog ref="addDialog" />
+    <EditDialog ref="editDialog" />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import AddDialog from 'src/components/connects/AddDialog.vue';
 import ConnectList from 'src/components/connects/ConnectsList.vue';
+import EditDialog from 'src/components/connects/EditDialog.vue';
 import { ref } from 'vue';
+import { ConnectType } from 'src/stores/ConnectTypes';
+
+// --------------------------------
+//  component ref
+// --------------------------------
 const addDialog = ref();
+const editDialog = ref();
+
+// --------------------------------
+//  daialog visibility
+// --------------------------------
 function showAddDialog() {
   addDialog.value.show();
+}
+
+function showEditDialog(id:string, type:ConnectType) {
+  editDialog.value.show(id, type);
 }
 </script>

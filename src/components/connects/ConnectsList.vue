@@ -1,7 +1,7 @@
 <template>
   <q-list>
     <template v-for="connect in connects.all" :key="connect.id">
-      <q-item clickable v-ripple>
+      <q-item @click="showEditDialog(connect)" clickable v-ripple>
         <q-item-section avatar>
           <template v-if="connect.type == 'kindle'">
             <q-img src="icons/icons8-amazon-kindle-48.svg" width="48px" />
@@ -32,6 +32,25 @@
 
 <script setup lang="ts">
 import { useConnectsStore } from 'src/stores/Connects';
+import { DisplayConnect } from 'src/stores/ConnectTypes';
+
+// --------------------------------
+//  store init
+// --------------------------------
 const connects = useConnectsStore();
-connects.fillSample();
+connects.fillSample(); // temp sample fill
+
+// --------------------------------
+//  emit
+// --------------------------------
+const emit = defineEmits([
+  'showEditDialog',  // show edit dialog via parent component(ContentsPage).
+]);
+
+// --------------------------------
+//  item actions
+// --------------------------------
+function showEditDialog(connect:DisplayConnect) {
+  emit('showEditDialog', connect.id, connect.type);
+}
 </script>

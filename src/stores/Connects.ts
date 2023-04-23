@@ -10,10 +10,10 @@ export const useConnectsStore = defineStore('connects', {
   }),
   
   getters: {
-    all (state) {
+    all(state) :DisplayConnect[] {
       const all : DisplayConnect[] = []
       state.kindle.forEach(e => all.push({
-        id: e.email,
+        id: e.id,
         type: 'kindle',
         description: e.email,
         lastConnectAt: null,
@@ -33,34 +33,52 @@ export const useConnectsStore = defineStore('connects', {
   },
 
   actions: {
-    bind (connectApi:ConnectApi) {
+    // --------------------------------
+    //  common
+    // --------------------------------
+    bind(connectApi:ConnectApi) {
       this.connectApi = connectApi;
       console.log(typeof(connectApi));
     },
 
-    async testKindleSetting (setting:KindleConnect) {
+    // --------------------------------
+    //  kindle functions
+    // --------------------------------
+    getKindleSetting(id:string) :KindleConnect {
+      const index = this.kindle.findIndex((kindle) => kindle.id == id);
+      return index >= 0 ? this.kindle[index] : { id:'0', email:'', password:'' };
+    },
+
+    async testKindleSetting(setting:KindleConnect) {
       await this.connectApi.testKindle(setting.email, setting.password);
     },
 
-    addKindleSetting (setting:KindleConnect) {
+    addKindleSetting(setting:KindleConnect) {
       // Todo: Exists validation
       this.kindle.push(setting);
     },
 
-    async collectKindleBooks () {
+    async collectKindleBooks() {
       const json = await this.connectApi.collectKindle();
       return json;
     },
 
-    deleteKindleSetting () {
+    deleteKindleSetting() {
       console.log('not implements');
     },
 
-    fillSample () {
+    // --------------------------------
+    //  debug
+    // --------------------------------
+    fillSample() {
       if (this.all.length == 0) {
-        this.addKindleSetting({email:'sample@booklium', password:'sample'});
+        this.addKindleSetting({id: '1', email:'sample@booklium', password:'sample'});
         this.localstrage.push({path:'./sample'});
       }
     },
+
+    logState() {
+      console.log(this);
+    }
   }
 });
