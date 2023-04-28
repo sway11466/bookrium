@@ -61,11 +61,8 @@ let kindle = ref({
 //  lifecycle events
 // --------------------------------
 onMounted(() => {
-  console.log(props.id);
   const kindleSetting = connects.getKindleSetting(props.id);
-  console.log(kindleSetting);
   kindle.value = kindleSetting;
-  console.log(kindle.value);
 })
 
 // --------------------------------

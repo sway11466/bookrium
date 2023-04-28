@@ -38,7 +38,6 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     bind(connectApi:ConnectApi) {
       this.connectApi = connectApi;
-      console.log(typeof(connectApi));
     },
 
     // --------------------------------
