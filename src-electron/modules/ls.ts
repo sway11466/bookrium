@@ -13,7 +13,7 @@ export default {
    * @return user app data folfder path
    * @see https://www.electronjs.org/docs/latest/api/app#appgetpathname
    */
-  getUserAppDataFolder: async () => {
+  getUserAppDataFolder: async() :Promise<string> => {
     return app.getPath('appData');
   },
 
@@ -24,7 +24,7 @@ export default {
    * @return filePaths selected folder paths.
    * @see https://www.electronjs.org/docs/latest/api/dialog
    */
-  selectFolder: async () => {
+  selectFolder: async() :Promise<Electron.OpenDialogReturnValue> => {
    const { canceled, filePaths } = await dialog.showOpenDialog({
       properties: ['openDirectory'],
     });

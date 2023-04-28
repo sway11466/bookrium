@@ -31,8 +31,8 @@ function useTest() {
     const connects = useConnectsStore();
     const books = useBooksStore();
     // await connects.kindleTest('userid', 'password');
-    const collects = await connects.collectKindleBooks();
-    books.addKindleBooks(collects);
+    // const collects = await connects.collectKindleBooks();
+    // books.addKindleBooks(collects);
   }
   return { test };
 }

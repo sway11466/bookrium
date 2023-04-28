@@ -34,7 +34,7 @@ export const useConnectsStore = defineStore('connects', {
 
   actions: {
     // --------------------------------
-    //  common
+    //  bind apis
     // --------------------------------
     bind(connectApi:ConnectApi) {
       this.connectApi = connectApi;
@@ -45,11 +45,12 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     getKindleSetting(id:string) :KindleConnect {
       const index = this.kindle.findIndex((kindle) => kindle.id == id);
-      return index >= 0 ? this.kindle[index] : { id:'0', email:'', password:'' };
+      if (index == -1) { throw new Error('') } // TODO: implements error handling
+      return this.kindle[index];
     },
 
-    async testKindleSetting(setting:KindleConnect) {
-      await this.connectApi.testKindle(setting.email, setting.password);
+    async testKindleSetting(setting:KindleConnect) :Promise<boolean> {
+      return await this.connectApi.testKindle(setting.email, setting.password);
     },
 
     addKindleSetting(setting:KindleConnect) {
@@ -57,9 +58,9 @@ export const useConnectsStore = defineStore('connects', {
       this.kindle.push(setting);
     },
 
-    async collectKindleBooks() {
-      const json = await this.connectApi.collectKindle();
-      return json;
+    async collectKindleBooks(setting:KindleConnect) {
+      const books = await this.connectApi.collectKindle(setting.email, setting.password);
+      return books;
     },
 
     deleteKindleSetting() {

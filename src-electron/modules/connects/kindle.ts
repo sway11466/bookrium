@@ -1,5 +1,5 @@
 /**
- * Kindle Scraping
+ * Kindle Scraping Library
  */
 
 import { BrowserWindow, app, IpcMainInvokeEvent } from 'electron';
@@ -16,43 +16,78 @@ init();
 
 export default {
 
-  testKindle: async (event:IpcMainInvokeEvent, userid:string, password:string) => {
-    // const window = new BrowserWindow({show: false});
-    const window = new BrowserWindow();
-    const page = await pie.getPage(browser, window);
+  testKindle: async (event:IpcMainInvokeEvent, email:string, password:string) :Promise<boolean> => {
+    const window = new BrowserWindow(); // debug param {show: true}
+    try {
+      const page = await pie.getPage(browser, window);
 
-    // トップページを表示する
-    await page.goto('https://read.amazon.co.jp')
+      // go to the top page.
+      await page.goto('https://read.amazon.co.jp');
 
-    // ログインページに遷移する
-    await page.waitForSelector('#top-sign-in-btn')
-    await page.click('#top-sign-in-btn')
+      // go to the login page.
+      await page.waitForSelector('#top-sign-in-btn');
+      await page.click('#top-sign-in-btn');
+  
+      // login with email and password
+      await page.waitForSelector('#signInSubmit');
+      await page.type('input[name=email]', email);
+      await page.type('input[name=password]', password);
+      await page.click('#signInSubmit');
 
-    console.log(event)
-    console.log(userid);
-    console.log(password);
+      // wait loguin success
+      await page.waitForSelector('#header-desktop');
 
-    // window.destroy();
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    } finally {
+      window.destroy();
+    }
   },
 
-  collectKindle: async (event:IpcMainInvokeEvent) :Promise<KindleBook[]> => {
-    console.log('not implements');
-    console.log(event)
-    return [
-      {
-          asin: 'B079Y1WDVZ',
-          webReaderUrl: new URL('https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ'),
-          productUrl: new URL('https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg'),
-          title: 'Dr.STONE 5 (ジャンプコミックスDIGITAL) (Japanese Edition)',
-          percentageRead: 0,
-          authors: [
-              '稲垣理一郎:Boichi:'
-          ],
-          resourceType: 'EBOOK',
-          originType: 'PURCHASE',
-          mangaOrComicAsin: true,
-      }
-    ]
+  collectKindle: async (event:IpcMainInvokeEvent, email:string, password:string) :Promise<KindleBook[]> => {
+    const window = new BrowserWindow({show: true}); // debug param {show: true}
+    try {
+      const page = await pie.getPage(browser, window);
+
+      // go to the top page.
+      await page.goto('https://read.amazon.co.jp');
+
+      // go to the login page.
+      // await page.waitForSelector('#top-sign-in-btn');
+      // await page.click('#top-sign-in-btn');
+  
+      // // login with email and password
+      // await page.waitForSelector('#signInSubmit');
+      // await page.type('input[name=email]', email);
+      // await page.type('input[name=password]', password);
+      // await page.click('#signInSubmit');
+
+      // // wait loguin success
+      // await page.waitForSelector('#header-desktop');
+
+      return [
+        {
+            asin: 'B079Y1WDVZ',
+            webReaderUrl: new URL('https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ'),
+            productUrl: new URL('https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg'),
+            title: 'Dr.STONE 5 (ジャンプコミックスDIGITAL) (Japanese Edition)',
+            percentageRead: 0,
+            authors: [
+                '稲垣理一郎:Boichi:'
+            ],
+            resourceType: 'EBOOK',
+            originType: 'PURCHASE',
+            mangaOrComicAsin: true,
+        }
+      ]
+    } catch (e) {
+      console.log(e);
+      return [];
+    } finally {
+      // window.destroy();
+    }
   },
 
 }

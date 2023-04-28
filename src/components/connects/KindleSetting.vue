@@ -23,13 +23,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
+import { useBooksStore } from 'src/stores/Books';
 import { useConnectsStore } from 'src/stores/Connects';
+import { KindleConnect } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  store init
 // --------------------------------
 const connects = useConnectsStore();
+const books = useBooksStore();
 
 // --------------------------------
 //  prop
@@ -52,7 +55,8 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-let kindle = ref({
+let kindle :Ref<KindleConnect> = ref({
+  id: '',
   email: '',
   password: '',
 });
@@ -61,20 +65,47 @@ let kindle = ref({
 //  lifecycle events
 // --------------------------------
 onMounted(() => {
-  const kindleSetting = connects.getKindleSetting(props.id);
-  kindle.value = kindleSetting;
+  if (props.id) {
+    const kindleSetting = connects.getKindleSetting(props.id);
+    kindle.value = kindleSetting;
+  } else {
+    console.log('not implements.');
+    // TODO: Assign uuid as id
+  }
 })
 
 // --------------------------------
 //  actions
 // --------------------------------
-function test() {
-  console.log('not implements.');
+async function test() {
+  // TODO: show spinner
+  connects.testKindleSetting(kindle.value).then((ret) => {
+    if (ret) {
+      // TODO: show ok message & badge
+      console.log('test ok');
+    } else {
+      // TODO: show ng message & badge
+      console.log('test ng');
+    }
+  }).catch(e => {
+    // TODO: show ng message & badge
+    console.log(e);
+  }).finally(() => {
+    // TODO: close spinner
+  });
 };
 
-function collect() {
-  console.log('not implements.');
-  emit('hideDialog');
+async function collect() {
+  connects.collectKindleBooks(kindle.value).then((books) => {
+      console.log('result');
+      console.log(books);
+  }).catch(e => {
+    // TODO: show ng message & badge
+    console.log(e);
+  }).finally(() => {
+    // TODO: close spinner
+    emit('hideDialog');
+  });
 };
 
 function del() {
