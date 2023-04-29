@@ -1,21 +1,25 @@
-import * as path from 'path';
 import { defineStore } from 'pinia';
+import { ConfigApi } from 'src-electron/modules/config-api';
 import { LocalStorageApi } from 'src-electron/modules/lsTypes';
-import { Setting } from './SettingTypes';
-
+import { BookriumSetting, StorageSetting } from './SettingTypes';
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
+    configApi: {} as ConfigApi,
     localStorageApi: {} as LocalStorageApi,
-    dataFolderPath: '' as string,
+    storageSetting: {} as StorageSetting,
   }),
 
   getters: {
-    async defaultSetting() :Promise<Setting> {
+    async defaultSettings() :Promise<BookriumSetting> {
       const dataFolder = await this.localStorageApi.getUserAppDataFolder();
       return {
-        dataFolderPath: dataFolder,
-        cachFolderPath: path.join(dataFolder, 'cache'),
+        storageSetting: {
+          dataFolderPath: dataFolder,
+          cacheFolderPath: dataFolder + '\\cache',
+          artworkFolderPath: dataFolder + '\\artwork',
+          connectorSettingPath: dataFolder + '\\bookrium-setting-connector.json',
+        }
       }
     }
   },
@@ -24,8 +28,41 @@ export const useSettingsStore = defineStore('settings', {
     // --------------------------------
     //  bind apis
     // --------------------------------
-    bind(localStorageApi:LocalStorageApi) {
+    bind(localStorageApi:LocalStorageApi, configApi:ConfigApi) {
       this.localStorageApi = localStorageApi;
+      this.configApi = configApi;
+    },
+
+    // --------------------------------
+    //  initialize store
+    // --------------------------------
+    async init() {
+      if (await this.configApi.hasConfig()) {
+        await this.load(); // TODO: error handling
+      } else {
+        const defaultSetting = await this.defaultSettings;
+        Object.assign(this.storageSetting, defaultSetting.storageSetting);
+        this.save();
+      }
+    },
+
+    // --------------------------------
+    //  config operation
+    // --------------------------------
+    async load() {
+      const config :BookriumSetting = await this.configApi.loadConfig() as BookriumSetting;
+      Object.assign(this.storageSetting, config.storageSetting);
+    },
+
+    async save() {
+      await this.configApi.saveConfig({
+        storageSetting: {
+          dataFolderPath: this.storageSetting.dataFolderPath,
+          cacheFolderPath: this.storageSetting.cacheFolderPath,
+          artworkFolderPath: this.storageSetting.artworkFolderPath,
+          connectorSettingPath: this.storageSetting.connectorSettingPath,
+        }
+      });
     },
 
     // --------------------------------

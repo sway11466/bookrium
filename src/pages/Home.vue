@@ -28,8 +28,8 @@ export declare var window: Window
 
 function useTest() {
   async function test() {
-    const connects = useConnectsStore();
-    const books = useBooksStore();
+    // const connects = useConnectsStore();
+    // const books = useBooksStore();
     // await connects.kindleTest('userid', 'password');
     // const collects = await connects.collectKindleBooks();
     // books.addKindleBooks(collects);
