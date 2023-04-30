@@ -47,6 +47,8 @@ export default {
   },
 
   collectKindle: async (event:IpcMainInvokeEvent, email:string, password:string) :Promise<KindleBook[]> => {
+    console.log(email);
+    console.log(password);
     const window = new BrowserWindow({show: true}); // debug param {show: true}
     try {
       const page = await pie.getPage(browser, window);

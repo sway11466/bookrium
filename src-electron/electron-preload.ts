@@ -28,12 +28,10 @@
  * }
  */
 
-import { KindleBook } from 'src/stores/BookTypes';
-
-const { contextBridge, ipcRenderer } = require('electron');
+import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('settingApi', {
-  // ./modules/config
+  // src-electron/modules/config
   getPath: async () :Promise<string> => await ipcRenderer.invoke('getPath'),
   hasConfig: async () :Promise<boolean> => await ipcRenderer.invoke('hasConfig'),
   saveConfig: async (config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', config),
@@ -42,14 +40,18 @@ contextBridge.exposeInMainWorld('settingApi', {
 })
 
 contextBridge.exposeInMainWorld('localStorageApi', {
-  // ./modules/ls
+  // src-electron/modules/ls
   getUserAppDataFolder: async () :Promise<string> => await ipcRenderer.invoke('getUserAppDataFolder'),
   selectFolder: async () :Promise<Electron.OpenDialogReturnValue> => await ipcRenderer.invoke('selectFolder'),
   saveFile: async (path:string, json:object) :Promise<void> => await ipcRenderer.invoke('saveFile', path, json),
 })
 
 contextBridge.exposeInMainWorld('connectApi', {
-  // ./modules/connects/kindle
+  // src-electron/modules/connects/connect
+  hasConnectsSetting: async () :Promise<boolean> => await ipcRenderer.invoke('hasConnectsSetting'),
+  loadConnectsSetting: async () :Promise<unknown> => await ipcRenderer.invoke('loadConnectsSetting'),
+  saveConnectsSetting: async (setting:unknown) :Promise<boolean> => await ipcRenderer.invoke('saveConnectsSetting', setting),
+  // src-electron/modules/connects/kindle
   testKindle: async (email:string, password:string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
-  collectKindle: async (email:string, password:string) :Promise<KindleBook[]> => await ipcRenderer.invoke('collectKindle', email, password),
+  collectKindle: async (email:string, password:string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
 })

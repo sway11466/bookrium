@@ -1,27 +1,37 @@
-import { KindleBook } from './BookTypes';
-
-export interface ConnectApi {
-  testKindle: (email: string, password: string) => Promise<boolean>
-  collectKindle: (email: string, password: string) => Promise<KindleBook[]>
-};
-
 export type ConnectType = 'kindle' | 'localstrage';
 
+/**
+ * Connection settings for screen display.
+ */
 export type DisplayConnect = {
   id: string
   type: ConnectType
   description: string
   lastConnectAt: Date | null
   kindleConnect: KindleConnect | null
-  LocalStrageConnect: LocalStrageConnect | null
+  LocalStrageConnect: LocalStorageConnect | null
 };
 
+/**
+ * Connection settings for setting file.
+ */
+export type ConnectorSetting = {
+  kindle: KindleConnect[],
+  localstrage: LocalStorageConnect[]
+}
+
+/**
+ * Kindle Connect Setting.
+ */
 export type KindleConnect = {
   id: string
   email: string
   password: string
 };
 
-export type LocalStrageConnect = {
+/**
+ * LocalStorage Connect Setting.
+ */
+export type LocalStorageConnect = {
   path: string
 };

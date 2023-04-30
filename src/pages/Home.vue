@@ -15,15 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useBooksStore } from 'src/stores/Books';
 import { useConnectsStore } from 'src/stores/Connects';
-import { ConnectApi } from '../stores/ConnectTypes';
-
-// Suppress ts lint message.
-export interface Window {
-  connectApi: ConnectApi
-}
-export declare var window: Window
 
 
 function useTest() {
@@ -41,9 +33,7 @@ export default defineComponent({
   name: 'ConnectsPage',
   components: { },
   setup () {
-    const books = useConnectsStore();
-    books.bind(window.connectApi);
-    return { ...useTest(), books };
+    return { ...useTest() };
   }
 });
 </script>

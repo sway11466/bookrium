@@ -1,22 +1,23 @@
 <template>
-  <q-card flat>
+  <q-card class="q-gutter-y-md" flat>
     <q-card-section class="q-pa-none">
       user name
-    </q-card-section>
-    <q-card-section class="q-pa-none">
       <q-input dense v-model="kindle.email" autofocus />
     </q-card-section>
-    <q-card-section class="q-pa-none q-pt-lg">
-      password
-    </q-card-section>
     <q-card-section class="q-pa-none">
+      password
       <q-input dense v-model="kindle.password" />
     </q-card-section>
-    <q-card-actions class="q-pa-none q-pt-lg" vertical >
-      <q-btn icon="mdi-account-check-outline" label="Connection Test" @click="test" @blur="debug" padding="xs lg" color="primary" unelevated no-caps />
-      <div class="q-pa-sm" />
-      <q-btn icon="mdi-arrow-down-bold-box-outline" label="Collect Books" @click="collect" padding="xs lg" color="primary" unelevated no-caps />
-      <div class="q-pa-lg" />
+    <q-card-actions vertical>
+      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" padding="xs lg" color="primary" unelevated no-caps />
+    </q-card-actions>
+    <q-separator />
+    <q-card-actions vertical >
+      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" padding="xs lg" color="primary" unelevated no-caps />
+      <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" padding="xs lg" color="primary" unelevated no-caps />
+    </q-card-actions>
+    <q-separator />
+    <q-card-actions vertical >
       <q-btn icon="delete" label="Delete Connection Setting" @click="del" padding="xs lg" color="red" outline no-caps />
     </q-card-actions>
   </q-card>
@@ -24,15 +25,25 @@
 
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
-import { useBooksStore } from 'src/stores/Books';
+// import { useBooksStore } from 'src/stores/Books';
 import { useConnectsStore } from 'src/stores/Connects';
 import { KindleConnect } from 'src/stores/ConnectTypes';
+import { ConnectApi } from 'src-electron/modules/connects/connect-api'
+
+// --------------------------------
+//  suppress ts lint message.
+// --------------------------------
+export interface Window {
+  connectApi: ConnectApi
+};
+export declare var window: Window;
 
 // --------------------------------
 //  store init
 // --------------------------------
 const connects = useConnectsStore();
-const books = useBooksStore();
+connects.bind(window.connectApi);
+// const books = useBooksStore();
 
 // --------------------------------
 //  prop
@@ -66,8 +77,7 @@ let kindle :Ref<KindleConnect> = ref({
 // --------------------------------
 onMounted(() => {
   if (props.id) {
-    const kindleSetting = connects.getKindleSetting(props.id);
-    kindle.value = kindleSetting;
+    kindle.value = connects.getKindleSetting(props.id);
   } else {
     console.log('not implements.');
     // TODO: Assign uuid as id
@@ -77,6 +87,16 @@ onMounted(() => {
 // --------------------------------
 //  actions
 // --------------------------------
+async function save() {
+  let connectSettings = await connects.loadConnectsSetting();
+  for (let i=0; i<connectSettings.kindle.length; i++) {
+    if (connectSettings.kindle[i].id == kindle.value.id) {
+      Object.assign(connectSettings.kindle[i], kindle);
+    }
+  }
+  await connects.saveConnectsSetting(connectSettings);
+};
+
 async function test() {
   // TODO: show spinner
   connects.testKindleSetting(kindle.value).then((ret) => {

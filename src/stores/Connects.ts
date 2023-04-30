@@ -1,15 +1,23 @@
 import { defineStore } from 'pinia';
-import { ConnectApi, DisplayConnect, KindleConnect, LocalStrageConnect } from './ConnectTypes';
+import { DisplayConnect, KindleConnect, LocalStorageConnect, ConnectorSetting } from 'src/stores/ConnectTypes';
+import { ConnectApi } from 'app/src-electron/modules/connects/connect-api';
 
 export const useConnectsStore = defineStore('connects', {
   
   state: () => ({
     connectApi: {} as ConnectApi,
     kindle: [] as KindleConnect[],
-    localstrage: [] as LocalStrageConnect[]
+    localstrage: [] as LocalStorageConnect[]
   }),
   
   getters: {
+    blankSetting() :ConnectorSetting {
+      return {
+        kindle: [] as KindleConnect[],
+        localstrage: [] as LocalStorageConnect[],
+      }
+    },
+
     all(state) :DisplayConnect[] {
       const all : DisplayConnect[] = []
       state.kindle.forEach(e => all.push({
@@ -41,8 +49,27 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     // --------------------------------
+    //  comoon functions
+    // --------------------------------
+    async loadConnectsSetting() :Promise<ConnectorSetting> {
+      return await this.connectApi.hasConnectsSetting() ?
+        await this.connectApi.loadConnectsSetting() as ConnectorSetting : this.blankSetting;
+    },
+
+    async saveConnectsSetting(setting :ConnectorSetting) :Promise<boolean> {
+      this.connectApi.saveConnectsSetting(setting);
+      // TODO: error handling
+      return true;
+    },
+
+    // --------------------------------
     //  kindle functions
     // --------------------------------
+    addKindleSetting(setting:KindleConnect) {
+      // Todo: Exists validation
+      this.kindle.push(setting);
+    },
+
     getKindleSetting(id:string) :KindleConnect {
       const index = this.kindle.findIndex((kindle) => kindle.id == id);
       if (index == -1) { throw new Error('') } // TODO: implements error handling
@@ -51,11 +78,6 @@ export const useConnectsStore = defineStore('connects', {
 
     async testKindleSetting(setting:KindleConnect) :Promise<boolean> {
       return await this.connectApi.testKindle(setting.email, setting.password);
-    },
-
-    addKindleSetting(setting:KindleConnect) {
-      // Todo: Exists validation
-      this.kindle.push(setting);
     },
 
     async collectKindleBooks(setting:KindleConnect) {

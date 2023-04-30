@@ -6,8 +6,8 @@ import { IpcMainInvokeEvent } from 'electron';
 import fs from 'fs';
 import useStore from 'electron-store';
 
-const CONFIG_NAME = 'bookrium-setting';
-const store = new useStore({name: 'bookrium'});
+const CONFIG_NAME = 'bookrium';
+const store = new useStore({name: 'bookrium-setting'});
 
 export default {
 
