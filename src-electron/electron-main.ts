@@ -67,10 +67,10 @@ import ls from 'src-electron/modules/ls';
 for (const [k,v] of Object.entries(ls)) { ipcMain.handle(k, v) }
 
 // import and handle Config
-import config from 'src-electron/modules/setting/setting';
+import config from 'src-electron/modules/config';
 for (const [k,v] of Object.entries(config)) { ipcMain.handle(k, v) }
 
-// import and handle Kindle
+// import and handle Connects
 import connect from 'src-electron/modules/connects/connect';
 import kindle from 'src-electron/modules/connects/kindle';
 for (const [k,v] of Object.entries(connect)) { ipcMain.handle(k, v) }

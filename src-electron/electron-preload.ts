@@ -30,20 +30,19 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('settingApi', {
-  // src-electron/modules/config
-  getPath: async () :Promise<string> => await ipcRenderer.invoke('getPath'),
-  hasConfig: async () :Promise<boolean> => await ipcRenderer.invoke('hasConfig'),
-  saveConfig: async (config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', config),
-  loadConfig: async () :Promise<object> => await ipcRenderer.invoke('loadConfig'),
-  hasKey: async (key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', key),
-})
-
 contextBridge.exposeInMainWorld('localStorageApi', {
   // src-electron/modules/ls
   getUserAppDataFolder: async () :Promise<string> => await ipcRenderer.invoke('getUserAppDataFolder'),
   selectFolder: async () :Promise<Electron.OpenDialogReturnValue> => await ipcRenderer.invoke('selectFolder'),
   saveFile: async (path:string, json:object) :Promise<void> => await ipcRenderer.invoke('saveFile', path, json),
+})
+
+contextBridge.exposeInMainWorld('configApi', {
+  // src-electron/modules/config
+  hasConfig: async (path:string) :Promise<boolean> => await ipcRenderer.invoke('hasConfig', path),
+  saveConfig: async (path:string, key:string, config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', path, key, config),
+  loadConfig: async (path:string, key:string) :Promise<object> => await ipcRenderer.invoke('loadConfig', path, key),
+  hasKey: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', path, key),
 })
 
 contextBridge.exposeInMainWorld('connectApi', {

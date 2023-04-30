@@ -1,25 +1,25 @@
 import { defineStore } from 'pinia';
-import { SettingApi } from 'app/src-electron/modules/setting/setting-api';
-import { LocalStorageApi } from 'src-electron/modules/lsTypes';
-import { BookriumSetting, StorageSetting } from './SettingTypes';
+import { useApiManager } from 'src/stores/ApiManager';
+import { BookriumSetting, StorageSetting } from 'src/stores/SettingTypes';
+
+const CONFIG_ROOT_KEY = 'bookrium';
 
 export const useSettingsStore = defineStore('settings', {
-  state: () => ({
-    settingApi: {} as SettingApi,
-    localStorageApi: {} as LocalStorageApi,
+  state: (): BookriumSetting => ({
     storageSetting: {} as StorageSetting,
   }),
 
   getters: {
-    async defaultSettings() :Promise<BookriumSetting> {
-      const dataFolder = await this.localStorageApi.getUserAppDataFolder();
+    async defaultSettings(): Promise<BookriumSetting> {
+      const apiManager = useApiManager();
+      const appDirPath = await apiManager.localStorageApi.getUserAppDataFolder();
       return {
         storageSetting: {
-          dataFolderPath: dataFolder + '\\Bookrium',
-          cacheFolderPath: dataFolder + '\\Bookrium\\cache',
-          artworkFolderPath: dataFolder + '\\Bookrium\\artwork',
-          settingPath: await this.settingApi.getPath(),
-          connectorSettingPath: dataFolder + '\\Bookrium\\bookrium-setting-connector.json',
+          settingPath: appDirPath + '\\Bookrium\\bookrium.json',
+          dataFolderPath: appDirPath + '\\Bookrium',
+          bookFolderPath: appDirPath + '\\Bookrium\\book',
+          cacheFolderPath: appDirPath + '\\Bookrium\\cache',
+          artworkFolderPath: appDirPath + '\\Bookrium\\artwork',
         }
       }
     }
@@ -27,23 +27,16 @@ export const useSettingsStore = defineStore('settings', {
 
   actions: {
     // --------------------------------
-    //  bind apis
-    // --------------------------------
-    bind(localStorageApi:LocalStorageApi, settingApi:SettingApi) {
-      this.localStorageApi = localStorageApi;
-      this.settingApi = settingApi;
-    },
-
-    // --------------------------------
     //  initialize store
     // --------------------------------
     async init() {
-      if (await this.settingApi.hasConfig()) {
+      const apiManager = useApiManager();
+      const defaultSetting = await this.defaultSettings;
+      if (await apiManager.configApi.hasConfig(defaultSetting.storageSetting.settingPath)) {
         await this.load(); // TODO: error handling
       } else {
-        const defaultSetting = await this.defaultSettings;
-        Object.assign(this.storageSetting, defaultSetting.storageSetting);
-        this.save();
+        Object.assign(this, defaultSetting);
+        await this.save();
       }
     },
 
@@ -51,27 +44,33 @@ export const useSettingsStore = defineStore('settings', {
     //  config operation
     // --------------------------------
     async load() {
-      const config :BookriumSetting = await this.settingApi.loadConfig() as BookriumSetting;
-      Object.assign(this.storageSetting, config.storageSetting);
+      const apiManager = useApiManager();
+      const defaultSetting = await this.defaultSettings;
+      const setting = await apiManager.configApi.loadConfig(defaultSetting.storageSetting.settingPath, CONFIG_ROOT_KEY) as BookriumSetting;
+      Object.assign(this, setting);
     },
 
     async save() {
-      await this.settingApi.saveConfig({
-        storageSetting: {
-          dataFolderPath: this.storageSetting.dataFolderPath,
-          cacheFolderPath: this.storageSetting.cacheFolderPath,
-          artworkFolderPath: this.storageSetting.artworkFolderPath,
-          settingPath: this.storageSetting.settingPath,
-          connectorSettingPath: this.storageSetting.connectorSettingPath,
+      const apiManager = useApiManager();
+      apiManager.configApi.saveConfig(
+        this.storageSetting.settingPath,
+        CONFIG_ROOT_KEY + '.storageSetting',
+        {
+            settingPath: this.storageSetting.settingPath,
+            dataFolderPath: this.storageSetting.dataFolderPath,
+            bookFolderPtha: this.storageSetting.bookFolderPath,
+            cacheFolderPath: this.storageSetting.cacheFolderPath,
+            artworkFolderPath: this.storageSetting.artworkFolderPath,
         }
-      });
+      );
     },
 
     // --------------------------------
     //  api bredge
     // --------------------------------
     async selectFolder() :Promise<Electron.OpenDialogReturnValue> {
-      return await this.localStorageApi.selectFolder();
+      const apiManager = useApiManager();
+      return await apiManager.localStorageApi.selectFolder();
     }
   }
 });

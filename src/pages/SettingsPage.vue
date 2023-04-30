@@ -40,44 +40,33 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
-import { SettingApi } from 'src-electron/modules/setting/setting-api';
-import { LocalStorageApi } from 'src-electron/modules/lsTypes';
 import { BookriumSetting } from 'src/stores/SettingTypes';
-
-// --------------------------------
-//  suppress ts lint message.
-// --------------------------------
-export interface Window {
-  settingApi: SettingApi
-  localStorageApi: LocalStorageApi
-};
-export declare var window: Window;
 
 // --------------------------------
 //  store init
 // --------------------------------
 const settings = useSettingsStore();
-settings.bind(window.localStorageApi, window.settingApi);
 
 // --------------------------------
 //  local var
 // --------------------------------
+// TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
 const bookriumSetting :Ref<BookriumSetting> = ref({
   storageSetting: {
     dataFolderPath: '',
+    bookFolderPath: '',
     cacheFolderPath: '',
     artworkFolderPath: '',
     settingPath: '',
-    connectorSettingPath: '',
   }
 });
 
 // --------------------------------
 //  lifecycle events
 // --------------------------------
-onMounted(() => {
-  settings.init();
+onMounted(async () => {
+  await settings.init();
   bookriumSetting.value.storageSetting = settings.storageSetting;
 });
 
