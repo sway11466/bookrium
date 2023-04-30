@@ -67,7 +67,7 @@ import ls from './modules/ls';
 for (const [k,v] of Object.entries(ls)) { ipcMain.handle(k, v) }
 
 // import and handle Config
-import config from './modules/config'
+import config from './modules/setting/setting'
 for (const [k,v] of Object.entries(config)) { ipcMain.handle(k, v) }
 
 // import and handle Kindle

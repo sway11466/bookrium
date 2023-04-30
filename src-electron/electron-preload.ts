@@ -32,13 +32,13 @@ import { KindleBook } from 'src/stores/BookTypes';
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('configApi', {
+contextBridge.exposeInMainWorld('settingApi', {
   // ./modules/config
   getPath: async () :Promise<string> => await ipcRenderer.invoke('getPath'),
   hasConfig: async () :Promise<boolean> => await ipcRenderer.invoke('hasConfig'),
   saveConfig: async (config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', config),
   loadConfig: async () :Promise<object> => await ipcRenderer.invoke('loadConfig'),
-  hasKey: async (key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey'),
+  hasKey: async (key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', key),
 })
 
 contextBridge.exposeInMainWorld('localStorageApi', {

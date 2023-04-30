@@ -1,4 +1,4 @@
-export interface ConfigApi {
+export interface SettingApi {
   getPath: () => string,
   hasConfig: () => boolean,
   saveConfig: (config:unknown) => boolean,

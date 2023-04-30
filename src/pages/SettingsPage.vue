@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
-import { ConfigApi } from 'src-electron/modules/config-api';
+import { SettingApi } from 'src-electron/modules/setting/setting-api';
 import { LocalStorageApi } from 'src-electron/modules/lsTypes';
 import { BookriumSetting } from 'src/stores/SettingTypes';
 
@@ -48,7 +48,7 @@ import { BookriumSetting } from 'src/stores/SettingTypes';
 //  suppress ts lint message.
 // --------------------------------
 export interface Window {
-  configApi: ConfigApi
+  settingApi: SettingApi
   localStorageApi: LocalStorageApi
 };
 export declare var window: Window;
@@ -57,7 +57,7 @@ export declare var window: Window;
 //  store init
 // --------------------------------
 const settings = useSettingsStore();
-settings.bind(window.localStorageApi, window.configApi);
+settings.bind(window.localStorageApi, window.settingApi);
 
 // --------------------------------
 //  local var
@@ -81,9 +81,13 @@ onMounted(() => {
   bookriumSetting.value.storageSetting = settings.storageSetting;
 });
 
+// --------------------------------
+//  
+// --------------------------------
 async function selectDataFolderPath () {
-  const { canceled, filePaths } = await settings.selectFolder();
-  if (canceled) { return }
-  bookriumSetting.value.storageSetting.dataFolderPath = filePaths[0];
+  console.log('not implements.');
+  // const { canceled, filePaths } = await settings.selectFolder();
+  // if (canceled) { return }
+  // bookriumSetting.value.storageSetting.dataFolderPath = filePaths[0];
 }
 </script>
