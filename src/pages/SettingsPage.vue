@@ -5,13 +5,29 @@
         <q-list class="q-ml-md">
           <q-item>
             <q-item-section>
-              <q-item-label>Data Folder Path</q-item-label>
+              <q-item-label>Setting File Path</q-item-label>
+              <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
               <q-item-label>
-                <q-input outlined v-model="bookriumSetting.storageSetting.dataFolderPath"/>
+                <q-input readonly v-model="bookriumSetting.storageSetting.settingPath" outlined dense>
+                  <template v-slot:append>
+                    <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+                  </template>
+                </q-input>
               </q-item-label>
             </q-item-section>
-            <q-item-section side>
-              <q-btn square icon="mdi-folder-settings" @click="selectDataFolderPath"/>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
+              <q-item-label>Data Folder Path</q-item-label>
+              <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
+              <q-item-label>
+                <q-input readonly v-model="bookriumSetting.storageSetting.dataFolderPath" outlined dense>
+                  <template v-slot:append>
+                    <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+                  </template>
+                </q-input>
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -52,6 +68,7 @@ const bookriumSetting :Ref<BookriumSetting> = ref({
     dataFolderPath: '',
     cacheFolderPath: '',
     artworkFolderPath: '',
+    settingPath: '',
     connectorSettingPath: '',
   }
 });

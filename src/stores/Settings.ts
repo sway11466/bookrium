@@ -15,10 +15,11 @@ export const useSettingsStore = defineStore('settings', {
       const dataFolder = await this.localStorageApi.getUserAppDataFolder();
       return {
         storageSetting: {
-          dataFolderPath: dataFolder,
-          cacheFolderPath: dataFolder + '\\cache',
-          artworkFolderPath: dataFolder + '\\artwork',
-          connectorSettingPath: dataFolder + '\\bookrium-setting-connector.json',
+          dataFolderPath: dataFolder + '\\Bookrium',
+          cacheFolderPath: dataFolder + '\\Bookrium\\cache',
+          artworkFolderPath: dataFolder + '\\Bookrium\\artwork',
+          settingPath: await this.configApi.getPath(),
+          connectorSettingPath: dataFolder + '\\Bookrium\\bookrium-setting-connector.json',
         }
       }
     }
@@ -60,6 +61,7 @@ export const useSettingsStore = defineStore('settings', {
           dataFolderPath: this.storageSetting.dataFolderPath,
           cacheFolderPath: this.storageSetting.cacheFolderPath,
           artworkFolderPath: this.storageSetting.artworkFolderPath,
+          settingPath: this.storageSetting.settingPath,
           connectorSettingPath: this.storageSetting.connectorSettingPath,
         }
       });
