@@ -25,9 +25,8 @@
 
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
-// import { useBooksStore } from 'src/stores/Books';
 import { useConnectsStore } from 'src/stores/Connects';
-import { KindleConnect } from 'src/stores/ConnectTypes';
+import { ConnectType, KindleConnect } from 'src/stores/ConnectTypes';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api'
 
 // --------------------------------
@@ -65,10 +64,9 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-// Todo: use type
-let kindle: Ref = ref({
+let kindle: Ref<KindleConnect> = ref({
   id: '',
-  type: 'kindle',
+  type: 'kindle' as ConnectType,
   email: '',
   password: '',
 });
@@ -78,7 +76,7 @@ let kindle: Ref = ref({
 // --------------------------------
 onMounted(() => {
   if (props.id) {
-    kindle.value = connects[props.id];
+    kindle.value = connects[props.id] as KindleConnect;
   } else {
     console.log('not implements.');
     // TODO: Assign uuid as id
@@ -127,13 +125,4 @@ function del() {
   console.log('not implements.');
   emit('hideDialog');
 };
-
-// --------------------------------
-//  debug functions
-// --------------------------------
-function debug() {
-  console.log('==== Conncts Srote State ====');
-  connects.logState();
-}
-
 </script>

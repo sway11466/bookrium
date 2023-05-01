@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useSettingsStore } from 'src/stores/Settings';
-import { DisplayConnect, KindleConnect, LocalStorageConnect, Connect } from 'src/stores/ConnectTypes';
+import { DisplayConnect, KindleConnect, Connect } from 'src/stores/ConnectTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connector';
@@ -22,7 +22,7 @@ export const useConnectsStore = defineStore('connects', {
         if (connect.type == 'kindle') {
           const kindle = connect as KindleConnect;
           all.push({
-            id: kindle.id,
+            id: id,
             type: 'kindle',
             description: kindle.email,
             lastConnectAt: null,
@@ -91,6 +91,11 @@ export const useConnectsStore = defineStore('connects', {
 
     deleteKindleSetting(id: string) {
       console.log('not implements');
+      console.log(id);
+      // Todo: implements
+      // - show confirm dialog
+      // - delete all books on delete connection
+      // - delete connection
     },
 
     // --------------------------------
