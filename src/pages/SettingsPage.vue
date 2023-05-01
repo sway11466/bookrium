@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue';
+import { ref, Ref } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
 import { Setting } from 'src/stores/SettingTypes';
 
@@ -53,22 +53,8 @@ const settings = useSettingsStore();
 // TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
 const setting :Ref<Setting> = ref({
-  settingPath: '',
-  storage: {
-    dataFolderPath: '',
-    bookFolderPath: '',
-    cacheFolderPath: '',
-    artworkFolderPath: '',
-  }
-});
-
-// --------------------------------
-//  lifecycle events
-// --------------------------------
-onMounted(async () => {
-  await settings.init();
-  setting.value.settingPath = settings.settingPath;
-  setting.value.storage = settings.storage;
+  settingPath: settings.settingPath,
+  storage: settings.storage,
 });
 
 // --------------------------------

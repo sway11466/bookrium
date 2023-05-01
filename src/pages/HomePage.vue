@@ -14,6 +14,9 @@
 </template>
 
 <script setup lang="ts">
+// --------------------------------
+//  init ApiManager
+// --------------------------------
 import { useApiManager } from 'src/stores/ApiManager';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
@@ -27,6 +30,14 @@ export declare var window: Window;
 const apiManager = useApiManager();
 apiManager.bindLocalStorageApi(window.localStorageApi);
 apiManager.bindConfigApi(window.configApi);
+
+// --------------------------------
+//  init SettingStore
+// --------------------------------
+import { useSettingsStore } from 'src/stores/Settings';
+const settings = useSettingsStore();
+settings.init();
+
 
 async function test() {
   console.log('test');
