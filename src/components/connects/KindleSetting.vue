@@ -64,7 +64,7 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-let kindle: Ref<KindleConnect> = ref({
+const kindle: Ref<KindleConnect> = ref({
   id: '',
   type: 'kindle' as ConnectType,
   email: '',
@@ -78,8 +78,7 @@ onMounted(() => {
   if (props.id) {
     kindle.value = connects[props.id] as KindleConnect;
   } else {
-    console.log('not implements.');
-    // TODO: Assign uuid as id
+    kindle.value = connects.newKindleConnect();
   }
 })
 
@@ -88,6 +87,7 @@ onMounted(() => {
 // --------------------------------
 async function save() {
   await connects.saveKindleConnect(kindle.value);
+  connects[kindle.value.id] = kindle.value; //Todo: Reactive not work in store...
 };
 
 async function test() {
@@ -121,8 +121,8 @@ async function collect() {
   });
 };
 
-function del() {
-  console.log('not implements.');
+async function del() {
+  await connects.deleteKindleSetting(kindle.value.id);
   emit('hideDialog');
 };
 </script>

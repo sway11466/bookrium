@@ -26,6 +26,13 @@ export default {
     return fs.existsSync(path) ? store.get(key) as object : {};
   },
 
+  deleteConfig: async (event:IpcMainInvokeEvent, path:string, key:string): Promise<boolean> => {
+    const {dir, name, ext} = pt.parse(path);
+    const store = new useStore({cwd: dir, name: name, fileExtension: ext.replace('.', '')});
+    store.delete(key);
+    return true;
+  },
+
   hasKey: async (event:IpcMainInvokeEvent, path:string, key:string): Promise<boolean> => {
     const {dir, name, ext} = pt.parse(path);
     const store = new useStore({cwd: dir, name: name, fileExtension: ext.replace('.', '')});

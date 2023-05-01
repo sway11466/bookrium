@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia';
+import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useSettingsStore } from 'src/stores/Settings';
-import { DisplayConnect, KindleConnect, Connect } from 'src/stores/ConnectTypes';
+import { DisplayConnect, Connect, ConnectType, KindleConnect } from 'src/stores/ConnectTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connector';
+const apiManager = useApiManager();
+const settings = useSettingsStore();
 
 export const useConnectsStore = defineStore('connects', {
   
@@ -43,8 +46,6 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     async loadAllConnects(): Promise<boolean> {
-      const apiManager = useApiManager();
-      const settings = useSettingsStore();
       if (!apiManager.configApi.hasConfig(settings.settingPath)) { return false; }
       const connects = await apiManager.configApi.loadConfig(settings.settingPath, CONFIG_CONNECTOR_KEY) as Connect;
       for (const [id, connect] of Object.entries(connects)) {
@@ -56,6 +57,15 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     //  kindle functions
     // --------------------------------
+    newKindleConnect(): KindleConnect {
+      return {
+        id: uuid(),
+        type: 'kindle' as ConnectType,
+        email: '',
+        password: '',
+      }
+    },
+
     cloneKindleConnect(connect: KindleConnect): KindleConnect {
       return {
         id: structuredClone(connect.id),
@@ -65,50 +75,28 @@ export const useConnectsStore = defineStore('connects', {
       }
     },
 
-    setKindleConnect(connect: KindleConnect) {
-      // Todo: Exists validation
-      this[connect.id] = connect;
-      // Todo: save file
-    },
-
     saveKindleConnect(connect: KindleConnect) {
-      const apiManager = useApiManager();
-      const settings = useSettingsStore();
-      const value = { [connect.id]: this.cloneKindleConnect(connect) };
-      apiManager.configApi.saveConfig(settings.settingPath, CONFIG_CONNECTOR_KEY, value);
+      const key = CONFIG_CONNECTOR_KEY + "." + connect.id;
+      const value = this.cloneKindleConnect(connect);
+      apiManager.configApi.saveConfig(settings.settingPath, key, value);
+      // this[connect.id] = connect; //Todo: Reactive not work
     },
 
     async testKindleSetting(connect: KindleConnect): Promise<boolean> {
-      const apiManager = useApiManager();
       return await apiManager.connectApi.testKindle(connect.email, connect.password);
     },
 
     async collectKindleBooks(connect: KindleConnect) {
-      const apiManager = useApiManager();
       const books = await apiManager.connectApi.collectKindle(connect.email, connect.password);
       return books;
     },
 
-    deleteKindleSetting(id: string) {
-      console.log('not implements');
-      console.log(id);
-      // Todo: implements
-      // - show confirm dialog
-      // - delete all books on delete connection
-      // - delete connection
+    async deleteKindleSetting(id: string) {
+      // Todo: show confirm dialog
+      const key = CONFIG_CONNECTOR_KEY + "." + id;
+      await apiManager.configApi.deleteConfig(settings.settingPath, key);
+      delete this[id];
+      // Todo: delete all books on delete connection
     },
-
-    // --------------------------------
-    //  debug
-    // --------------------------------
-    fillSample() {
-      if (this.displays.length == 0) {
-        this.setKindleConnect({id: '8bc4c5f7-87be-445b-9d51-631a0259dfb0', type: 'kindle', email:'sample@booklium', password:'sample'});
-      }
-    },
-
-    logState() {
-      console.log(this);
-    }
   }
 });

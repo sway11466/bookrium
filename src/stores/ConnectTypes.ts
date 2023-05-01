@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 export type ConnectType = 'kindle' | 'localstrage';
 
 /**
