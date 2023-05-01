@@ -20,16 +20,19 @@
 import { useApiManager } from 'src/stores/ApiManager';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
+import { ConnectApi } from 'src-electron/modules/connects/connect-api';
 
 export interface Window {
   localStorageApi: LocalStorageApi
   configApi: ConfigApi
+  connectApi: ConnectApi
 };
 export declare var window: Window;
 
 const apiManager = useApiManager();
 apiManager.bindLocalStorageApi(window.localStorageApi);
 apiManager.bindConfigApi(window.configApi);
+apiManager.bindConnectApi(window.connectApi);
 
 // --------------------------------
 //  init SettingStore

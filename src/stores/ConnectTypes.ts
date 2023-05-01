@@ -15,7 +15,7 @@ export type DisplayConnect = {
 /**
  * Connection settings for setting file.
  */
-export type ConnectorSetting = {
+export type Connect = {
   kindle: KindleConnect[],
   localstrage: LocalStorageConnect[]
 }

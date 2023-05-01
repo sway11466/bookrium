@@ -1,24 +1,16 @@
 import { defineStore } from 'pinia';
-import { DisplayConnect, KindleConnect, LocalStorageConnect, ConnectorSetting } from 'src/stores/ConnectTypes';
-import { ConnectApi } from 'app/src-electron/modules/connects/connect-api';
+import { useApiManager } from 'src/stores/ApiManager';
+import { DisplayConnect, KindleConnect, LocalStorageConnect, Connect } from 'src/stores/ConnectTypes';
 
 export const useConnectsStore = defineStore('connects', {
   
-  state: () => ({
-    connectApi: {} as ConnectApi,
+  state: (): Connect => ({
     kindle: [] as KindleConnect[],
     localstrage: [] as LocalStorageConnect[]
   }),
   
   getters: {
-    blankSetting() :ConnectorSetting {
-      return {
-        kindle: [] as KindleConnect[],
-        localstrage: [] as LocalStorageConnect[],
-      }
-    },
-
-    all(state) :DisplayConnect[] {
+    displays(state) :DisplayConnect[] {
       const all : DisplayConnect[] = []
       state.kindle.forEach(e => all.push({
         id: e.id,
@@ -42,22 +34,17 @@ export const useConnectsStore = defineStore('connects', {
 
   actions: {
     // --------------------------------
-    //  bind apis
-    // --------------------------------
-    bind(connectApi:ConnectApi) {
-      this.connectApi = connectApi;
-    },
-
-    // --------------------------------
     //  comoon functions
     // --------------------------------
-    async loadConnectsSetting() :Promise<ConnectorSetting> {
-      return await this.connectApi.hasConnectsSetting() ?
-        await this.connectApi.loadConnectsSetting() as ConnectorSetting : this.blankSetting;
+    async loadConnectsSetting() :Promise<Connect> {
+      const apiManager = useApiManager();
+      return await apiManager.connectApi.hasConnectsSetting() ?
+        await apiManager.connectApi.loadConnectsSetting() as Connect : this;
     },
 
-    async saveConnectsSetting(setting :ConnectorSetting) :Promise<boolean> {
-      this.connectApi.saveConnectsSetting(setting);
+    async saveConnectsSetting(setting :Connect) :Promise<boolean> {
+      const apiManager = useApiManager();
+      apiManager.connectApi.saveConnectsSetting(setting);
       // TODO: error handling
       return true;
     },
@@ -77,11 +64,13 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     async testKindleSetting(setting:KindleConnect) :Promise<boolean> {
-      return await this.connectApi.testKindle(setting.email, setting.password);
+      const apiManager = useApiManager();
+      return await apiManager.connectApi.testKindle(setting.email, setting.password);
     },
 
     async collectKindleBooks(setting:KindleConnect) {
-      const books = await this.connectApi.collectKindle(setting.email, setting.password);
+      const apiManager = useApiManager();
+      const books = await apiManager.connectApi.collectKindle(setting.email, setting.password);
       return books;
     },
 
@@ -93,7 +82,7 @@ export const useConnectsStore = defineStore('connects', {
     //  debug
     // --------------------------------
     fillSample() {
-      if (this.all.length == 0) {
+      if (this.displays.length == 0) {
         this.addKindleSetting({id: '1', email:'sample@booklium', password:'sample'});
         this.localstrage.push({path:'./sample'});
       }

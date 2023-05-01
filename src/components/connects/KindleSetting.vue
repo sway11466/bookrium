@@ -42,7 +42,6 @@ export declare var window: Window;
 //  store init
 // --------------------------------
 const connects = useConnectsStore();
-connects.bind(window.connectApi);
 // const books = useBooksStore();
 
 // --------------------------------
