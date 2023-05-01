@@ -71,7 +71,5 @@ import config from 'src-electron/modules/config';
 for (const [k,v] of Object.entries(config)) { ipcMain.handle(k, v) }
 
 // import and handle Connects
-import connect from 'src-electron/modules/connects/connect';
 import kindle from 'src-electron/modules/connects/kindle';
-for (const [k,v] of Object.entries(connect)) { ipcMain.handle(k, v) }
 for (const [k,v] of Object.entries(kindle)) { ipcMain.handle(k, v) }

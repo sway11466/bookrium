@@ -14,40 +14,49 @@
 </template>
 
 <script setup lang="ts">
-// --------------------------------
-//  init ApiManager
-// --------------------------------
-import { useApiManager } from 'src/stores/ApiManager';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
 
+// --------------------------------
+//  supress window function error
+// --------------------------------
+export declare var window: Window;
 export interface Window {
   localStorageApi: LocalStorageApi
   configApi: ConfigApi
   connectApi: ConnectApi
 };
-export declare var window: Window;
 
+// --------------------------------
+//  ApiManager
+// --------------------------------
+import { useApiManager } from 'src/stores/ApiManager';
 const apiManager = useApiManager();
-apiManager.bindLocalStorageApi(window.localStorageApi);
-apiManager.bindConfigApi(window.configApi);
-apiManager.bindConnectApi(window.connectApi);
 
 // --------------------------------
-//  init ConnectorStore
-// --------------------------------
-import { useConnectsStore } from 'src/stores/Connects';
-const connects = useConnectsStore();
-connects.init();
-
-// --------------------------------
-//  init SettingStore
+//  SettingStore
 // --------------------------------
 import { useSettingsStore } from 'src/stores/Settings';
 const settings = useSettingsStore();
-settings.init();
 
+// --------------------------------
+//  ConnectorStore
+// --------------------------------
+import { useConnectsStore } from 'src/stores/Connects';
+const connects = useConnectsStore();
+
+// --------------------------------
+//  init 
+// --------------------------------
+const init = async () => {
+  apiManager.bindLocalStorageApi(window.localStorageApi);
+  apiManager.bindConfigApi(window.configApi);
+  apiManager.bindConnectApi(window.connectApi);
+  await settings.init();
+  await connects.init();
+};
+init();
 
 async function test() {
   console.log('test');

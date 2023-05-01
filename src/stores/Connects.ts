@@ -3,6 +3,9 @@ import { useApiManager } from 'src/stores/ApiManager';
 import { useSettingsStore } from 'src/stores/Settings';
 import { DisplayConnect, KindleConnect, LocalStorageConnect, Connect } from 'src/stores/ConnectTypes';
 
+const CONFIG_ROOT_KEY = 'bookrium';
+const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connector';
+
 export const useConnectsStore = defineStore('connects', {
   
   state: (): Connect => ({}),
@@ -36,32 +39,43 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     async init(): Promise<void> {
       await this.loadAllConnects();
-      this.fillSample(); // for debug
+      // this.fillSample(); // for debug
     },
 
-    async loadAllConnects(): Promise<Connect> {
+    async loadAllConnects(): Promise<boolean> {
       const apiManager = useApiManager();
-      return await apiManager.connectApi.hasConnectsSetting() ?
-        await apiManager.connectApi.loadConnectsSetting() as Connect : this;
+      const settings = useSettingsStore();
+      if (!apiManager.configApi.hasConfig(settings.settingPath)) { return false; }
+      const connects = await apiManager.configApi.loadConfig(settings.settingPath, CONFIG_CONNECTOR_KEY) as Connect;
+      for (const [id, connect] of Object.entries(connects)) {
+        this[id] = connect;
+      }
+      return true;
     },
 
     // --------------------------------
     //  kindle functions
     // --------------------------------
+    cloneKindleConnect(connect: KindleConnect): KindleConnect {
+      return {
+        id: structuredClone(connect.id),
+        type: structuredClone(connect.type),
+        email: structuredClone(connect.email),
+        password: structuredClone(connect.password),
+      }
+    },
+
     setKindleConnect(connect: KindleConnect) {
       // Todo: Exists validation
       this[connect.id] = connect;
       // Todo: save file
     },
 
-    saveKindleConnect(id: string) {
+    saveKindleConnect(connect: KindleConnect) {
       const apiManager = useApiManager();
       const settings = useSettingsStore();
-      apiManager.configApi.saveConfig(
-        settings.settingPath,
-        'connector',
-        {}
-      );
+      const value = { [connect.id]: this.cloneKindleConnect(connect) };
+      apiManager.configApi.saveConfig(settings.settingPath, CONFIG_CONNECTOR_KEY, value);
     },
 
     async testKindleSetting(connect: KindleConnect): Promise<boolean> {

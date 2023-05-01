@@ -46,10 +46,6 @@ contextBridge.exposeInMainWorld('configApi', {
 })
 
 contextBridge.exposeInMainWorld('connectApi', {
-  // src-electron/modules/connects/connect
-  hasConnectsSetting: async () :Promise<boolean> => await ipcRenderer.invoke('hasConnectsSetting'),
-  loadConnectsSetting: async () :Promise<unknown> => await ipcRenderer.invoke('loadConnectsSetting'),
-  saveConnectsSetting: async (setting:unknown) :Promise<boolean> => await ipcRenderer.invoke('saveConnectsSetting', setting),
   // src-electron/modules/connects/kindle
   testKindle: async (email:string, password:string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
   collectKindle: async (email:string, password:string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
