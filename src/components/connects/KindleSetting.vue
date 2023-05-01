@@ -65,8 +65,10 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-let kindle :Ref<KindleConnect> = ref({
+// Todo: use type
+let kindle: Ref = ref({
   id: '',
+  type: 'kindle',
   email: '',
   password: '',
 });
@@ -76,7 +78,7 @@ let kindle :Ref<KindleConnect> = ref({
 // --------------------------------
 onMounted(() => {
   if (props.id) {
-    kindle.value = connects.getKindleSetting(props.id);
+    kindle.value = connects[props.id];
   } else {
     console.log('not implements.');
     // TODO: Assign uuid as id
@@ -87,13 +89,7 @@ onMounted(() => {
 //  actions
 // --------------------------------
 async function save() {
-  let connectSettings = await connects.loadConnectsSetting();
-  for (let i=0; i<connectSettings.kindle.length; i++) {
-    if (connectSettings.kindle[i].id == kindle.value.id) {
-      Object.assign(connectSettings.kindle[i], kindle);
-    }
-  }
-  await connects.saveConnectsSetting(connectSettings);
+  await connects.saveKindleConnect(kindle.value);
 };
 
 async function test() {

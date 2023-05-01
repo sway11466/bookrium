@@ -16,8 +16,7 @@ export type DisplayConnect = {
  * Connection settings for setting file.
  */
 export type Connect = {
-  kindle: KindleConnect[],
-  localstrage: LocalStorageConnect[]
+  [id in string]: KindleConnect | LocalStorageConnect
 }
 
 /**
@@ -25,6 +24,7 @@ export type Connect = {
  */
 export type KindleConnect = {
   id: string
+  type: ConnectType
   email: string
   password: string
 };
@@ -33,5 +33,7 @@ export type KindleConnect = {
  * LocalStorage Connect Setting.
  */
 export type LocalStorageConnect = {
+  id: string
+  type: ConnectType
   path: string
 };

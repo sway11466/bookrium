@@ -1,6 +1,6 @@
 <template>
   <q-list>
-    <template v-for="connect in connects.displays" :key="connect.id">
+    <template v-for="connect in connects.displays()" :key="connect.id">
       <q-item @click="showEditDialog(connect)" clickable v-ripple>
         <q-item-section avatar>
           <template v-if="connect.type == 'kindle'">
@@ -38,7 +38,6 @@ import { DisplayConnect } from 'src/stores/ConnectTypes';
 //  store init
 // --------------------------------
 const connects = useConnectsStore();
-connects.fillSample(); // temp sample fill
 
 // --------------------------------
 //  emit

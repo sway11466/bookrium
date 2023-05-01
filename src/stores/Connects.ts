@@ -1,80 +1,81 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
+import { useSettingsStore } from 'src/stores/Settings';
 import { DisplayConnect, KindleConnect, LocalStorageConnect, Connect } from 'src/stores/ConnectTypes';
 
 export const useConnectsStore = defineStore('connects', {
   
-  state: (): Connect => ({
-    kindle: [] as KindleConnect[],
-    localstrage: [] as LocalStorageConnect[]
-  }),
-  
+  state: (): Connect => ({}),
+
   getters: {
-    displays(state) :DisplayConnect[] {
-      const all : DisplayConnect[] = []
-      state.kindle.forEach(e => all.push({
-        id: e.id,
-        type: 'kindle',
-        description: e.email,
-        lastConnectAt: null,
-        kindleConnect: e,
-        LocalStrageConnect: null
-      }));
-      state.localstrage.forEach(e => all.push({ 
-        id: e.path,
-        type: 'localstrage',
-        description: e.path,
-        lastConnectAt: null,
-        kindleConnect: null,
-        LocalStrageConnect: e
-      }));
-      return all
-    }
   },
 
   actions: {
+    // Todo: move getters
+    displays() :DisplayConnect[] {
+      const all : DisplayConnect[] = [];
+      for (const [id, connect] of Object.entries(this)) {
+        if (!connect.hasOwnProperty('type')) { continue; }
+        if (connect.type == 'kindle') {
+          const kindle = connect as KindleConnect;
+          all.push({
+            id: kindle.id,
+            type: 'kindle',
+            description: kindle.email,
+            lastConnectAt: null,
+            kindleConnect: kindle,
+            LocalStrageConnect: null
+          });
+        }
+      };
+      return all
+    },
+
     // --------------------------------
     //  comoon functions
     // --------------------------------
-    async loadConnectsSetting() :Promise<Connect> {
+    async init(): Promise<void> {
+      await this.loadAllConnects();
+      this.fillSample(); // for debug
+    },
+
+    async loadAllConnects(): Promise<Connect> {
       const apiManager = useApiManager();
       return await apiManager.connectApi.hasConnectsSetting() ?
         await apiManager.connectApi.loadConnectsSetting() as Connect : this;
     },
 
-    async saveConnectsSetting(setting :Connect) :Promise<boolean> {
-      const apiManager = useApiManager();
-      apiManager.connectApi.saveConnectsSetting(setting);
-      // TODO: error handling
-      return true;
-    },
-
     // --------------------------------
     //  kindle functions
     // --------------------------------
-    addKindleSetting(setting:KindleConnect) {
+    setKindleConnect(connect: KindleConnect) {
       // Todo: Exists validation
-      this.kindle.push(setting);
+      this[connect.id] = connect;
+      // Todo: save file
     },
 
-    getKindleSetting(id:string) :KindleConnect {
-      const index = this.kindle.findIndex((kindle) => kindle.id == id);
-      if (index == -1) { throw new Error('') } // TODO: implements error handling
-      return this.kindle[index];
-    },
-
-    async testKindleSetting(setting:KindleConnect) :Promise<boolean> {
+    saveKindleConnect(id: string) {
       const apiManager = useApiManager();
-      return await apiManager.connectApi.testKindle(setting.email, setting.password);
+      const settings = useSettingsStore();
+      apiManager.configApi.saveConfig(
+        settings.settingPath,
+        'connector',
+        {}
+      );
     },
 
-    async collectKindleBooks(setting:KindleConnect) {
+    async testKindleSetting(connect: KindleConnect): Promise<boolean> {
       const apiManager = useApiManager();
-      const books = await apiManager.connectApi.collectKindle(setting.email, setting.password);
+      return await apiManager.connectApi.testKindle(connect.email, connect.password);
+    },
+
+    async collectKindleBooks(connect: KindleConnect) {
+      const apiManager = useApiManager();
+      const books = await apiManager.connectApi.collectKindle(connect.email, connect.password);
       return books;
     },
 
-    deleteKindleSetting() {
+    deleteKindleSetting(id: string) {
       console.log('not implements');
     },
 
@@ -83,8 +84,7 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     fillSample() {
       if (this.displays.length == 0) {
-        this.addKindleSetting({id: '1', email:'sample@booklium', password:'sample'});
-        this.localstrage.push({path:'./sample'});
+        this.setKindleConnect({id: '8bc4c5f7-87be-445b-9d51-631a0259dfb0', type: 'kindle', email:'sample@booklium', password:'sample'});
       }
     },
 

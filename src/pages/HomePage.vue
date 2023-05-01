@@ -35,6 +35,13 @@ apiManager.bindConfigApi(window.configApi);
 apiManager.bindConnectApi(window.connectApi);
 
 // --------------------------------
+//  init ConnectorStore
+// --------------------------------
+import { useConnectsStore } from 'src/stores/Connects';
+const connects = useConnectsStore();
+connects.init();
+
+// --------------------------------
 //  init SettingStore
 // --------------------------------
 import { useSettingsStore } from 'src/stores/Settings';
