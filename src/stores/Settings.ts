@@ -1,21 +1,23 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { BookriumSetting, StorageSetting } from 'src/stores/SettingTypes';
+import { Setting, Storage } from 'src/stores/SettingTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
+const CONFIG_SETTING_KEY = CONFIG_ROOT_KEY + '.setting';
 
 export const useSettingsStore = defineStore('settings', {
-  state: (): BookriumSetting => ({
-    storageSetting: {} as StorageSetting,
+  state: (): Setting => ({
+    settingPath: '',
+    storage: {} as Storage,
   }),
 
   getters: {
-    async defaultSettings(): Promise<BookriumSetting> {
+    async defaultSettings(): Promise<Setting> {
       const apiManager = useApiManager();
       const appDirPath = await apiManager.localStorageApi.getUserAppDataFolder();
       return {
-        storageSetting: {
-          settingPath: appDirPath + '\\Bookrium\\bookrium.json',
+        settingPath: appDirPath + '\\Bookrium\\bookrium.json',
+        storage: {
           dataFolderPath: appDirPath + '\\Bookrium',
           bookFolderPath: appDirPath + '\\Bookrium\\book',
           cacheFolderPath: appDirPath + '\\Bookrium\\cache',
@@ -32,7 +34,7 @@ export const useSettingsStore = defineStore('settings', {
     async init() {
       const apiManager = useApiManager();
       const defaultSetting = await this.defaultSettings;
-      if (await apiManager.configApi.hasConfig(defaultSetting.storageSetting.settingPath)) {
+      if (await apiManager.configApi.hasConfig(defaultSetting.settingPath)) {
         await this.load(); // TODO: error handling
       } else {
         Object.assign(this, defaultSetting);
@@ -46,22 +48,24 @@ export const useSettingsStore = defineStore('settings', {
     async load() {
       const apiManager = useApiManager();
       const defaultSetting = await this.defaultSettings;
-      const setting = await apiManager.configApi.loadConfig(defaultSetting.storageSetting.settingPath, CONFIG_ROOT_KEY) as BookriumSetting;
+      const setting = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as Setting;
       Object.assign(this, setting);
     },
 
     async save() {
       const apiManager = useApiManager();
       apiManager.configApi.saveConfig(
-        this.storageSetting.settingPath,
-        CONFIG_ROOT_KEY + '.storageSetting',
+        this.settingPath,
+        CONFIG_SETTING_KEY,
         {
-            settingPath: this.storageSetting.settingPath,
-            dataFolderPath: this.storageSetting.dataFolderPath,
-            bookFolderPtha: this.storageSetting.bookFolderPath,
-            cacheFolderPath: this.storageSetting.cacheFolderPath,
-            artworkFolderPath: this.storageSetting.artworkFolderPath,
-        }
+          settingPath: this.settingPath,
+          storage: {
+            dataFolderPath: this.storage.dataFolderPath,
+            bookFolderPtha: this.storage.bookFolderPath,
+            cacheFolderPath: this.storage.cacheFolderPath,
+            artworkFolderPath: this.storage.artworkFolderPath,
+          }
+        } 
       );
     },
 

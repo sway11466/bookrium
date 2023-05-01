@@ -1,9 +1,9 @@
-export type BookriumSetting = {
-  storageSetting: StorageSetting,
+export type Setting = {
+  settingPath: string,
+  storage: Storage,
 }
 
-export type StorageSetting = {
-  settingPath: string,
+export type Storage = {
   dataFolderPath: string,
   bookFolderPath: string,
   cacheFolderPath: string,

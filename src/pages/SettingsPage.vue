@@ -8,7 +8,7 @@
               <q-item-label>Setting File Path</q-item-label>
               <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
               <q-item-label>
-                <q-input readonly v-model="bookriumSetting.storageSetting.settingPath" outlined dense>
+                <q-input readonly v-model="setting.settingPath" outlined dense>
                   <template v-slot:append>
                     <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
                   </template>
@@ -22,7 +22,7 @@
               <q-item-label>Data Folder Path</q-item-label>
               <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
               <q-item-label>
-                <q-input readonly v-model="bookriumSetting.storageSetting.dataFolderPath" outlined dense>
+                <q-input readonly v-model="setting.storage.dataFolderPath" outlined dense>
                   <template v-slot:append>
                     <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
                   </template>
@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
-import { BookriumSetting } from 'src/stores/SettingTypes';
+import { Setting } from 'src/stores/SettingTypes';
 
 // --------------------------------
 //  store init
@@ -52,13 +52,13 @@ const settings = useSettingsStore();
 // --------------------------------
 // TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
-const bookriumSetting :Ref<BookriumSetting> = ref({
-  storageSetting: {
+const setting :Ref<Setting> = ref({
+  settingPath: '',
+  storage: {
     dataFolderPath: '',
     bookFolderPath: '',
     cacheFolderPath: '',
     artworkFolderPath: '',
-    settingPath: '',
   }
 });
 
@@ -67,7 +67,8 @@ const bookriumSetting :Ref<BookriumSetting> = ref({
 // --------------------------------
 onMounted(async () => {
   await settings.init();
-  bookriumSetting.value.storageSetting = settings.storageSetting;
+  setting.value.settingPath = settings.settingPath;
+  setting.value.storage = settings.storage;
 });
 
 // --------------------------------
