@@ -42,7 +42,6 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     async init(): Promise<void> {
       await this.loadAllConnects();
-      // this.fillSample(); // for debug
     },
 
     async loadAllConnects(): Promise<boolean> {
@@ -76,7 +75,7 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     saveKindleConnect(connect: KindleConnect) {
-      const key = CONFIG_CONNECTOR_KEY + "." + connect.id;
+      const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       const value = this.cloneKindleConnect(connect);
       apiManager.configApi.saveConfig(settings.settingPath, key, value);
       // this[connect.id] = connect; //Todo: Reactive not work
@@ -93,7 +92,7 @@ export const useConnectsStore = defineStore('connects', {
 
     async deleteKindleSetting(id: string) {
       // Todo: show confirm dialog
-      const key = CONFIG_CONNECTOR_KEY + "." + id;
+      const key = CONFIG_CONNECTOR_KEY + '.' + id;
       await apiManager.configApi.deleteConfig(settings.settingPath, key);
       delete this[id];
       // Todo: delete all books on delete connection
