@@ -1,5 +1,24 @@
-- bookrium.json
-```bookrium.json
+# Directory and File Structure
+
+## Excecutable Dir/File Structure
+```
+./
+ +-- books/
+ |   +-- [connector-id].json
+ |
+ +-- artwork/
+ |
+ +-- shelf/
+ |
+ +-- labels/
+ |
+ +-- cache/
+ |
+ +-- booklium.json
+```
+
+## /bookrium.json
+```json
 {
     "bookrium": {
         "connector": {
@@ -15,6 +34,17 @@
                 "cacheFolderPath": "",
                 "artworkFolderPath": ""
             }
+        }
+    }
+}
+```
+
+## /book/[connector-id].json
+```json
+{
+    "bookrium": {
+        [book-id]: {
+            [attr-key]: [attr-val]
         }
     }
 }

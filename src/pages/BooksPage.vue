@@ -20,17 +20,9 @@
   </q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { useBooksStore } from 'src/stores/Books.js';
 
-export default defineComponent({
-  name: 'ConnectsPage',
-  components: { },
-  setup () {
-    const books = useBooksStore();
-    books.fillSample()
-    return { books };
-  }
-});
+const books = useBooksStore();
+books.fillSample()
 </script>
