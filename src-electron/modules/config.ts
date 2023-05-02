@@ -8,6 +8,7 @@ import useStore from 'electron-store';
 
 export default {
 
+  // Todo: rename hasFile
   hasConfig: async (event:IpcMainInvokeEvent, path:string): Promise<boolean> => {
     return fs.existsSync(path);
   },
@@ -33,6 +34,7 @@ export default {
     return true;
   },
 
+  // Todo: rename hasConfig
   hasKey: async (event:IpcMainInvokeEvent, path:string, key:string): Promise<boolean> => {
     const {dir, name, ext} = pt.parse(path);
     const store = new useStore({cwd: dir, name: name, fileExtension: ext.replace('.', '')});

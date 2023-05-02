@@ -47,8 +47,6 @@ export default {
   },
 
   collectKindle: async (event:IpcMainInvokeEvent, email:string, password:string) :Promise<KindleBook[]> => {
-    console.log(email);
-    console.log(password);
     const window = new BrowserWindow({show: true}); // debug param {show: true}
     try {
       const page = await pie.getPage(browser, window);
@@ -71,9 +69,12 @@ export default {
 
       return [
         {
+            id: 'sample-book-02',
+            type: 'kindle',
+            connectorId: 'sample-connctor-01',
             asin: 'B079Y1WDVZ',
-            webReaderUrl: new URL('https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ'),
-            productUrl: new URL('https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg'),
+            webReaderUrl: 'https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ',
+            productUrl: 'https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg',
             title: 'Dr.STONE 5 (ジャンプコミックスDIGITAL) (Japanese Edition)',
             percentageRead: 0,
             authors: [

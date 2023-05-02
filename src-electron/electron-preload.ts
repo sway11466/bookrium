@@ -46,6 +46,11 @@ contextBridge.exposeInMainWorld('configApi', {
   hasKey: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', path, key),
 })
 
+contextBridge.exposeInMainWorld('settingApi', {
+  // src-electron/modules/settings/setting
+  getPlatform: async () :Promise<string> => await ipcRenderer.invoke('getPlatform'),
+})
+
 contextBridge.exposeInMainWorld('connectApi', {
   // src-electron/modules/connects/kindle
   testKindle: async (email:string, password:string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),

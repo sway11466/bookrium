@@ -110,8 +110,7 @@ async function test() {
 
 async function collect() {
   connects.collectKindleBooks(kindle.value).then((books) => {
-      console.log('result');
-      console.log(books);
+    // TODO: show ok message & badge
   }).catch(e => {
     // TODO: show ng message & badge
     console.log(e);

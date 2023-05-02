@@ -45,7 +45,7 @@ import { Setting } from 'src/stores/SettingTypes';
 // --------------------------------
 //  store init
 // --------------------------------
-const settings = useSettingsStore();
+const store = useSettingsStore();
 
 // --------------------------------
 //  local var
@@ -53,8 +53,9 @@ const settings = useSettingsStore();
 // TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
 const setting :Ref<Setting> = ref({
-  settingPath: settings.settingPath,
-  storage: settings.storage,
+  settingPath: store.settingPath,
+  storage: store.storage,
+  platform: store.platform,
 });
 
 // --------------------------------

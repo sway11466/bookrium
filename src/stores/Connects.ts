@@ -1,13 +1,16 @@
 import { defineStore } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
+import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
 import { DisplayConnect, Connect, ConnectType, KindleConnect } from 'src/stores/ConnectTypes';
+import { KindleBook } from './BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connector';
 const apiManager = useApiManager();
-const settings = useSettingsStore();
+const booksStore = useBooksStore();
+const settingsStore = useSettingsStore();
 
 export const useConnectsStore = defineStore('connects', {
   
@@ -45,8 +48,8 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     async loadAllConnects(): Promise<boolean> {
-      if (!apiManager.configApi.hasConfig(settings.settingPath)) { return false; }
-      const connects = await apiManager.configApi.loadConfig(settings.settingPath, CONFIG_CONNECTOR_KEY) as Connect;
+      if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
+      const connects = await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY) as Connect;
       for (const [id, connect] of Object.entries(connects)) {
         this[id] = connect;
       }
@@ -77,7 +80,7 @@ export const useConnectsStore = defineStore('connects', {
     saveKindleConnect(connect: KindleConnect) {
       const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       const value = this.cloneKindleConnect(connect);
-      apiManager.configApi.saveConfig(settings.settingPath, key, value);
+      apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
       // this[connect.id] = connect; //Todo: Reactive not work
     },
 
@@ -86,14 +89,15 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     async collectKindleBooks(connect: KindleConnect) {
-      const books = await apiManager.connectApi.collectKindle(connect.email, connect.password);
+      const books = await apiManager.connectApi.collectKindle(connect.email, connect.password) as KindleBook[];
+      booksStore.addBooks(books);
       return books;
     },
 
     async deleteKindleSetting(id: string) {
       // Todo: show confirm dialog
       const key = CONFIG_CONNECTOR_KEY + '.' + id;
-      await apiManager.configApi.deleteConfig(settings.settingPath, key);
+      await apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
       delete this[id];
       // Todo: delete all books on delete connection
     },

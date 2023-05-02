@@ -43,8 +43,9 @@
 ```json
 {
     "bookrium": {
-        [book-id]: {
-            [attr-key]: [attr-val]
+        "books": [
+            [book-object]
+          ]
         }
     }
 }

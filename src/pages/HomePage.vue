@@ -17,6 +17,7 @@
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
+import { SettingApi } from 'src-electron/modules/settings/setting-api';
 
 // --------------------------------
 //  supress window function error
@@ -26,6 +27,7 @@ export interface Window {
   localStorageApi: LocalStorageApi
   configApi: ConfigApi
   connectApi: ConnectApi
+  settingApi: SettingApi
 };
 
 // --------------------------------
@@ -53,6 +55,7 @@ const init = async () => {
   apiManager.bindLocalStorageApi(window.localStorageApi);
   apiManager.bindConfigApi(window.configApi);
   apiManager.bindConnectApi(window.connectApi);
+  apiManager.bindSettingApi(window.settingApi);
   await settings.init();
   await connects.init();
 };

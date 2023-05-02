@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { Setting, Storage } from 'src/stores/SettingTypes';
+import { PlatformType, Setting, Storage } from 'src/stores/SettingTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_SETTING_KEY = CONFIG_ROOT_KEY + '.setting';
@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore('settings', {
   state: (): Setting => ({
     settingPath: '',
     storage: {} as Storage,
+    platform: 'win32',
   }),
 
   getters: {
@@ -22,7 +23,8 @@ export const useSettingsStore = defineStore('settings', {
           bookFolderPath: appDirPath + '\\Bookrium\\book',
           cacheFolderPath: appDirPath + '\\Bookrium\\cache',
           artworkFolderPath: appDirPath + '\\Bookrium\\artwork',
-        }
+        },
+        platform: await apiManager.settingApi.getPlatform() as PlatformType
       }
     }
   },
@@ -48,8 +50,10 @@ export const useSettingsStore = defineStore('settings', {
     async load() {
       const apiManager = useApiManager();
       const defaultSetting = await this.defaultSettings;
-      const setting = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as Setting;
-      Object.assign(this, setting);
+      const load = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as Setting;
+      this.settingPath = load.settingPath;
+      this.storage = load.storage;
+      this.platform = await apiManager.settingApi.getPlatform() as PlatformType;
     },
 
     async save() {
@@ -61,7 +65,7 @@ export const useSettingsStore = defineStore('settings', {
           settingPath: this.settingPath,
           storage: {
             dataFolderPath: this.storage.dataFolderPath,
-            bookFolderPtha: this.storage.bookFolderPath,
+            bookFolderPath: this.storage.bookFolderPath,
             cacheFolderPath: this.storage.cacheFolderPath,
             artworkFolderPath: this.storage.artworkFolderPath,
           }
