@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { BookStore, Book, KindleBook, DisplayBook, PDFBook } from 'src/stores/BookTypes';
+import { BookStore, Book, KindleBook, PDFBook } from 'src/stores/BookTypes';
 import { useSettingsStore } from 'src/stores/Settings';
 import { useConnectsStore } from 'src/stores/Connects';
 
@@ -15,26 +15,8 @@ export const useBooksStore = defineStore('books', {
   }),
 
   getters: {
-    display (state) :DisplayBook[] {
-      const books :DisplayBook[] = [];
-      for (const book of state.books.values()) {
-        switch (book.type) {
-          case 'kindle':
-            const kindle = book as KindleBook;
-            books.push({
-              type: 'kindle',
-              bookriumid: kindle.asin,
-              title: kindle.title,
-              author: kindle.authors.join(','),
-              image: kindle.productUrl,
-            })
-            break;
-          default:
-            break;
-        }
-      }
-      return books;
-    }
+    list: (state) => state.books.values(),
+    blankKindle: () => blankKindleBook(),
   },
 
   actions: {
@@ -103,5 +85,22 @@ const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
     resourceType: kindle.resourceType,
     originType: kindle.originType,
     mangaOrComicAsin: kindle.mangaOrComicAsin,
+  }
+}
+
+const blankKindleBook = (): KindleBook => {
+  return {
+    id: '',
+    type: 'kindle',
+    connectorId: '',
+    asin: '',
+    webReaderUrl: '',
+    productUrl: '',
+    title: '',
+    percentageRead: 0,
+    authors: [],
+    resourceType: '',
+    originType: '',
+    mangaOrComicAsin: false,
   }
 }

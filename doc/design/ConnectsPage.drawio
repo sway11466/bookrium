@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-05-02T02:08:07.086Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="-gKU-fLxUFfwpk2fIiHO" version="21.2.1" type="device">
+<mxfile host="Electron" modified="2023-05-03T06:16:08.813Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="zDt4L4gV1QJmS8Wjg7Ti" version="21.2.1" type="device">
   <diagram name="Components Relationship" id="kIjDmi0lvfg__qyG36zZ">
     <mxGraphModel dx="2142" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="800" math="0" shadow="0">
       <root>
@@ -121,6 +121,9 @@
         </mxCell>
         <mxCell id="tA3PqAxvzJVMVG8O-jBx-4" value="Essentially, it is a one-to-one shop with pages." style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="-360" y="400" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="tA3PqAxvzJVMVG8O-jBx-6" value="Store and main-thread-module are loosely coupled." style="text;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="-360" y="480" width="280" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

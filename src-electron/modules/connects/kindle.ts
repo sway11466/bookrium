@@ -46,6 +46,7 @@ export default {
     }
   },
 
+  // Todo: KindleBook[] type to be knknown[].
   collectKindle: async (event:IpcMainInvokeEvent, email:string, password:string) :Promise<KindleBook[]> => {
     const window = new BrowserWindow({show: true}); // debug param {show: true}
     try {
@@ -68,10 +69,10 @@ export default {
       await page.waitForSelector('#header-desktop');
 
       // collect books
-      let books:any = []
+      let books: KindleBook[] = []
       for (let paginationToken=0; paginationToken != undefined;) {
-        await page.goto("https://read.amazon.co.jp/kindle-library/search?&sortType=acquisition_asc&paginationToken=" + paginationToken)
-        const respons = JSON.parse((await page.$eval("pre", e => e.textContent)) ?? "{}")
+        await page.goto('https://read.amazon.co.jp/kindle-library/search?&sortType=acquisition_asc&paginationToken=' + paginationToken)
+        const respons = JSON.parse((await page.$eval('pre', e => e.textContent)) ?? '{}')
         books = books.concat(respons.itemsList)
         paginationToken = respons.paginationToken
       }

@@ -27,15 +27,6 @@
 import { ref, Ref, onMounted } from 'vue';
 import { useConnectsStore } from 'src/stores/Connects';
 import { ConnectType, KindleConnect } from 'src/stores/ConnectTypes';
-import { ConnectApi } from 'src-electron/modules/connects/connect-api'
-
-// --------------------------------
-//  suppress ts lint message.
-// --------------------------------
-export interface Window {
-  connectApi: ConnectApi
-};
-export declare var window: Window;
 
 // --------------------------------
 //  store init
@@ -108,8 +99,9 @@ async function test() {
 };
 
 async function collect() {
-  connectsStore.collectKindleBooks(kindle.value).then((books) => {
+  connectsStore.collectKindleBooks(kindle.value).then((ret: boolean) => {
     // TODO: show ok message & badge
+    console.log(ret);
   }).catch(e => {
     // TODO: show ng message & badge
     console.log(e);

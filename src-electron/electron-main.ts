@@ -1,5 +1,4 @@
 import { app, BrowserWindow, nativeTheme, ipcMain } from 'electron';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import path from 'path';
 import os from 'os';
 
@@ -37,7 +36,9 @@ function createWindow() {
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
     mainWindow.webContents.openDevTools();
-    installExtension(VUEJS_DEVTOOLS).then(name => console.log(name)).catch(err => console.log(err));
+    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer');
+    // eslint-disable-next-line
+    installExtension(VUEJS_DEVTOOLS).then((name: any) => console.log(name)).catch((err: any) => console.log(err));
   } else {
     // we're on production; no access to devtools pls
     mainWindow.webContents.on('devtools-opened', () => {

@@ -44,11 +44,3 @@ export type PDFBook = Book & {
  * 
  */
 export type ContentType = 'kindle' | 'pdf';
-
-export type DisplayBook = {
-  type: ContentType
-  bookriumid: string
-  title: string
-  author: string
-  image: string
-};

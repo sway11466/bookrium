@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
-import { ConnectStore, Connect, ConnectType, KindleConnect, LocalStorageConnect, DisplayConnect } from 'src/stores/ConnectTypes';
+import { ConnectStore, ConnectType, KindleConnect, LocalStorageConnect, DisplayConnect } from 'src/stores/ConnectTypes';
 import { KindleBook } from './BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
@@ -53,7 +53,7 @@ export const useConnectsStore = defineStore('connects', {
       const settingsStore = useSettingsStore();
       if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
       const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, KindleConnect | LocalStorageConnect>;
-      Object.entries(connectors).forEach(([key, value], index) => this.connectors.set(key, value));
+      Object.entries(connectors).forEach(([key, value]) => this.connectors.set(key, value));
       return true;
     },
 

@@ -1,24 +1,38 @@
 <template>
   <q-page>
     <q-list>
-      <template v-for="book in books.display" :key="book.id">
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <q-img :src="book.image" fit="fill" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{book.title}}</q-item-label>
-            <q-item-label caption>{{book.author}}</q-item-label>
-          </q-item-section>
-        </q-item>
+      <template v-for="book in store.list" :key="book.id">
+        <template v-if="book.type == 'kindle'">
+          <KindleListItem :param="book" @showKindleDialog="showKindleDialog" />
+        </template>
         <q-separator />
       </template>
     </q-list>
+    <KindleDialog ref="kindleDialog" />
   </q-page>
 </template>
 
 <script setup lang="ts">
+import KindleListItem from 'src/components/books/KindleListItem.vue';
+import KindleDialog from 'src/components/books/KindleDialog.vue';
+import { ref } from 'vue';
 import { useBooksStore } from 'src/stores/Books.js';
+import { KindleBook } from 'src/stores/BookTypes';
 
-const books = useBooksStore();
+// --------------------------------
+//  store init
+// --------------------------------
+const store = useBooksStore();
+
+// --------------------------------
+//  component ref
+// --------------------------------
+const kindleDialog = ref();
+
+// --------------------------------
+//  daialog visibility
+// --------------------------------
+function showKindleDialog(book: KindleBook) {
+  kindleDialog.value.show(book);
+}
 </script>
