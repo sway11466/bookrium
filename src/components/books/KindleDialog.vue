@@ -1,10 +1,22 @@
 <template>
-  <q-dialog v-model="visible" persistent>
+  <q-dialog v-model="visible">
     <q-card style="min-width: 350px">
-      <q-card-section class="row items-center q-pb-none">
-        <div>{{ book.title }}</div>
-        <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+      <q-card-section>
+        <q-img :src="book.productUrl" fit="fill" />
+      </q-card-section>
+      <q-card-section class="row">
+        <div class="text-h6">{{ book.title }}</div>
+        <template v-for="author in book.authors" :key="author">
+          <div>{{ author }}</div>
+        </template>
+      </q-card-section>
+      <q-card-section>
+        <template v-for="tag in book.tags" :key="tag">
+          <q-chip removable @remove="debug" color="primary" text-color="white">
+            {{ tag }}
+          </q-chip>
+        </template>
+        <q-input v-model="tag" rounded standout dense />
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -24,6 +36,14 @@ const store = useBooksStore();
 //  local var
 // --------------------------------
 const book: Ref<KindleBook> = ref(store.blankKindle);
+const tag: Ref<string> = ref('');
+
+// --------------------------------
+//  actions
+// --------------------------------
+function debug() {
+  console.log('callde!');
+}
 
 // --------------------------------
 //  self visibility

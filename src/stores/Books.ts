@@ -15,7 +15,7 @@ export const useBooksStore = defineStore('books', {
   }),
 
   getters: {
-    list: (state) => state.books.values(),
+    list: (state) => [...state.books.values()],
     blankKindle: () => blankKindleBook(),
   },
 
@@ -76,6 +76,7 @@ const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
     id: kindle.id,
     type: kindle.type,
     connectorId: kindle.connectorId,
+    tags: kindle.tags.concat([]),
     asin: kindle.asin,
     webReaderUrl: kindle.webReaderUrl,
     productUrl: kindle.productUrl,
@@ -93,12 +94,13 @@ const blankKindleBook = (): KindleBook => {
     id: '',
     type: 'kindle',
     connectorId: '',
+    tags: [] as string[],
     asin: '',
     webReaderUrl: '',
     productUrl: '',
     title: '',
     percentageRead: 0,
-    authors: [],
+    authors: [] as string[],
     resourceType: '',
     originType: '',
     mangaOrComicAsin: false,

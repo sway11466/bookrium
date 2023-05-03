@@ -16,6 +16,7 @@ export type Book = {
   id: string, //uuid
   type: ContentType,
   connectorId: string,
+  tags: string[],
 }
 
 /**
