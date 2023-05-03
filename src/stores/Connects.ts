@@ -87,12 +87,29 @@ export const useConnectsStore = defineStore('connects', {
       return await apiManager.connectApi.testKindle(connect.email, connect.password);
     },
 
-    async collectKindleBooks(connect: KindleConnect) {
+    async collectKindleBooks(connect: KindleConnect): Promise<boolean> {
       const apiManager = useApiManager();
       const booksStore = useBooksStore();
-      const books = await apiManager.connectApi.collectKindle(connect.email, connect.password) as KindleBook[];
+      const collected = await apiManager.connectApi.collectKindle(connect.email, connect.password) as KindleBook[];
+      const books = [] as KindleBook[];
+      for (const book of Object.values(collected)) {
+        books.push({
+          id: uuid(),
+          type: 'kindle',
+          connectorId: connect.id,
+          asin: book.asin,
+          webReaderUrl: book.webReaderUrl,
+          productUrl: book.productUrl,
+          title: book.title,
+          percentageRead: book.percentageRead,
+          authors: book.authors,
+          resourceType: book.resourceType,
+          originType: book.originType,
+          mangaOrComicAsin: book.mangaOrComicAsin,
+        });
+      }
       booksStore.addBooks(books);
-      return books;
+      return true;
     },
 
     async deleteKindleSetting(id: string) {

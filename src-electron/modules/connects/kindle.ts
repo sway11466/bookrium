@@ -55,36 +55,28 @@ export default {
       await page.goto('https://read.amazon.co.jp');
 
       // go to the login page.
-      // await page.waitForSelector('#top-sign-in-btn');
-      // await page.click('#top-sign-in-btn');
+      await page.waitForSelector('#top-sign-in-btn');
+      await page.click('#top-sign-in-btn');
   
       // // login with email and password
-      // await page.waitForSelector('#signInSubmit');
-      // await page.type('input[name=email]', email);
-      // await page.type('input[name=password]', password);
-      // await page.click('#signInSubmit');
+      await page.waitForSelector('#signInSubmit');
+      await page.type('input[name=email]', email);
+      await page.type('input[name=password]', password);
+      await page.click('#signInSubmit');
 
-      // // wait loguin success
-      // await page.waitForSelector('#header-desktop');
+      // wait loguin success
+      await page.waitForSelector('#header-desktop');
 
-      return [
-        {
-            id: 'sample-book-02',
-            type: 'kindle',
-            connectorId: 'sample-connctor-01',
-            asin: 'B079Y1WDVZ',
-            webReaderUrl: 'https://read.amazon.co.jp/kindle-library/manga-wr/B079Y1WDVZ',
-            productUrl: 'https://m.media-amazon.com/images/I/61LjdewoX5L._SY400_.jpg',
-            title: 'Dr.STONE 5 (ジャンプコミックスDIGITAL) (Japanese Edition)',
-            percentageRead: 0,
-            authors: [
-                '稲垣理一郎:Boichi:'
-            ],
-            resourceType: 'EBOOK',
-            originType: 'PURCHASE',
-            mangaOrComicAsin: true,
-        }
-      ]
+      // collect books
+      let books:any = []
+      for (let paginationToken=0; paginationToken != undefined;) {
+        await page.goto("https://read.amazon.co.jp/kindle-library/search?&sortType=acquisition_asc&paginationToken=" + paginationToken)
+        const respons = JSON.parse((await page.$eval("pre", e => e.textContent)) ?? "{}")
+        books = books.concat(respons.itemsList)
+        paginationToken = respons.paginationToken
+      }
+
+      return books;
     } catch (e) {
       console.log(e);
       return [];
