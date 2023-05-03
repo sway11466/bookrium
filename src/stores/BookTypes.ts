@@ -6,7 +6,7 @@
  */
 export type BookStore = {
   books: Map<string, KindleBook | PDFBook>,
-  connectors: Map<string, Book[]>,
+  connectorsIndex: Map<string, Book[]>,
 };
 
 /**

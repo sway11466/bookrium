@@ -5,8 +5,6 @@ import { ConnectApi } from 'src-electron/modules/connects/connect-api';
 import { SettingApi } from 'src-electron/modules/settings/setting-api';
 import { useSettingsStore } from 'src/stores/Settings';
 
-const settings = useSettingsStore();
-
 export const useApiManager = defineStore('ApiManager', {
   state: () => ({
     localStorageApi: {} as LocalStorageApi,
@@ -42,6 +40,7 @@ export const useApiManager = defineStore('ApiManager', {
 });
 
 const separator = (): string => {
+  const settings = useSettingsStore();
   switch (settings.platform) {
     case 'win32':
       return '\\';

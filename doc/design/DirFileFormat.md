@@ -21,11 +21,6 @@
 ```json
 {
     "bookrium": {
-        "connector": {
-            [connector-id]: {
-                [attr-key]: [attr-val]
-            }
-        },
         "setting": {
             "settingPath": "",
             "storage": {
@@ -33,6 +28,11 @@
                 "bookFolderPath": "",
                 "cacheFolderPath": "",
                 "artworkFolderPath": ""
+            }
+        },
+        "connector": {
+            [connector-id]: {
+                [attr-key]: [attr-val]
             }
         }
     }

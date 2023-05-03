@@ -21,7 +21,7 @@ export default {
     // TODO: error handling
   },
   
-  loadConfig: async (event:IpcMainInvokeEvent, path:string, key:string): Promise<object> => {
+  loadConfig: async (event:IpcMainInvokeEvent, path:string, key:string): Promise<unknown> => {
     const {dir, name, ext} = pt.parse(path);
     const store = new useStore({cwd: dir, name: name, fileExtension: ext.replace('.', '')});
     return fs.existsSync(path) ? store.get(key) as object : {};

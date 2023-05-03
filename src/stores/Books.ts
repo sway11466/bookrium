@@ -1,18 +1,17 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
 import { BookStore, Book, KindleBook, DisplayBook, PDFBook } from 'src/stores/BookTypes';
-import { KindleConnect } from 'src/stores/ConnectTypes';
 import { useSettingsStore } from 'src/stores/Settings';
+import { useConnectsStore } from 'src/stores/Connects';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.books';
-const apiManager = useApiManager();
 
 export const useBooksStore = defineStore('books', {
 
   state: (): BookStore => ({
     books: new Map(),
-    connectors: new Map(),
+    connectorsIndex: new Map(),
   }),
 
   getters: {
@@ -39,23 +38,38 @@ export const useBooksStore = defineStore('books', {
   },
 
   actions: {
-    addBooks(books: KindleBook[] | PDFBook[]) {
+    async init() {
+      const apiManager = useApiManager();
+      const connectsStore = useConnectsStore();
       const settings = useSettingsStore();
-      // books
+      for (const id of connectsStore.connectIdList) {
+        // load from file
+        const path = apiManager.path.join(settings.storage.bookFolderPath, id + '.json');
+        const books = await apiManager.configApi.loadConfig(path, CONFIG_CONNECTOR_KEY) as Book[];
+        // add connectors index
+        this.connectorsIndex.set(id, books);
+        // add book
+        Object.values(books).forEach(book => this.books.set(book.id, book as KindleBook | PDFBook));
+      }
+    },
+
+    addBooks(books: KindleBook[] | PDFBook[]) {
+      const apiManager = useApiManager();
+      const settings = useSettingsStore();
+      // add books
       books.forEach(book => this.books.set(book.id, book));
-      // connectors index
+      // add connectors index
       for (const book of books) {
-        const bookIndex = this.connectors.get(book.connectorId) ?? [];
+        const bookIndex = this.connectorsIndex.get(book.connectorId) ?? [];
         bookIndex.push(book);
-        if (!this.connectors.has(book.connectorId)) {
-          this.connectors.set(book.connectorId, bookIndex);
+        if (!this.connectorsIndex.has(book.connectorId)) {
+          this.connectorsIndex.set(book.connectorId, bookIndex);
         }
       };
-      // save
-      // const temp = Array.from(new Set(books.map(book => book.connector.id)));
+      // save to file
       new Set(books.map(book => book.connectorId)).forEach(id => {
         const path = apiManager.path.join(settings.storage.bookFolderPath, id + '.json');
-        apiManager.configApi.saveConfig(path, CONFIG_CONNECTOR_KEY, deproxyBook(this.connectors.get(id) ?? []));
+        apiManager.configApi.saveConfig(path, CONFIG_CONNECTOR_KEY, deproxyBook(this.connectorsIndex.get(id) ?? []));
       });
     },
   }

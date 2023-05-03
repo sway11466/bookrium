@@ -41,7 +41,7 @@ contextBridge.exposeInMainWorld('configApi', {
   // src-electron/modules/config
   hasConfig: async (path:string) :Promise<boolean> => await ipcRenderer.invoke('hasConfig', path),
   saveConfig: async (path:string, key:string, config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', path, key, config),
-  loadConfig: async (path:string, key:string) :Promise<object> => await ipcRenderer.invoke('loadConfig', path, key),
+  loadConfig: async (path:string, key:string) :Promise<unknown> => await ipcRenderer.invoke('loadConfig', path, key),
   deleteConfig: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('deleteConfig', path, key),
   hasKey: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', path, key),
 })

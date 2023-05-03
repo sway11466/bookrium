@@ -40,8 +40,8 @@ export declare var window: Window;
 // --------------------------------
 //  store init
 // --------------------------------
-const connects = useConnectsStore();
-// const books = useBooksStore();
+const connectsStore = useConnectsStore();
+// const books = useBooksStore();  // Todo: for count badge
 
 // --------------------------------
 //  prop
@@ -76,9 +76,9 @@ const kindle: Ref<KindleConnect> = ref({
 // --------------------------------
 onMounted(() => {
   if (props.id) {
-    kindle.value = connects[props.id] as KindleConnect;
+    kindle.value = connectsStore.connectors.get(props.id) as KindleConnect;
   } else {
-    kindle.value = connects.newKindleConnect();
+    kindle.value = connectsStore.newKindleConnect();
   }
 })
 
@@ -86,13 +86,12 @@ onMounted(() => {
 //  actions
 // --------------------------------
 async function save() {
-  await connects.saveKindleConnect(kindle.value);
-  connects[kindle.value.id] = kindle.value; //Todo: Reactive not work in store...
+  await connectsStore.saveKindleConnect(kindle.value);
 };
 
 async function test() {
   // TODO: show spinner
-  connects.testKindleSetting(kindle.value).then((ret) => {
+  connectsStore.testKindleSetting(kindle.value).then((ret) => {
     if (ret) {
       // TODO: show ok message & badge
       console.log('test ok');
@@ -109,7 +108,7 @@ async function test() {
 };
 
 async function collect() {
-  connects.collectKindleBooks(kindle.value).then((books) => {
+  connectsStore.collectKindleBooks(kindle.value).then((books) => {
     // TODO: show ok message & badge
   }).catch(e => {
     // TODO: show ng message & badge
@@ -121,7 +120,7 @@ async function collect() {
 };
 
 async function del() {
-  await connects.deleteKindleSetting(kindle.value.id);
+  await connectsStore.deleteKindleSetting(kindle.value.id);
   emit('hideDialog');
 };
 </script>

@@ -37,6 +37,12 @@ import { useApiManager } from 'src/stores/ApiManager';
 const apiManager = useApiManager();
 
 // --------------------------------
+//  BooksStore
+// --------------------------------
+import { useBooksStore } from 'src/stores/Books';
+const books = useBooksStore();
+
+// --------------------------------
 //  SettingStore
 // --------------------------------
 import { useSettingsStore } from 'src/stores/Settings';
@@ -58,6 +64,7 @@ const init = async () => {
   apiManager.bindSettingApi(window.settingApi);
   await settings.init();
   await connects.init();
+  await books.init();
 };
 init();
 
