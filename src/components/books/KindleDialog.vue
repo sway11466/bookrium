@@ -7,16 +7,18 @@
       <q-card-section class="row">
         <div class="text-h6">{{ book.title }}</div>
         <template v-for="author in book.authors" :key="author">
-          <div>{{ author }}</div>
+          <div>{{ author.replace(':','') }}</div>
         </template>
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="row wrap">
         <template v-for="tag in book.tags" :key="tag">
-          <q-chip removable @remove="debug" color="primary" text-color="white">
+          <q-chip removable @remove="remove(tag)" color="primary" text-color="white">
             {{ tag }}
           </q-chip>
         </template>
-        <q-input v-model="tag" rounded standout dense />
+        <div class="col" style="max-width: 7em;">
+        <q-input v-model="tag" @keydown.enter="add" rounded standout dense />
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -43,6 +45,20 @@ const tag: Ref<string> = ref('');
 // --------------------------------
 function debug() {
   console.log('callde!');
+}
+
+function add(event: KeyboardEvent) {
+  book.value.tags.push(tag.value);
+  tag.value = '';
+  //TODO: save to file from store
+  //TODO: modify label
+}
+
+function remove(param: string) {
+  const index = book.value.tags.indexOf(param);
+  book.value.tags.splice(index, 1);
+  //TODO: save to file from store
+  //TODO: modify label
 }
 
 // --------------------------------

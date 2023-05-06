@@ -5,7 +5,7 @@
     </q-item-section>
     <q-item-section>
       <q-item-label>{{book.title}}</q-item-label>
-      <q-item-label caption>{{book.authors.join(',')}}</q-item-label>
+      <q-item-label caption>{{authors(book.authors)}}</q-item-label>
     </q-item-section>
     <q-item-section side>
       <q-btn @click.stop="showEditDialog" icon="edit" color="primary" outline rounded />
@@ -42,11 +42,15 @@ const book: Ref<KindleBook> = ref(props.param as KindleBook);
 // --------------------------------
 //  actions
 // --------------------------------
-function showEditDialog() {
+function showEditDialog(): void {
   emit('showKindleDialog', book.value);
 }
 
-function test() {
+function authors(authors: string[]): string {
+  return authors.join(':').split(':').join(',').replace(/,$/, '');
+}
+
+function test(): void {
   console.log('called');
 }
 </script>
