@@ -11,10 +11,36 @@
  +-- shelf/
  |
  +-- labels/
+ |   +-- label.json
  |
  +-- cache/
  |
  +-- booklium.json
+```
+
+## /book/[connector-id].json
+```json
+{
+    "bookrium": {
+        "books": [
+            [book-object]
+          ]
+        }
+    }
+}
+```
+
+## /labels/label.json
+```json
+{
+    "bookrium": {
+        "labels": {
+            [label-name]: {
+                "count": 0,
+            }
+        }
+    }
+}
 ```
 
 ## /bookrium.json
@@ -34,18 +60,6 @@
             [connector-id]: {
                 [attr-key]: [attr-val]
             }
-        }
-    }
-}
-```
-
-## /book/[connector-id].json
-```json
-{
-    "bookrium": {
-        "books": [
-            [book-object]
-          ]
         }
     }
 }

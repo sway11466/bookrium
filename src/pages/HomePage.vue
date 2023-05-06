@@ -37,22 +37,28 @@ import { useApiManager } from 'src/stores/ApiManager';
 const apiManager = useApiManager();
 
 // --------------------------------
-//  BooksStore
+//  Books Store
 // --------------------------------
 import { useBooksStore } from 'src/stores/Books';
 const books = useBooksStore();
 
 // --------------------------------
-//  SettingStore
+//  Labels Store
 // --------------------------------
-import { useSettingsStore } from 'src/stores/Settings';
-const settings = useSettingsStore();
+import { useLabelsStore } from 'src/stores/Labels';
+const labels = useLabelsStore();
 
 // --------------------------------
-//  ConnectorStore
+//  Connectors Store
 // --------------------------------
 import { useConnectsStore } from 'src/stores/Connects';
 const connects = useConnectsStore();
+
+// --------------------------------
+//  Setting Store
+// --------------------------------
+import { useSettingsStore } from 'src/stores/Settings';
+const settings = useSettingsStore();
 
 // --------------------------------
 //  init 
@@ -65,6 +71,7 @@ const init = async () => {
   await settings.init();
   await connects.init();
   await books.init();
+  await labels.init();
 };
 init();
 
