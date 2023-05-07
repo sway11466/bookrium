@@ -4,15 +4,15 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="add" color="accent" @click="showAddDialog" />
     </q-page-sticky>
-    <!-- 
     <AddDialog ref="addDialog" />
+    <!-- 
     <EditDialog ref="editDialog" />
      -->
   </q-page>
 </template>
 
 <script setup lang="ts">
-import AddDialog from 'src/components/connects/AddDialog.vue';
+import AddDialog from 'src/components/labels/AddDialog.vue';
 import LabelList from 'src/components/labels/LabelList.vue';
 import EditDialog from 'src/components/connects/EditDialog.vue';
 import { ref } from 'vue';

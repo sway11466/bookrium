@@ -8,7 +8,7 @@
       <q-item-label caption>{{authors(book.authors)}}</q-item-label>
     </q-item-section>
     <q-item-section side>
-      <q-btn @click.stop="showEditDialog" icon="edit" color="primary" outline rounded />
+      <q-btn @click.stop="showEditDialog" icon="mdi-square-edit-outline" color="primary" flat square />
     </q-item-section>
   </q-item>
 </template>
