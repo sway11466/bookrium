@@ -1,7 +1,15 @@
 <template>
-  <q-dialog v-model="visible" persistent>
-    <q-btn icon="close" flat round dense v-close-popup />
-    <LabelSetting />
+  <q-dialog v-model="visible">
+    <q-card style="min-width: 350px">
+      <q-toolbar class="q-mb-lg">
+        <q-avatar square>
+          <q-img src="add-tag-blue-80x80.png" />
+        </q-avatar>
+        <q-toolbar-title>Add Label</q-toolbar-title>
+        <q-btn flat round dense icon="close" v-close-popup />
+      </q-toolbar>
+      <LabelSetting />
+    </q-card>
   </q-dialog>
 </template>
 

@@ -2,7 +2,11 @@
   <q-page class="col">
     <LabelList @showEditDialog="showEditDialog"/>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="add" color="accent" @click="showAddDialog" />
+      <q-btn @click="showAddDialog" round padding="xs">
+        <q-avatar>
+          <q-img src="add-tag-color-96x96.png" />
+        </q-avatar>
+      </q-btn>
     </q-page-sticky>
     <AddDialog ref="addDialog" />
     <!-- 

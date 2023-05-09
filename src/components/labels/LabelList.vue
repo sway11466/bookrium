@@ -4,7 +4,8 @@
       <q-chip size="md" color="primary" text-color="white">{{ prop.node.name }}</q-chip>
       <q-space />
       <q-badge :label="prop.node.count" color="primary" rounded transparent />
-      <q-btn @click.stop="showEditDialog(prop.node.name)" icon="mdi-square-edit-outline" color="primary" flat square />
+      <q-btn @click.stop="showEditDialog(prop.node.name)" icon="mdi-square-edit-outline" color="primary" flat square>
+      </q-btn>
     </template>
   </q-tree>
  </template>
