@@ -9,18 +9,15 @@
       </q-btn>
     </q-page-sticky>
     <AddDialog ref="addDialog" />
-    <!-- 
     <EditDialog ref="editDialog" />
-     -->
   </q-page>
 </template>
 
 <script setup lang="ts">
-import AddDialog from 'src/components/labels/AddDialog.vue';
 import LabelList from 'src/components/labels/LabelList.vue';
-import EditDialog from 'src/components/connects/EditDialog.vue';
+import AddDialog from 'src/components/labels/AddDialog.vue';
+import EditDialog from 'src/components/labels/EditDialog.vue';
 import { ref } from 'vue';
-import { ConnectType } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  component ref
@@ -35,7 +32,7 @@ function showAddDialog() {
   addDialog.value.show();
 }
 
-function showEditDialog(id:string, type:ConnectType) {
-  editDialog.value.show(id, type);
+function showEditDialog(id: string) {
+  editDialog.value.show(id);
 }
 </script>

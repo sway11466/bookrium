@@ -5,25 +5,31 @@
         <q-avatar square>
           <q-img src="add-tag-blue-80x80.png" />
         </q-avatar>
-        <q-toolbar-title>Add Label</q-toolbar-title>
+        <q-toolbar-title>Edit Label</q-toolbar-title>
         <q-btn flat round dense icon="close" v-close-popup />
       </q-toolbar>
-      <LabelSetting :mode="'add'" :id="''" @hideDialog="hide" />
+      <LabelSetting :mode="'edit'" :id="id" @hideDialog="hide" />
     </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
 import LabelSetting from 'src/components/labels/LabelSetting.vue';
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
+
+// --------------------------------
+//  local var
+// --------------------------------
+const id: Ref<string> = ref('');
 
 // --------------------------------
 //  self visibility
 // --------------------------------
-let visible = ref(false);
+let visible: Ref<boolean> = ref(false);
 
-function show() {
+function show(editId: string) {
   visible.value = true;
+  id.value = editId;
 }
 
 function hide() {

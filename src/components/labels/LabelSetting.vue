@@ -1,43 +1,62 @@
 <template>
-  <q-card class="q-gutter-y-md" flat>
-    <q-card-section>
-      label name
+  <q-card class="q-gutter-y-md q-pa-md" flat>
+
+    <q-card-section class="q-px-none">
+      <div>label name</div>
       <q-input dense v-model="label.name" autofocus />
     </q-card-section>
-    <q-card-section>
+
+    <q-card-section class="q-px-none">
       <div>color</div>
-      <q-chip :label="label.name" color="teal-123" style="min-width: 128px;" />
       <q-btn padding="xs" round flat>
         <q-avatar>
-          <q-img src="color-picker-96x96.png" />
+          <q-img src="txet-color-40x40.png" />
         </q-avatar>
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-          <q-color v-model="label.color" default-view="palette" no-header no-footer 
-          :palette="['#ffcdd2', '#f8bbd0', '#e1bee7', '#c5cae9', '#bbdefb', '#b2dfdb', '#c8e6c9', '#f0f4c3', '#ffecb3', '#ffe0b2',
-                     '#ef9a9a', '#f48fb1', 'ce93d8', '', '', '', '', '', '', '',
-                     '#e57373', '', '', '', '', '', '', '', '', '', 
-                     '#ef5350', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#f44336', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#e53935', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#d32f2f', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#c62828', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#b71c1c', '', '', '', '', '', '', '' ,'' ,'' ,
-                     '#fafafa', '#f5f5f5', '#eeeeee', '#e0e0e0', '#bdbdbd', '#9e9e9e', '#757575', '#616161' ,'#424242' ,'#212121' ]" />
-                     <!--
-                      red-2
-                      .
-                      .
-                      red-10
-                      grey-0 grey-1 grey2 ... grey10
-                     -->
+          <q-color v-model="label.fore_color" default-view="palette" />
         </q-popup-proxy>        
       </q-btn>
+      <q-btn padding="xs" round flat>
+        <q-avatar>
+          <q-img src="back-color-40x40.png" />
+        </q-avatar>
+        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+          <q-color v-model="label.back_color" default-view="palette" />
+        </q-popup-proxy>        
+      </q-btn>
+      <q-chip :label="label.name" :style="{ color: label.fore_color, backgroundColor: label.back_color }" style="min-width: 128px;" />
     </q-card-section>
-    <q-card-section>
-      parent label
-      <q-input dense v-model="label.parent" />
+
+    <q-card-section class="q-px-none">
+      <div>parent label</div>
+      <q-select v-model="parent" :options="parents" option-label="name"
+                @filter="filterParent" @update:model-value="selectParent"
+                use-input behavior="menu">
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
     </q-card-section>
-  </q-card>
+    
+    <template v-if="props.mode == 'add'">
+      <q-card-actions class="q-px-none qu-py-lg" vertical>
+          <q-btn label="Add Label" @click="add" icon="mdi-plus" padding="xs lg" color="primary" unelevated no-caps />
+      </q-card-actions>
+    </template>
+    <template v-if="props.mode == 'edit'">
+      <q-card-actions class="q-px-none qu-py-lg" vertical>
+          <q-btn label="Edit Done" @click="update" icon="mdi-check" padding="xs lg" color="primary" unelevated no-caps />
+      </q-card-actions>
+      <q-separator />
+      <q-card-actions class="q-px-none qu-py-lg" vertical>
+          <q-btn label="Delet Label" @click="del" icon="mdi-delete" padding="xs lg" color="red" unelevated no-caps />
+      </q-card-actions>
+    </template>
+</q-card>
 </template>
 
 <script setup lang="ts">
@@ -53,12 +72,19 @@ const store = useLabelsStore();
 // --------------------------------
 //  prop
 // --------------------------------
-// const props = defineProps({
-//   id: {
-//     type: String,
-//     required: true,
-//   }
-// });
+const props = defineProps({
+  mode: {
+    type: String,
+    required: true,
+    validator(value: string) {
+      return ['add', 'edit'].includes(value);
+    }
+  },
+  id: {
+    type: String,
+    required: true,
+  }
+});
 
 // --------------------------------
 //  fire parent component events
@@ -71,24 +97,50 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-const label: Ref<Label> = ref(store.newLabel());
+const label: Ref<Label> = ref(props.mode === 'add' ? store.newLabel(): store.get(props.id));
 
 // --------------------------------
 //  lifecycle events
 // --------------------------------
-onMounted(() => {
+// onMounted(() => {
 // 
-})
+// })
+
+// --------------------------------
+//  parent label selector
+// --------------------------------
+const parent = ref(store.newLabel());
+const parents = ref(store.list);
+function filterParent(val: string, update: any) {
+  if (val === '') {
+    update(() => parents.value = store.list);
+  } else {
+    update(() => {
+      const needle = val.toLowerCase()
+      parents.value = store.list.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+    })
+  }
+};
+function selectParent(val: Label) {
+  label.value.parent_id = val.id;
+}
 
 // --------------------------------
 //  actions
 // --------------------------------
-async function save() {
-  // await connectsStore.saveKindleConnect(kindle.value);
+async function add() {
+  await store.add(label.value);
+  emit('hideDialog');
+};
+
+async function update() {
+  await store.update(label.value);
+  emit('hideDialog');
 };
 
 async function del() {
-  // await connectsStore.deleteKindleSetting(kindle.value.id);
-  // emit('hideDialog');
+  // Todo: confirm Dialog
+  await store.del(label.value.id);
+  emit('hideDialog');
 };
 </script>

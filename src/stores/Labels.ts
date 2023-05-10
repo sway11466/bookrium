@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useSettingsStore } from 'src/stores/Settings';
 import { Label, LabelsStore, TreedLabel } from 'src/stores/LabelTypes';
@@ -17,17 +18,20 @@ export const useLabelsStore = defineStore('labels', {
     tree(): TreedLabel[] {
       // convert TreedLabel
       const index = new Map<string, TreedLabel>();
-      this.list.forEach(label => index.set(label.name, {...label, children:[]}));
+      this.list.forEach(label => index.set(label.id, {...label, children:[]}));
       // create tree
       const tree = [] as TreedLabel[];
       [...index.values()].forEach(label => {
-        if (label.parent) {
-          index.get(label.parent)?.children.push(label); //Todo: remove ?
+        if (label.parent_id) {
+          index.get(label.parent_id)?.children.push(label); //Todo: remove ?
         } else {
           tree.push(label);
         }
       });
       return tree;
+    },
+    names(): string[]  {
+      return this.list.map(label => label.name);
     },
   },
 
@@ -37,13 +41,13 @@ export const useLabelsStore = defineStore('labels', {
     // --------------------------------
     async init(): Promise<void> {
       await this.loadAllConnects();
-      this.labels.set("root1", { name: 'root1', color: '', parent: null, count: 12, createdAt: new Date(), });
-      this.labels.set("hoge", { name: 'hoge', color: '', parent: 'root1', count: 29, createdAt: new Date(), });
-      this.labels.set("piyo", { name: 'piyo', color: '', parent: 'root1', count: 32, createdAt: new Date(), });
-      this.labels.set("poke", { name: 'poke', color: '', parent: 'piyo', count: 4, createdAt: new Date(), });
-      this.labels.set("root2", { name: 'root2', color: '', parent: null, count: 53, createdAt: new Date(), });
-      this.labels.set("foo", { name: 'foo', color: '', parent: 'root2', count: 16, createdAt: new Date(), });
-      this.labels.set("bar", { name: 'bar', color: '', parent: 'root2', count: 47, createdAt: new Date(), });
+      this.labels.set("1", { id: '1', name: 'root1', fore_color: '', back_color:'', parent_id: null, count: 12, createdAt: new Date(), });
+      this.labels.set("2", { id: '2', name: 'hoge', fore_color: '', back_color:'', parent_id: '1', count: 29, createdAt: new Date(), });
+      this.labels.set("3", { id: '3', name: 'piyo', fore_color: '', back_color:'', parent_id: '1', count: 32, createdAt: new Date(), });
+      this.labels.set("4", { id: '4', name: 'poke', fore_color: '', back_color:'', parent_id: '3', count: 4, createdAt: new Date(), });
+      this.labels.set("5", { id: '5', name: 'root2', fore_color: '', back_color:'', parent_id: null, count: 53, createdAt: new Date(), });
+      this.labels.set("6", { id: '6', name: 'foo', fore_color: '', back_color:'', parent_id: '5', count: 16, createdAt: new Date(), });
+      this.labels.set("7", { id: '7', name: 'bar', fore_color: '', back_color:'', parent_id: '5', count: 47, createdAt: new Date(), });
     },
 
     async loadAllConnects(): Promise<boolean> {
@@ -60,35 +64,70 @@ export const useLabelsStore = defineStore('labels', {
     // --------------------------------
     newLabel(): Label {
       return {
+        id: uuid(),
         name: '',
-        color: '#BBBBBB',
-        parent: null,
+        fore_color: '#000000',
+        back_color: '#BBBBBB',
+        parent_id: null,
         count: 0,
         createdAt: new Date(),
       }
     },
 
-    add(label: Label) {
-      const apiManager = useApiManager();
-      const settingsStore = useSettingsStore();
-      // add store if new connect
-      // if (!this.connectors.has(connect.id)) {
-      //   this.connectors.set(connect.id, connect);
-      // }
-      // save to file
-      // const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
-      // const value = deproxyKindleConnect(connect);
-      // apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
+    get(id: string): Label {
+      if (this.labels.has(id)) {
+        return this.labels.get(id) as Label
+      } else {
+        // Todo: implements
+        throw new Error('not implements');
+      }
     },
 
-    async remove(name: string) {
+    async add(label: Label) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
-      // Todo: show confirm dialog
-      // const key = CONFIG_CONNECTOR_KEY + '.' + id;
-      // await apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
-      // this.connectors.delete(id);
-      // Todo: delete all books on delete connection
+      // add store
+      this.labels.set(label.id, label);
+      // TODO: save to file
+      // const path = apiManager.path.join(settingsStore.settingPath, 'labels');
+      // const key = CONFIG_CONNECTOR_KEY + '.' + label.id;
+      // const value = deproxyLabel(label);
+      // apiManager.configApi.saveConfig(path, key, value);
+    },
+
+    async update(label: Label) {
+      // update store
+      //   No need. Because it has already been updated.
+      // TODO: save to file
+    },
+
+    async del(id: string) {
+      const apiManager = useApiManager();
+      const settingsStore = useSettingsStore();
+      // pick up child label
+      const new_parent_id = (this.labels.get(id) as Label).parent_id;
+      this.list.forEach(label => {
+        if (label.parent_id === id) { label.parent_id = new_parent_id; }
+      })
+      // delete from store
+      this.labels.delete(id);
+      // TODO: delete from file
+      // const path = apiManager.path.join(settingsStore.settingPath, 'labels');
+      // const key = CONFIG_CONNECTOR_KEY + '.' + label.id;
+      // const value = deproxyLabel(label);
+      // await apiManager.configApi.deleteConfig(path, key);
     },
   }
 });
+
+const deproxyLabel = (label: Label): Label => {
+  return {
+    id: label.id,
+    name: label.name,
+    fore_color: label.fore_color,
+    back_color: label.back_color,
+    parent_id: label.parent_id,
+    count: label.count,
+    createdAt: label.createdAt,
+  }
+}

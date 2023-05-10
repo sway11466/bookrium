@@ -97,6 +97,7 @@ export const useConnectsStore = defineStore('connects', {
           id: uuid(),
           type: 'kindle',
           connectorId: connect.id,
+          tags: [],
           asin: book.asin,
           webReaderUrl: book.webReaderUrl,
           productUrl: book.productUrl,
@@ -115,11 +116,12 @@ export const useConnectsStore = defineStore('connects', {
     async deleteKindleSetting(id: string) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
-      // Todo: show confirm dialog
-      const key = CONFIG_CONNECTOR_KEY + '.' + id;
-      await apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
+      // delete from store
       this.connectors.delete(id);
       // Todo: delete all books on delete connection
+      // delete from file
+      const key = CONFIG_CONNECTOR_KEY + '.' + id;
+      await apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
     },
   }
 });

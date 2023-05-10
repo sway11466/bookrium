@@ -6,9 +6,11 @@ export type LabelsStore = {
 }
 
 export type Label = {
+  id: string,
   name: string,
-  color: string,
-  parent: string | null,
+  fore_color: string,
+  back_color: string,
+  parent_id: string | null,
   count: number,
   createdAt: Date,
 };
