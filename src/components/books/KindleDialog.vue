@@ -43,11 +43,7 @@ const tag: Ref<string> = ref('');
 // --------------------------------
 //  actions
 // --------------------------------
-function debug() {
-  console.log('callde!');
-}
-
-function add(event: KeyboardEvent) {
+function add() {
   book.value.tags.push(tag.value);
   tag.value = '';
   //TODO: save to file from store

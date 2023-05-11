@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue';
+import { ref, Ref } from 'vue';
 import { useLabelsStore } from 'src/stores/Labels';
 import { Label } from 'src/stores/LabelTypes';
 
@@ -101,13 +101,15 @@ const emit = defineEmits([
 const parent = ref(store.newLabel());
 const parents = ref(store.list);
 
-function filterParent(val: string, update: any) {
+function filterParent(val: string, update: (param: () => void) => void) {
   const list = store.list.filter(v => label.value.id != v.id);
   if (val === '') {
     update(() => parents.value = list);
   } else {
-    const name = val.toLowerCase()
-    parents.value = list.filter(v => v.name.toLowerCase().indexOf(name) > -1)
+    update(() => {
+      const name = val.toLowerCase()
+      parents.value = list.filter(v => v.name.toLowerCase().indexOf(name) > -1)
+    })
   }
 };
 
