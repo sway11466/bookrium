@@ -1,19 +1,30 @@
 <template>
   <q-page>
     <q-list>
+      <q-item-label class="q-pb-none" header>Books</q-item-label>
       <q-item>
-        <q-item-section side>
-          <q-btn square icon="star" @click="test"/>
-        </q-item-section>
+        <q-virtual-scroll :items="heavyList" virtual-scroll-horizontal v-slot="{ item, index }">
+          <q-card :key="index" :class="item.class">
+            #{{ index }} - {{ item.label }}
+          </q-card>
+        </q-virtual-scroll>
       </q-item>
     </q-list>
-    <dive>
-      <a target="_blank" href="https://icons8.com/icon/qpuOQzhOVZ0a/amazon-kindle">Amazon Kindle</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-    </dive>
   </q-page>
 </template>
 
 <script setup lang="ts">
+const maxSize = 10;
+const heavyList = [] as object[];
+for (let i = 0; i < maxSize; i++) {
+  heavyList.push({
+    label: 'Option ' + (i + 1),
+    class: i % 2 === 0 ? 'q-ma-md q-py-lg self-center bg-grey-2 text-black' : 'q-ma-md q-py-lg bg-black text-white'
+  })
+}
+</script>
+
+<script lang="ts">
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
@@ -74,13 +85,4 @@ const init = async () => {
   await labels.init();
 };
 init();
-
-async function test() {
-  console.log('test');
-  // const connects = useConnectsStore();
-  // const books = useBooksStore();
-  // await connects.kindleTest('userid', 'password');
-  // const collects = await connects.collectKindleBooks();
-  // books.addKindleBooks(collects);
-}
 </script>
