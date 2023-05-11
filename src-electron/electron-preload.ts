@@ -49,6 +49,7 @@ contextBridge.exposeInMainWorld('configApi', {
 contextBridge.exposeInMainWorld('settingApi', {
   // src-electron/modules/settings/setting
   getPlatform: async () :Promise<string> => await ipcRenderer.invoke('getPlatform'),
+  getAppVersion: async () :Promise<string> => await ipcRenderer.invoke('getAppVersion'),
 })
 
 contextBridge.exposeInMainWorld('connectApi', {

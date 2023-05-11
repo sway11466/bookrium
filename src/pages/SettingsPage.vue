@@ -1,40 +1,63 @@
 <template>
-  <q-page>
-    <q-list>
-      <q-expansion-item expand-separator icon="mdi-database-outline" label="Strage Settings">
-        <q-list class="q-ml-md">
-          <q-item>
-            <q-item-section>
-              <q-item-label>Setting File Path</q-item-label>
-              <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
-              <q-item-label>
-                <q-input readonly v-model="setting.settingPath" outlined dense>
-                  <template v-slot:append>
-                    <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
-                  </template>
-                </q-input>
-              </q-item-label>
-            </q-item-section>
-          </q-item>
+  <q-list>
 
-          <q-item>
-            <q-item-section>
-              <q-item-label>Data Folder Path</q-item-label>
-              <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
-              <q-item-label>
-                <q-input readonly v-model="setting.storage.dataFolderPath" outlined dense>
-                  <template v-slot:append>
-                    <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
-                  </template>
-                </q-input>
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-expansion-item>
-      <q-separator />
-    </q-list>
-  </q-page>
+    <q-expansion-item expand-separator icon="mdi-database-outline" label="Strage Settings">
+      <q-list class="q-ml-md">
+        <q-item>
+          <q-item-section>
+            <q-item-label>Setting File Path</q-item-label>
+            <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
+            <q-item-label>
+              <q-input readonly v-model="setting.settingPath" outlined dense>
+                <template v-slot:append>
+                  <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+                </template>
+              </q-input>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section>
+            <q-item-label>Data Folder Path</q-item-label>
+            <q-item-label caption>It is now for display only and cannot be changed.</q-item-label>
+            <q-item-label>
+              <q-input readonly v-model="setting.storage.dataFolderPath" outlined dense>
+                <template v-slot:append>
+                  <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+                </template>
+              </q-input>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-expansion-item>
+    <q-separator />
+
+    <q-expansion-item expand-separator icon="mdi-information-outline" label="About">
+      <q-list class="q-ml-md">
+        <q-item>
+          <q-item-section>
+            <q-item-label>Application Version</q-item-label>
+            <q-item-label>
+              <q-input readonly v-model="setting.version" outlined dense />
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section>
+            <q-item-label>licenses</q-item-label>
+            <q-item-label>
+              <ul>
+                <li>icon by <a target="_blank" href="https://icons8.com">Icons8</a></li>
+              </ul>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-expansion-item>
+    <q-separator />
+
+  </q-list>
 </template>
 
 <script setup lang="ts">
@@ -52,11 +75,7 @@ const store = useSettingsStore();
 // --------------------------------
 // TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
-const setting :Ref<SettingStore> = ref({
-  settingPath: store.settingPath,
-  storage: store.storage,
-  platform: store.platform,
-});
+const setting :Ref<SettingStore> = ref(store.$state);
 
 // --------------------------------
 //  

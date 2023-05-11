@@ -2,11 +2,10 @@
  * 
  */
 export type SettingStore = {
-  // saved Setting
   settingPath: string,
   storage: Storage,
-  // Temporary Setting
-  platform: PlatformType,
+  platform: PlatformType, // update automatically
+  version: string,
 }
 
 /**

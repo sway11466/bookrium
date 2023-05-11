@@ -10,6 +10,7 @@ export const useSettingsStore = defineStore('settings', {
     settingPath: '',
     storage: {} as Storage,
     platform: 'win32',
+    version: 'unknown',
   }),
 
   getters: {},
@@ -35,11 +36,9 @@ export const useSettingsStore = defineStore('settings', {
     async load() {
       const apiManager = useApiManager();
       const defaultSetting = await this.newSetting();
-      const load = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as SettingStore;
+      const loaded = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as SettingStore;
       // Todo: setting validation
-      this.settingPath = load.settingPath;
-      this.storage = load.storage;
-      this.platform = await apiManager.settingApi.getPlatform() as PlatformType;
+      Object.assign(this, loaded);
     },
 
     async save() {
@@ -59,7 +58,8 @@ export const useSettingsStore = defineStore('settings', {
           cacheFolderPath: appDirPath + '\\Bookrium\\cache',
           labelFolderPath: appDirPath + '\\Bookrium\\labels',
         },
-        platform: await apiManager.settingApi.getPlatform() as PlatformType
+        platform: await apiManager.settingApi.getPlatform() as PlatformType,
+        version: await apiManager.settingApi.getAppVersion() as string,
       }
     },
 
@@ -84,5 +84,6 @@ const deproxy = (setting: SettingStore): SettingStore => {
       labelFolderPath: setting.storage.labelFolderPath,
     },
     platform: setting.platform,
+    version: setting.version,
   }
 }
