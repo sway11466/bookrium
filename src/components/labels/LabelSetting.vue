@@ -47,6 +47,7 @@
           <q-btn label="Add Label" @click="add" icon="mdi-plus" padding="xs lg" color="primary" unelevated no-caps />
       </q-card-actions>
     </template>
+
     <template v-if="props.mode == 'edit'">
       <q-card-actions class="q-px-none qu-py-lg" vertical>
           <q-btn label="Edit Done" @click="update" icon="mdi-check" padding="xs lg" color="primary" unelevated no-caps />
@@ -95,22 +96,11 @@ const emit = defineEmits([
 ]);
 
 // --------------------------------
-//  local var
-// --------------------------------
-const label: Ref<Label> = ref(props.mode === 'add' ? store.newLabel(): store.get(props.id));
-
-// --------------------------------
-//  lifecycle events
-// --------------------------------
-// onMounted(() => {
-// 
-// })
-
-// --------------------------------
 //  parent label selector
 // --------------------------------
 const parent = ref(store.newLabel());
 const parents = ref(store.list);
+
 function filterParent(val: string, update: any) {
   const list = store.list.filter(v => label.value.id != v.id);
   if (val === '') {
@@ -120,14 +110,17 @@ function filterParent(val: string, update: any) {
     parents.value = list.filter(v => v.name.toLowerCase().indexOf(name) > -1)
   }
 };
+
 function selectParent(val: Label) {
   label.value.parent_id = val.id;
 }
 
 // --------------------------------
-//  actions
+//  Label Editor
 // --------------------------------
-async function add() {
+const label: Ref<Label> = ref(props.mode === 'add' ? store.newLabel(): store.get(props.id));
+
+  async function add() {
   await store.add(label.value);
   emit('hideDialog');
 };
