@@ -30,9 +30,6 @@ export const useLabelsStore = defineStore('labels', {
       });
       return tree;
     },
-    names(): string[]  {
-      return this.list.map(label => label.name);
-    },
   },
 
   actions: {

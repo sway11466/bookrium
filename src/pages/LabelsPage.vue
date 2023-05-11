@@ -1,6 +1,6 @@
 <template>
   <q-page class="col">
-    <LabelList @showEditDialog="showEditDialog"/>
+    <LabelList @showAddDialog="showAddDialog" @showEditDialog="showEditDialog"/>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn @click="showAddDialog" round padding="xs">
         <q-avatar>
