@@ -10,7 +10,7 @@
       <div>color</div>
       <q-btn padding="xs" round flat>
         <q-avatar>
-          <q-img src="txet-color-40x40.png" />
+          <q-img src="txet-color-40x40.png" no-spinner />
         </q-avatar>
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-color v-model="label.fore_color" default-view="palette" />
@@ -18,7 +18,7 @@
       </q-btn>
       <q-btn padding="xs" round flat>
         <q-avatar>
-          <q-img src="back-color-40x40.png" />
+          <q-img src="back-color-40x40.png" no-spinner />
         </q-avatar>
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-color v-model="label.back_color" default-view="palette" />

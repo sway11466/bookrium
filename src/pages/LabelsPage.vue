@@ -4,7 +4,7 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn @click="showAddDialog" round padding="xs">
         <q-avatar>
-          <q-img src="add-tag-color-96x96.png" />
+          <q-img src="add-tag-color-96x96.png" no-spinner />
         </q-avatar>
       </q-btn>
     </q-page-sticky>
