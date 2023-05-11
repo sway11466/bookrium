@@ -3,17 +3,19 @@
 ## Excecutable Dir/File Structure
 ```
 ./
+ +-- artwork/
+ |
  +-- books/
  |   +-- [connector-id].json
  |
- +-- artwork/
+ +-- cache/
  |
- +-- shelf/
+ +-- index/
  |
  +-- labels/
  |   +-- label.json
  |
- +-- cache/
+ +-- shelf/
  |
  +-- booklium.json
 ```

@@ -1,33 +1,18 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { PlatformType, Setting, Storage } from 'src/stores/SettingTypes';
+import { PlatformType, SettingStore, Storage } from 'src/stores/SettingTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_SETTING_KEY = CONFIG_ROOT_KEY + '.setting';
 
 export const useSettingsStore = defineStore('settings', {
-  state: (): Setting => ({
+  state: (): SettingStore => ({
     settingPath: '',
     storage: {} as Storage,
     platform: 'win32',
   }),
 
-  getters: {
-    async defaultSettings(): Promise<Setting> {
-      const apiManager = useApiManager();
-      const appDirPath = await apiManager.localStorageApi.getUserAppDataFolder();
-      return {
-        settingPath: appDirPath + '\\Bookrium\\bookrium.json',
-        storage: {
-          dataFolderPath: appDirPath + '\\Bookrium',
-          bookFolderPath: appDirPath + '\\Bookrium\\book',
-          cacheFolderPath: appDirPath + '\\Bookrium\\cache',
-          artworkFolderPath: appDirPath + '\\Bookrium\\artwork',
-        },
-        platform: await apiManager.settingApi.getPlatform() as PlatformType
-      }
-    }
-  },
+  getters: {},
 
   actions: {
     // --------------------------------
@@ -35,7 +20,7 @@ export const useSettingsStore = defineStore('settings', {
     // --------------------------------
     async init() {
       const apiManager = useApiManager();
-      const defaultSetting = await this.defaultSettings;
+      const defaultSetting = await this.newSetting();
       if (await apiManager.configApi.hasConfig(defaultSetting.settingPath)) {
         await this.load(); // TODO: error handling
       } else {
@@ -49,8 +34,9 @@ export const useSettingsStore = defineStore('settings', {
     // --------------------------------
     async load() {
       const apiManager = useApiManager();
-      const defaultSetting = await this.defaultSettings;
-      const load = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as Setting;
+      const defaultSetting = await this.newSetting();
+      const load = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as SettingStore;
+      // Todo: setting validation
       this.settingPath = load.settingPath;
       this.storage = load.storage;
       this.platform = await apiManager.settingApi.getPlatform() as PlatformType;
@@ -58,19 +44,23 @@ export const useSettingsStore = defineStore('settings', {
 
     async save() {
       const apiManager = useApiManager();
-      apiManager.configApi.saveConfig(
-        this.settingPath,
-        CONFIG_SETTING_KEY,
-        {
-          settingPath: this.settingPath,
-          storage: {
-            dataFolderPath: this.storage.dataFolderPath,
-            bookFolderPath: this.storage.bookFolderPath,
-            cacheFolderPath: this.storage.cacheFolderPath,
-            artworkFolderPath: this.storage.artworkFolderPath,
-          }
-        } 
-      );
+      apiManager.configApi.saveConfig(this.settingPath, CONFIG_SETTING_KEY, deproxy(this));
+    },
+
+    async newSetting(): Promise<SettingStore> {
+      const apiManager = useApiManager();
+      const appDirPath = await apiManager.localStorageApi.getUserAppDataFolder();
+      return {
+        settingPath: appDirPath + '\\Bookrium\\bookrium.json',
+        storage: {
+          dataFolderPath: appDirPath + '\\Bookrium',
+          artworkFolderPath: appDirPath + '\\Bookrium\\artworks',
+          bookFolderPath: appDirPath + '\\Bookrium\\books',
+          cacheFolderPath: appDirPath + '\\Bookrium\\cache',
+          labelFolderPath: appDirPath + '\\Bookrium\\labels',
+        },
+        platform: await apiManager.settingApi.getPlatform() as PlatformType
+      }
     },
 
     // --------------------------------
@@ -82,3 +72,17 @@ export const useSettingsStore = defineStore('settings', {
     }
   }
 });
+
+const deproxy = (setting: SettingStore): SettingStore => {
+  return {
+    settingPath: setting.settingPath,
+    storage: {
+      dataFolderPath: setting.storage.dataFolderPath,
+      artworkFolderPath: setting.storage.artworkFolderPath,
+      bookFolderPath: setting.storage.bookFolderPath,
+      cacheFolderPath: setting.storage.cacheFolderPath,
+      labelFolderPath: setting.storage.labelFolderPath,
+    },
+    platform: setting.platform,
+  }
+}

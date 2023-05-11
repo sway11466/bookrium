@@ -5,7 +5,7 @@ import { useSettingsStore } from 'src/stores/Settings';
 import { Label, LabelsStore, TreedLabel } from 'src/stores/LabelTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
-const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.labels';
+const CONFIG_LABEL_KEY = CONFIG_ROOT_KEY + '.labels';
 
 export const useLabelsStore = defineStore('labels', {
   
@@ -41,21 +41,15 @@ export const useLabelsStore = defineStore('labels', {
     // --------------------------------
     async init(): Promise<void> {
       await this.loadAllConnects();
-      this.labels.set("1", { id: '1', name: 'root1', fore_color: '', back_color:'', parent_id: null, count: 12, createdAt: new Date(), });
-      this.labels.set("2", { id: '2', name: 'hoge', fore_color: '', back_color:'', parent_id: '1', count: 29, createdAt: new Date(), });
-      this.labels.set("3", { id: '3', name: 'piyo', fore_color: '', back_color:'', parent_id: '1', count: 32, createdAt: new Date(), });
-      this.labels.set("4", { id: '4', name: 'poke', fore_color: '', back_color:'', parent_id: '3', count: 4, createdAt: new Date(), });
-      this.labels.set("5", { id: '5', name: 'root2', fore_color: '', back_color:'', parent_id: null, count: 53, createdAt: new Date(), });
-      this.labels.set("6", { id: '6', name: 'foo', fore_color: '', back_color:'', parent_id: '5', count: 16, createdAt: new Date(), });
-      this.labels.set("7", { id: '7', name: 'bar', fore_color: '', back_color:'', parent_id: '5', count: 47, createdAt: new Date(), });
     },
 
     async loadAllConnects(): Promise<boolean> {
-      // const apiManager = useApiManager();
-      // const settingsStore = useSettingsStore();
-      // if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
-      // const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, KindleConnect | LocalStorageConnect>;
-      // Object.entries(connectors).forEach(([key, value]) => this.connectors.set(key, value));
+      const apiManager = useApiManager();
+      const settingsStore = useSettingsStore();
+      const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
+      if (!apiManager.configApi.hasConfig(path)) { return false; }
+      const labels = (await apiManager.configApi.loadConfig(path, CONFIG_LABEL_KEY)) as Map<string, Label>;
+      Object.entries(labels).forEach(([key, value]) => this.labels.set(key, value));
       return true;
     },
 
@@ -89,16 +83,21 @@ export const useLabelsStore = defineStore('labels', {
       // add store
       this.labels.set(label.id, label);
       // TODO: save to file
-      // const path = apiManager.path.join(settingsStore.settingPath, 'labels');
-      // const key = CONFIG_CONNECTOR_KEY + '.' + label.id;
-      // const value = deproxyLabel(label);
-      // apiManager.configApi.saveConfig(path, key, value);
+      const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
+      const key = CONFIG_LABEL_KEY + '.' + label.id;
+      const value = deproxyLabel(label);
+      apiManager.configApi.saveConfig(path, key, value);
     },
 
     async update(label: Label) {
+      const apiManager = useApiManager();
+      const settingsStore = useSettingsStore();
       // update store
       //   No need. Because it has already been updated.
-      // TODO: save to file
+      const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
+      const key = CONFIG_LABEL_KEY + '.' + label.id;
+      const value = deproxyLabel(label);
+      apiManager.configApi.saveConfig(path, key, value);
     },
 
     async del(id: string) {
@@ -112,10 +111,9 @@ export const useLabelsStore = defineStore('labels', {
       // delete from store
       this.labels.delete(id);
       // TODO: delete from file
-      // const path = apiManager.path.join(settingsStore.settingPath, 'labels');
-      // const key = CONFIG_CONNECTOR_KEY + '.' + label.id;
-      // const value = deproxyLabel(label);
-      // await apiManager.configApi.deleteConfig(path, key);
+      const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
+      const key = CONFIG_LABEL_KEY + '.' + id;
+      await apiManager.configApi.deleteConfig(path, key);
     },
   }
 });

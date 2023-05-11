@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import { useSettingsStore } from 'src/stores/Settings.js';
-import { Setting } from 'src/stores/SettingTypes';
+import { SettingStore } from 'src/stores/SettingTypes';
 
 // --------------------------------
 //  store init
@@ -52,7 +52,7 @@ const store = useSettingsStore();
 // --------------------------------
 // TODO: use default. needs clone.
 // const bookriumSetting :Ref<BookriumSetting> = ref(await settings.defaultSettings);
-const setting :Ref<Setting> = ref({
+const setting :Ref<SettingStore> = ref({
   settingPath: store.settingPath,
   storage: store.storage,
   platform: store.platform,

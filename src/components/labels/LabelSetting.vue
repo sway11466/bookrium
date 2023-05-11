@@ -112,13 +112,12 @@ const label: Ref<Label> = ref(props.mode === 'add' ? store.newLabel(): store.get
 const parent = ref(store.newLabel());
 const parents = ref(store.list);
 function filterParent(val: string, update: any) {
+  const list = store.list.filter(v => label.value.id != v.id);
   if (val === '') {
-    update(() => parents.value = store.list);
+    update(() => parents.value = list);
   } else {
-    update(() => {
-      const needle = val.toLowerCase()
-      parents.value = store.list.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
-    })
+    const name = val.toLowerCase()
+    parents.value = list.filter(v => v.name.toLowerCase().indexOf(name) > -1)
   }
 };
 function selectParent(val: Label) {

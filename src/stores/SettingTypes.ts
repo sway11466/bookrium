@@ -1,7 +1,7 @@
 /**
  * 
  */
-export type Setting = {
+export type SettingStore = {
   // saved Setting
   settingPath: string,
   storage: Storage,
@@ -14,9 +14,10 @@ export type Setting = {
  */
 export type Storage = {
   dataFolderPath: string,
+  artworkFolderPath: string,
   bookFolderPath: string,
   cacheFolderPath: string,
-  artworkFolderPath: string,
+  labelFolderPath: string,
 };
 
 export type PlatformType = 'win32';
