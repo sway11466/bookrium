@@ -8,7 +8,7 @@
             <q-card-section>
               <q-img :src="item.productUrl" fit="fill" />
             </q-card-section>
-            <q-card-section>
+            <q-card-section class="text-caption">
               {{ item.title }}
             </q-card-section>
           </q-card>
@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+// 
 </script>
 
 <script lang="ts">

@@ -2,7 +2,11 @@
   <q-page class="col">
     <ConnectList @showEditDialog="showEditDialog"/>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="add" color="accent" @click="showAddDialog" />
+      <q-btn fab @click="showAddDialog" round padding="xs">
+        <q-avatar square>
+          <q-img src="add-link-cuteui-64x64.png" no-spinner />
+        </q-avatar>
+      </q-btn>
     </q-page-sticky>
     <AddDialog ref="addDialog" />
     <EditDialog ref="editDialog" />

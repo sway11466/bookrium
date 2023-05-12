@@ -1,8 +1,8 @@
 <template>
   <q-dialog v-model="visible">
     <q-card style="min-width: 350px">
-      <q-card-section>
-        <q-img :src="book.productUrl" fit="fill" />
+      <q-card-section class="text-center">
+        <img :src="book.productUrl" />
       </q-card-section>
       <q-card-section class="row">
         <div class="text-h6">{{ book.title }}</div>

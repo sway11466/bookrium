@@ -8,6 +8,7 @@ export type ConnectStore = {
 export type Connect = {
   id: string
   type: ConnectType
+  //Todo: LastCollect: string
 };
 
 /**

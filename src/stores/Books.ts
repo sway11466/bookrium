@@ -44,15 +44,13 @@ export const useBooksStore = defineStore('books', {
     },
 
     async initConnectorIndx() {
-      (async () => {
-        [...this.books.values()].forEach(book=> {
-          const index = this.index.connector.get(book.connectorId) ?? [];
-          index.push(book);
-          if (!this.index.connector.has(book.connectorId)) {
-            this.index.connector.set(book.connectorId, index);
-          }
-        });
-      })();
+      [...this.books.values()].forEach(book=> {
+        const index = this.index.connector.get(book.connectorId) ?? [];
+        index.push(book);
+        if (!this.index.connector.has(book.connectorId)) {
+          this.index.connector.set(book.connectorId, index);
+        }
+      });
     },
 
     async initLatestIndex() {

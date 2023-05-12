@@ -3,8 +3,8 @@
     <LabelList @showAddDialog="showAddDialog" @showEditDialog="showEditDialog"/>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn @click="showAddDialog" round padding="xs">
-        <q-avatar>
-          <q-img src="add-tag-color-96x96.png" no-spinner />
+        <q-avatar square>
+          <q-img src="add-tag-cuteui-64x64.png" no-spinner />
         </q-avatar>
       </q-btn>
     </q-page-sticky>

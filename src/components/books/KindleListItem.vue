@@ -5,10 +5,14 @@
     </q-item-section>
     <q-item-section>
       <q-item-label>{{book.title}}</q-item-label>
-      <q-item-label caption>{{authors(book.authors)}}</q-item-label>
+      <q-item-label caption>{{authors()}}</q-item-label>
     </q-item-section>
     <q-item-section side>
-      <q-btn @click.stop="showEditDialog" icon="mdi-square-edit-outline" color="primary" flat square />
+      <q-btn @click.stop="showEditDialog" flat square>
+        <q-avatar square>
+          <q-img src="detail-cuteui-64x64.png" no-spinner />
+        </q-avatar>
+      </q-btn>
     </q-item-section>
   </q-item>
 </template>
@@ -46,11 +50,12 @@ function showEditDialog(): void {
   emit('showKindleDialog', book.value);
 }
 
-function authors(authors: string[]): string {
-  return authors.join(':').split(':').join(',').replace(/,$/, '');
+function authors(): string {
+  return book.value.authors.join(':').split(':').join(',').replace(/,$/, '');
 }
 
 function test(): void {
-  console.log('called');
+  window.open(book.value.webReaderUrl);
+  //Todo: auto login if not logined.
 }
 </script>

@@ -3,7 +3,7 @@
     <q-card style="min-width: 350px">
       <q-toolbar class="q-mb-md">
         <q-avatar square>
-          <q-img src="add-tag-blue-80x80.png" no-spinner />
+          <q-img src="edit-cuteui-64x64.png" no-spinner />
         </q-avatar>
         <q-toolbar-title>Edit Label</q-toolbar-title>
         <q-btn flat round dense icon="close" v-close-popup />

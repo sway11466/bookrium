@@ -97,7 +97,7 @@ export const useConnectsStore = defineStore('connects', {
           id: uuid(),
           type: 'kindle',
           connectorId: connect.id,
-          tags: [],
+          labels: [],
           asin: book.asin,
           webReaderUrl: book.webReaderUrl,
           productUrl: book.productUrl,
