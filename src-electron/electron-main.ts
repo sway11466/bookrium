@@ -32,6 +32,7 @@ function createWindow() {
   });
 
   mainWindow.loadURL(process.env.APP_URL);
+  mainWindow.setMenuBarVisibility(false);
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
