@@ -11,7 +11,7 @@
         </template>
       </q-card-section>
       <q-card-section class="row wrap">
-        <template v-for="tag in book.tags" :key="tag">
+        <template v-for="tag in book.labels" :key="tag">
           <q-chip removable @remove="remove(tag)" color="primary" text-color="white">
             {{ tag }}
           </q-chip>
@@ -37,22 +37,22 @@ const store = useBooksStore();
 // --------------------------------
 //  local var
 // --------------------------------
-const book: Ref<KindleBook> = ref(store.blankKindle);
+const book: Ref<KindleBook> = ref(store.newKindleBook());
 const tag: Ref<string> = ref('');
 
 // --------------------------------
 //  actions
 // --------------------------------
 function add() {
-  book.value.tags.push(tag.value);
+  book.value.labels.push(tag.value);
   tag.value = '';
   //TODO: save to file from store
   //TODO: modify label
 }
 
 function remove(param: string) {
-  const index = book.value.tags.indexOf(param);
-  book.value.tags.splice(index, 1);
+  const index = book.value.labels.indexOf(param);
+  book.value.labels.splice(index, 1);
   //TODO: save to file from store
   //TODO: modify label
 }

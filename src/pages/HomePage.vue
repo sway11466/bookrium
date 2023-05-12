@@ -3,9 +3,14 @@
     <q-list>
       <q-item-label class="q-pb-none" header>Books</q-item-label>
       <q-item>
-        <q-virtual-scroll :items="heavyList" virtual-scroll-horizontal v-slot="{ item, index }">
-          <q-card :key="index" :class="item.class">
-            #{{ index }} - {{ item.label }}
+        <q-virtual-scroll :items="books.latest" virtual-scroll-horizontal v-slot="{ item }">
+          <q-card :key="item.id" class="q-ma-md" style="min-width: 128px; max-width: 192px;">
+            <q-card-section>
+              <q-img :src="item.productUrl" fit="fill" />
+            </q-card-section>
+            <q-card-section>
+              {{ item.title }}
+            </q-card-section>
           </q-card>
         </q-virtual-scroll>
       </q-item>
@@ -14,14 +19,6 @@
 </template>
 
 <script setup lang="ts">
-const maxSize = 10;
-const heavyList = [] as object[];
-for (let i = 0; i < maxSize; i++) {
-  heavyList.push({
-    label: 'Option ' + (i + 1),
-    class: i % 2 === 0 ? 'q-ma-md q-py-lg self-center bg-grey-2 text-black' : 'q-ma-md q-py-lg bg-black text-white'
-  })
-}
 </script>
 
 <script lang="ts">

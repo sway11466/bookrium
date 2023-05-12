@@ -1,12 +1,21 @@
+import { Queue } from 'src/components/Queue';
+
 /**
  * Book Store.
  * 
  * books      -> all books. key is book.id.
- * connectors -> book index of connector. key is connector.id.
+ * index
+ *   label      -> book index of label. key is label id.
+ *   connectors -> book index of connector. key is connector id.
+ *   latest     -> book index of top x latest books.
  */
 export type BookStore = {
   books: Map<string, KindleBook | PDFBook>,
-  connectorsIndex: Map<string, Book[]>,
+  index: {
+    label: Map<string, Book[]>,
+    connector: Map<string, Book[]>,
+    latest: Queue<Book>,
+  }
 };
 
 /**
@@ -16,7 +25,7 @@ export type Book = {
   id: string, //uuid
   type: ContentType,
   connectorId: string,
-  tags: string[],
+  labels: string[],
 }
 
 /**

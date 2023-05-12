@@ -6,7 +6,7 @@
  +-- artwork/
  |
  +-- books/
- |   +-- [connector-id].json
+ |   +-- books.json
  |
  +-- cache/
  |
@@ -20,7 +20,7 @@
  +-- booklium.json
 ```
 
-## /book/[connector-id].json
+## /book/books.json
 ```json
 {
     "bookrium": {
