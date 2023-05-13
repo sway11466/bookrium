@@ -38,6 +38,13 @@ const connectsStore = useConnectsStore();
 //  prop
 // --------------------------------
 const props = defineProps({
+  mode: {
+    type: String,
+    required: true,
+    validator(value: string) {
+      return ['add', 'edit'].includes(value);
+    }
+  },
   id: {
     type: String,
     required: true,
@@ -55,22 +62,17 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-const kindle: Ref<KindleConnect> = ref({
-  id: '',
-  type: 'kindle' as ConnectType,
-  email: '',
-  password: '',
-});
+const kindle: Ref<KindleConnect> = ref(props.mode === 'add' ? connectsStore.newKindleConnect() : connectsStore.get(props.id) as KindleConnect);
 
 // --------------------------------
 //  lifecycle events
 // --------------------------------
 onMounted(() => {
-  if (props.id) {
-    kindle.value = connectsStore.connectors.get(props.id) as KindleConnect;
-  } else {
-    kindle.value = connectsStore.newKindleConnect();
-  }
+  // if (props.id) {
+  //   kindle.value = connectsStore.connectors.get(props.id) as KindleConnect;
+  // } else {
+  //   kindle.value = connectsStore.newKindleConnect();
+  // }
 })
 
 // --------------------------------

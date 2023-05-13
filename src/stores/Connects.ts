@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
-import { ConnectStore, ConnectType, KindleConnect, LocalStorageConnect, DisplayConnect } from 'src/stores/ConnectTypes';
-import { KindleBook } from './BookTypes';
+import { ConnectStore, ConnectDivision, Connect, KindleConnect, PDFLocalStorageConnect, ConnectType } from 'src/stores/ConnectTypes';
+import { KindleBook } from 'src/stores/BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connectors';
@@ -16,30 +16,11 @@ export const useConnectsStore = defineStore('connects', {
   }),
 
   getters: {
+    list: (state): Connect[] => [...state.connectors.values()],
     connectIdList: (state): string[] => [...state.connectors.keys()],
   },
 
   actions: {
-    // Todo: move getters
-    displays() :DisplayConnect[] {
-      const all : DisplayConnect[] = [];
-      for (const connect of this.connectors.values()) {
-        switch (connect.type) {
-          case 'kindle':
-            const kindle = connect as KindleConnect;
-            all.push({
-              id: kindle.id,
-              type: kindle.type,
-              description: kindle.email,
-              lastConnectAt: null,
-              kindleConnect: kindle,
-              LocalStrageConnect: null
-            });
-            break;
-        }
-      };
-      return all
-    },
 
     // --------------------------------
     //  comoon functions
@@ -52,9 +33,25 @@ export const useConnectsStore = defineStore('connects', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
-      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, KindleConnect | LocalStorageConnect>;
+      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, ConnectType>;
       Object.entries(connectors).forEach(([key, value]) => this.connectors.set(key, value));
       return true;
+    },
+
+    new(division: ConnectDivision): ConnectType {
+      switch (division) {
+        case 'kindle': return this.newKindleConnect();
+        case 'pdfls': return this.newPDFLocalStorageConnect();
+      }
+      throw new Error(); //Todo implements
+    },
+
+    get(id: string): ConnectType {
+      if (this.connectors.has(id)) {
+        return this.connectors.get(id) as ConnectType;
+      } else {
+        throw new Error(); //Todo implements
+      }
     },
 
     // --------------------------------
@@ -63,7 +60,7 @@ export const useConnectsStore = defineStore('connects', {
     newKindleConnect(): KindleConnect {
       return {
         id: uuid(),
-        type: 'kindle' as ConnectType,
+        type: 'kindle' as ConnectDivision,
         email: '',
         password: '',
       }
@@ -122,6 +119,17 @@ export const useConnectsStore = defineStore('connects', {
       // delete from file
       const key = CONFIG_CONNECTOR_KEY + '.' + id;
       await apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
+    },
+
+    // --------------------------------
+    //  PDFLocalStorage functions
+    // --------------------------------
+    newPDFLocalStorageConnect(): PDFLocalStorageConnect {
+      return {
+        id: uuid(),
+        type: 'pdfls' as ConnectDivision,
+        path: '',
+      }
     },
   }
 });

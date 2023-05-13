@@ -11,7 +11,7 @@
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="kindle">
-          <KindleSetting :id="id" @hideDialog="hide" />
+          <KindleSetting mode="edit" :id="id" @hideDialog="hide" />
         </q-tab-panel>
 
         <q-tab-panel name="localstrage">
