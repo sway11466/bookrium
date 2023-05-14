@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useConnectsStore } from 'src/stores/Connects';
-import { ConnectType, KindleConnect } from 'src/stores/ConnectTypes';
+import { KindleConnect } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  store init

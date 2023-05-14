@@ -62,6 +62,13 @@
             [connector-id]: {
                 [attr-key]: [attr-val]
             }
+            "kindle": {
+                "email": "",
+                "password": ""
+            }
+            "pdfls": {
+                "path": ""
+            }
         }
     }
 }

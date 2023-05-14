@@ -38,6 +38,23 @@ export const useConnectsStore = defineStore('connects', {
       return true;
     },
 
+    async save(connect: ConnectType) {
+      const apiManager = useApiManager();
+      const settingsStore = useSettingsStore();
+      // add store if new connect
+      if (!this.connectors.has(connect.id)) {
+        this.connectors.set(connect.id, connect);
+      }
+      // save to file
+      const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
+      let value = {};
+      switch (connect.type) {
+        case 'kindle': value = deproxyKindleConnect(connect as KindleConnect); break;
+        case 'pdfls': value = deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect); break;
+      }
+      apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
+    },
+
     new(division: ConnectDivision): ConnectType {
       switch (division) {
         case 'kindle': return this.newKindleConnect();
@@ -66,6 +83,12 @@ export const useConnectsStore = defineStore('connects', {
       }
     },
 
+    async testKindleSetting(connect: KindleConnect): Promise<boolean> {
+      const apiManager = useApiManager();
+      return await apiManager.connectApi.testKindle(connect.email, connect.password);
+    },
+
+    // Todo: use common function.
     saveKindleConnect(connect: KindleConnect) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
@@ -77,11 +100,6 @@ export const useConnectsStore = defineStore('connects', {
       const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       const value = deproxyKindleConnect(connect);
       apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
-    },
-
-    async testKindleSetting(connect: KindleConnect): Promise<boolean> {
-      const apiManager = useApiManager();
-      return await apiManager.connectApi.testKindle(connect.email, connect.password);
     },
 
     async collectKindleBooks(connect: KindleConnect): Promise<boolean> {
@@ -131,6 +149,12 @@ export const useConnectsStore = defineStore('connects', {
         path: '',
       }
     },
+
+    async testPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<boolean> {
+      const apiManager = useApiManager();
+      const list = await apiManager.localStorageApi.readdirSync(connect.path, { filter: /.pdf$/ }) as string[];
+      return list.length > 0;
+    },
   }
 });
 
@@ -140,5 +164,13 @@ const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
     type: connect.type,
     email: connect.email,
     password: connect.password,
+  }
+}
+
+const deproxyPDFLocalStorageConnect = (connect: PDFLocalStorageConnect): PDFLocalStorageConnect => {
+  return {
+    id: connect.id,
+    type: connect.type,
+    path: connect.path,
   }
 }

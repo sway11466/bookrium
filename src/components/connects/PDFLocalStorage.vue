@@ -2,7 +2,11 @@
   <q-card class="q-gutter-y-md" flat>
     <q-card-section class="q-pa-none">
       path
-      <q-input dense v-model="pdfls.path" autofocus />
+      <q-input dense v-model="pdfls.path" autofocus>
+        <template v-slot:append>
+          <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+        </template>
+      </q-input>
     </q-card-section>
     <q-card-actions vertical >
       <template v-if="mode === 'add'">
@@ -22,12 +26,14 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from 'vue';
 import { useConnectsStore } from 'src/stores/Connects';
-import { KindleConnect, PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
+import { useSettingsStore } from 'src/stores/Settings';
+import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  store init
 // --------------------------------
 const connectsStore = useConnectsStore();
+const settingsStore = useSettingsStore();
 
 // --------------------------------
 //  prop
@@ -73,8 +79,23 @@ onMounted(() => {
 // --------------------------------
 //  actions
 // --------------------------------
+async function selectDataFolderPath () {
+  console.log('not implements.');
+  const { canceled, filePaths } = await settingsStore.selectFolder();
+  if (canceled) { return }
+  pdfls.value.path = filePaths[0];
+}
+
+async function test() {
+  connectsStore.testPDFLocalStorageConnect(pdfls.value).then(ret => {
+    console.log('collect ok!'); //Todo: implements
+  }).catch(reason => {
+    console.log(reason); //Todo: implements
+  });
+};
+
 async function save() {
-  // await connectsStore.saveKindleConnect(pdfls.value);
+  await connectsStore.save(pdfls.value);
 };
 
 async function collect() {

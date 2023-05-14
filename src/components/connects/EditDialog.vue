@@ -3,7 +3,7 @@
     <q-card style="min-width: 350px">
       <q-card-section class="row items-center q-pb-none">
         <template v-if="type == 'kindle'">
-          <q-img src="icons/icons8-amazon-kindle-48.svg" width="32px" />kindle Setting
+          <q-img src="kindle-48x48.svg" width="32px" />kindle Setting
         </template>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />

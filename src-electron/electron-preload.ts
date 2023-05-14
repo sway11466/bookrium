@@ -34,16 +34,17 @@ contextBridge.exposeInMainWorld('localStorageApi', {
   // src-electron/modules/ls
   getUserAppDataFolder: async () :Promise<string> => await ipcRenderer.invoke('getUserAppDataFolder'),
   selectFolder: async () :Promise<Electron.OpenDialogReturnValue> => await ipcRenderer.invoke('selectFolder'),
-  saveFile: async (path:string, json:object) :Promise<void> => await ipcRenderer.invoke('saveFile', path, json),
+  readdirSync: async (path: string, option: object) :Promise<unknown> => await ipcRenderer.invoke('readdirSync', path, option),
+  saveFile: async (path: string, json: object) :Promise<void> => await ipcRenderer.invoke('saveFile', path, json),
 })
 
 contextBridge.exposeInMainWorld('configApi', {
   // src-electron/modules/config
-  hasConfig: async (path:string) :Promise<boolean> => await ipcRenderer.invoke('hasConfig', path),
-  saveConfig: async (path:string, key:string, config:object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', path, key, config),
-  loadConfig: async (path:string, key:string) :Promise<unknown> => await ipcRenderer.invoke('loadConfig', path, key),
-  deleteConfig: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('deleteConfig', path, key),
-  hasKey: async (path:string, key:string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', path, key),
+  hasConfig: async (path: string) :Promise<boolean> => await ipcRenderer.invoke('hasConfig', path),
+  saveConfig: async (path: string, key: string, config: object) :Promise<boolean> => await ipcRenderer.invoke('saveConfig', path, key, config),
+  loadConfig: async (path: string, key: string) :Promise<unknown> => await ipcRenderer.invoke('loadConfig', path, key),
+  deleteConfig: async (path: string, key: string) :Promise<boolean> => await ipcRenderer.invoke('deleteConfig', path, key),
+  hasKey: async (path: string, key: string) :Promise<boolean> => await ipcRenderer.invoke('hasKey', path, key),
 })
 
 contextBridge.exposeInMainWorld('settingApi', {
@@ -54,6 +55,6 @@ contextBridge.exposeInMainWorld('settingApi', {
 
 contextBridge.exposeInMainWorld('connectApi', {
   // src-electron/modules/connects/kindle
-  testKindle: async (email:string, password:string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
-  collectKindle: async (email:string, password:string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
+  testKindle: async (email: string, password: string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
+  collectKindle: async (email: string, password: string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
 })

@@ -4,6 +4,9 @@
       <template v-if="connect.type == 'kindle'">
         <KindleListItem :id="connect.id" @showEditDialog="showEditDialog"/>
       </template>
+      <template v-if="connect.type == 'pdfls'">
+        <PDFLocalStorageListItem :id="connect.id" @showEditDialog="showEditDialog"/>
+      </template>
       <q-separator />
     </template>
   </q-list>
@@ -13,6 +16,7 @@
 import { useConnectsStore } from 'src/stores/Connects';
 import { ConnectDivision } from 'src/stores/ConnectTypes';
 import KindleListItem from 'src/components/connects/KindleListItem.vue';
+import PDFLocalStorageListItem from 'src/components/connects/PDFLocalStorageListItem.vue';
 
 // --------------------------------
 //  store init
