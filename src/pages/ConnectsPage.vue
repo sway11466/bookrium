@@ -18,7 +18,7 @@ import AddDialog from 'src/components/connects/AddDialog.vue';
 import ConnectList from 'src/components/connects/ConnectsList.vue';
 import EditDialog from 'src/components/connects/EditDialog.vue';
 import { ref } from 'vue';
-import { ConnectDivision } from 'src/stores/ConnectTypes';
+import { ConnectType } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  component ref
@@ -33,7 +33,7 @@ function showAddDialog() {
   addDialog.value.show();
 }
 
-function showEditDialog(id:string, type:ConnectDivision) {
+function showEditDialog(id:string, type:ConnectType) {
   editDialog.value.show(id, type);
 }
 </script>

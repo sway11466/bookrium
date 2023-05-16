@@ -19,16 +19,22 @@ export type BookStore = {
 };
 
 /**
+ * Book Common attributes.
  * 
+ *  id         -> uuid
+ *  type       -> see @ContentType
+ *  connectId  -> source connector id
+ *  labels     -> label id array
  */
 export type Book = {
-  id: string, //uuid
+  id: string,
   type: ContentType,
   connectorId: string,
   labels: string[],
 }
 
 /**
+ * Kindle Book attributes.
  * 
  */
 export type KindleBook = Book & {
@@ -44,10 +50,14 @@ export type KindleBook = Book & {
 };
 
 /**
+ * PDF Book attributes.
  * 
  */
 export type PDFBook = Book & {
+  hash: string,
   path: string,
+  title: string,
+  author: string,
 };
 
 /**

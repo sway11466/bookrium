@@ -57,4 +57,7 @@ contextBridge.exposeInMainWorld('connectApi', {
   // src-electron/modules/connects/kindle
   testKindle: async (email: string, password: string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
   collectKindle: async (email: string, password: string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
+  // src-electron/modules/connects/pdfls
+  testPdfLs: async (path: string) :Promise<boolean> => await ipcRenderer.invoke('testPdfLs', path),
+  collectPdfLs: async (path: string) :Promise<unknown[]> => await ipcRenderer.invoke('collectPdfLs', path),
 })

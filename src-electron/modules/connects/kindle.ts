@@ -1,5 +1,5 @@
 /**
- * Kindle Scraping Library
+ * Kindle Connector
  */
 
 import { BrowserWindow, app, IpcMainInvokeEvent } from 'electron';

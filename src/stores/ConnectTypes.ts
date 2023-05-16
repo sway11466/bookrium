@@ -2,12 +2,13 @@
  * Connection settings for setting file.
  */
 export type ConnectStore = {
-  connectors: Map<string, ConnectType>,
+  connectors: Map<string, ConnectTypeDef>,
 }
 
 export type Connect = {
   id: string
-  type: ConnectDivision
+  type: ConnectType
+  bookCount: number
   //Todo: LastCollect: string
 };
 
@@ -29,5 +30,5 @@ export type PDFLocalStorageConnect = Connect & {
 /**
  * 
  */
-export type ConnectDivision = 'kindle' | 'pdfls';
-export type ConnectType = KindleConnect | PDFLocalStorageConnect;
+export type ConnectType = 'kindle' | 'pdfls';
+export type ConnectTypeDef = KindleConnect | PDFLocalStorageConnect;

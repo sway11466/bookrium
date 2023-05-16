@@ -5,7 +5,7 @@ import { useSettingsStore } from 'src/stores/Settings';
 import { Queue } from 'src/components/Queue';
 
 const CONFIG_ROOT_KEY = 'bookrium';
-const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.books';
+const CONFIG_BOOK_KEY = CONFIG_ROOT_KEY + '.books';
 
 export const useBooksStore = defineStore('books', {
 
@@ -61,7 +61,7 @@ export const useBooksStore = defineStore('books', {
       const apiManager = useApiManager();
       const settings = useSettingsStore();
       const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
-      const books = await apiManager.configApi.loadConfig(path, CONFIG_CONNECTOR_KEY) as Book[];
+      const books = await apiManager.configApi.loadConfig(path, CONFIG_BOOK_KEY) as Book[];
       Object.values(books).forEach(book => this.books.set(book.id, book as KindleBook | PDFBook));
     },
 
@@ -85,8 +85,8 @@ export const useBooksStore = defineStore('books', {
       };
       // save to file
       new Set(books.map(book => book.connectorId)).forEach(id => {
-        const path = apiManager.path.join(settings.storage.bookFolderPath, id + '.json');
-        apiManager.configApi.saveConfig(path, CONFIG_CONNECTOR_KEY, deproxyBook(this.index.connector.get(id) ?? []));
+        const path = apiManager.path.join(settings.storage.bookFolderPath, '.json');
+        apiManager.configApi.saveConfig(path, CONFIG_BOOK_KEY + '-' + id, deproxyBook(this.index.connector.get(id) ?? []));
       });
     },
   }

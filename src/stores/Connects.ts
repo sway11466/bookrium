@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
-import { ConnectStore, ConnectDivision, Connect, KindleConnect, PDFLocalStorageConnect, ConnectType } from 'src/stores/ConnectTypes';
-import { KindleBook } from 'src/stores/BookTypes';
+import { ConnectStore, ConnectType, Connect, KindleConnect, PDFLocalStorageConnect, ConnectTypeDef } from 'src/stores/ConnectTypes';
+import { KindleBook, PDFBook } from 'src/stores/BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connectors';
@@ -33,12 +33,12 @@ export const useConnectsStore = defineStore('connects', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
-      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, ConnectType>;
+      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, ConnectTypeDef>;
       Object.entries(connectors).forEach(([key, value]) => this.connectors.set(key, value));
       return true;
     },
 
-    async save(connect: ConnectType) {
+    async save(connect: ConnectTypeDef) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       // add store if new connect
@@ -55,17 +55,16 @@ export const useConnectsStore = defineStore('connects', {
       apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
     },
 
-    new(division: ConnectDivision): ConnectType {
+    new(division: ConnectType): ConnectTypeDef {
       switch (division) {
         case 'kindle': return this.newKindleConnect();
         case 'pdfls': return this.newPDFLocalStorageConnect();
       }
-      throw new Error(); //Todo implements
     },
 
-    get(id: string): ConnectType {
+    get(id: string): ConnectTypeDef {
       if (this.connectors.has(id)) {
-        return this.connectors.get(id) as ConnectType;
+        return this.connectors.get(id) as ConnectTypeDef;
       } else {
         throw new Error(); //Todo implements
       }
@@ -77,7 +76,8 @@ export const useConnectsStore = defineStore('connects', {
     newKindleConnect(): KindleConnect {
       return {
         id: uuid(),
-        type: 'kindle' as ConnectDivision,
+        type: 'kindle' as ConnectType,
+        bookCount: -1,
         email: '',
         password: '',
       }
@@ -145,15 +145,36 @@ export const useConnectsStore = defineStore('connects', {
     newPDFLocalStorageConnect(): PDFLocalStorageConnect {
       return {
         id: uuid(),
-        type: 'pdfls' as ConnectDivision,
+        type: 'pdfls' as ConnectType,
+        bookCount: -1,
         path: '',
       }
     },
 
     async testPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<boolean> {
       const apiManager = useApiManager();
-      const list = await apiManager.localStorageApi.readdirSync(connect.path, { filter: /.pdf$/ }) as string[];
-      return list.length > 0;
+      return await apiManager.connectApi.testPdfLs(connect.path);
+    },
+
+    async collectPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<boolean> {
+      const apiManager = useApiManager();
+      const booksStore = useBooksStore();
+      const collected = await apiManager.connectApi.collectPdfLs(connect.path) as PDFBook[];
+      const books: PDFBook[] = collected.map((book: PDFBook) => {
+        return {
+          id: uuid(),
+          type: 'pdf',
+          connectorId: connect.id,
+          labels: [book.labels],
+          hash: book.hash,
+          path: book.path,
+          title: book.title,
+          author: book.author,
+        }
+      });
+      console.log(books);
+      booksStore.addBooks(books);
+      return true;
     },
   }
 });
@@ -162,6 +183,7 @@ const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
   return {
     id: connect.id,
     type: connect.type,
+    bookCount: connect.bookCount,
     email: connect.email,
     password: connect.password,
   }
@@ -171,6 +193,7 @@ const deproxyPDFLocalStorageConnect = (connect: PDFLocalStorageConnect): PDFLoca
   return {
     id: connect.id,
     type: connect.type,
+    bookCount: connect.bookCount,
     path: connect.path,
   }
 }

@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { useConnectsStore } from 'src/stores/Connects';
-import { ConnectDivision } from 'src/stores/ConnectTypes';
+import { ConnectType } from 'src/stores/ConnectTypes';
 import KindleListItem from 'src/components/connects/KindleListItem.vue';
 import PDFLocalStorageListItem from 'src/components/connects/PDFLocalStorageListItem.vue';
 
@@ -33,7 +33,7 @@ const emit = defineEmits([
 // --------------------------------
 //  item actions
 // --------------------------------
-function showEditDialog(id:string, type:ConnectDivision) {
+function showEditDialog(id:string, type:ConnectType) {
   emit('showEditDialog', id, type);
 }
 </script>

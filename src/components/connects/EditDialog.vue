@@ -5,35 +5,36 @@
         <template v-if="type == 'kindle'">
           <q-img src="kindle-48x48.svg" width="32px" />kindle Setting
         </template>
+        <template v-if="type == 'pdfls'">
+          <q-img src="pdf-48x48.png" width="32px" />PDF (Local Storage) Setting
+        </template>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="kindle">
+      <q-card-section>
+        <template v-if="type == 'kindle'">
           <KindleSetting mode="edit" :id="id" @hideDialog="hide" />
-        </q-tab-panel>
-
-        <q-tab-panel name="localstrage">
-          Not Implements.
-        </q-tab-panel>
-      </q-tab-panels>
-
+        </template>
+        <template v-if="type == 'pdfls'">
+          <PDFLocalStorageSetting mode="edit" :id="id" @hideDialog="hide" />
+        </template>
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
 import KindleSetting from 'src/components/connects/KindleSetting.vue';
+import PDFLocalStorageSetting from 'src/components/connects/PDFLocalStorageSetting.vue';
 import { Ref, ref } from 'vue';
 import { ConnectType } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  local var
 // --------------------------------
-let tab = ref('kindle')
 let id = ref('');
-let type :Ref<ConnectType> = ref('kindle');
+let type: Ref<ConnectType | ''> = ref('');
 let visible = ref(false);
 
 // --------------------------------

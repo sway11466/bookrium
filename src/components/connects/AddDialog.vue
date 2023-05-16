@@ -50,7 +50,7 @@
             <KindleSetting mode="add" id="" @back="step = 1" @hideDialog="hide" />
           </template>
           <template v-if="type === 'pdfls'">
-            <PDFLocalStorage mode="add" id="" @back="step = 1" @hideDialog="hide" />
+            <PDFLocalStorageSetting mode="add" id="" @back="step = 1" @hideDialog="hide" />
           </template>
         </q-step>
       </q-stepper>
@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import KindleSetting from 'src/components/connects/KindleSetting.vue';
-import PDFLocalStorage from 'src/components/connects/PDFLocalStorage.vue';
+import PDFLocalStorageSetting from 'src/components/connects/PDFLocalStorageSetting.vue';
 import { ref } from 'vue';
 
 // --------------------------------
