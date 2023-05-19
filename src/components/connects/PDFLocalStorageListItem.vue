@@ -1,7 +1,7 @@
 <template>
   <q-item @click="showEditDialog(connect.id)" clickable v-ripple>
     <q-item-section avatar>
-      <q-img src="pdf-48x48.png" width="48px" />
+      <q-img src="pdf-47x47.png" width="48px" />
     </q-item-section>
     <q-item-section>
       <q-item-label>

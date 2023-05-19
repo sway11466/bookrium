@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { BookStore, Book, KindleBook, PDFBook } from 'src/stores/BookTypes';
+import { BookStore, Book, KindleBook, PDFBook, BookTypeDef } from 'src/stores/BookTypes';
 import { useSettingsStore } from 'src/stores/Settings';
 import { Queue } from 'src/components/Queue';
 
@@ -26,13 +26,36 @@ export const useBooksStore = defineStore('books', {
   actions: {
     async init() {
       await this.load();
-      this.initLabelIndex();
-      this.initConnectorIndx();
-      this.initLatestIndex();
     },
 
-    async initLabelIndex() {
-      [...this.books.values()].forEach(book=> {
+    async load() {
+      const apiManager = useApiManager();
+      const settings = useSettingsStore();
+      const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
+      const books = await apiManager.configApi.loadConfig(path, CONFIG_BOOK_KEY) as Map<string, BookTypeDef>;
+      this.addBooks([...Object.values(books)]);
+    },
+
+    newKindleBook(): KindleBook {
+      return newKindleBook();
+    },
+
+    addBooks(books: BookTypeDef[]) {
+      const apiManager = useApiManager();
+      const settings = useSettingsStore();
+      // save to file
+      const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
+      books.forEach(book => apiManager.configApi.saveConfig(path, CONFIG_BOOK_KEY + '.' + book.id, deproxyBook(book)));
+      // update store
+      books.forEach(book => this.books.set(book.id, book));
+      this.addLabelIndex(books);  //async
+      this.addConnectorIndx(books);  //async
+      this.addLatestIndex(books);  //async
+    },
+
+    // Todo: Remove duplicates.
+    async addLabelIndex(books: BookTypeDef[]) {
+      books.forEach(book=> {
         book.labels.forEach(label => {
           const index = this.index.label.get(label) ?? [];
           index.push(book);
@@ -43,8 +66,9 @@ export const useBooksStore = defineStore('books', {
       });
     },
 
-    async initConnectorIndx() {
-      [...this.books.values()].forEach(book=> {
+    // Todo: Remove duplicates.
+    async addConnectorIndx(books: BookTypeDef[]) {
+      books.forEach(book=> {
         const index = this.index.connector.get(book.connectorId) ?? [];
         index.push(book);
         if (!this.index.connector.has(book.connectorId)) {
@@ -53,57 +77,18 @@ export const useBooksStore = defineStore('books', {
       });
     },
 
-    async initLatestIndex() {
-      [...this.books.values()].forEach(book=> this.index.latest.push(book));
-    },
-
-    async load() {
-      const apiManager = useApiManager();
-      const settings = useSettingsStore();
-      const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
-      const books = await apiManager.configApi.loadConfig(path, CONFIG_BOOK_KEY) as Book[];
-      Object.values(books).forEach(book => this.books.set(book.id, book as KindleBook | PDFBook));
-    },
-
-    newKindleBook(): KindleBook {
-      return newKindleBook();
-    },
-
-    addBooks(books: KindleBook[] | PDFBook[]) {
-      const apiManager = useApiManager();
-      const settings = useSettingsStore();
-      // add books
-      books.forEach(book => this.books.set(book.id, book));
-      // add label index
-      // add connectors index
-      for (const book of books) {
-        const bookIndex = this.index.connector.get(book.connectorId) ?? [];
-        bookIndex.push(book);
-        if (!this.index.connector.has(book.connectorId)) {
-          this.index.connector.set(book.connectorId, bookIndex);
-        }
-      };
-      // save to file
-      new Set(books.map(book => book.connectorId)).forEach(id => {
-        const path = apiManager.path.join(settings.storage.bookFolderPath, '.json');
-        apiManager.configApi.saveConfig(path, CONFIG_BOOK_KEY + '-' + id, deproxyBook(this.index.connector.get(id) ?? []));
-      });
+    // Todo: Remove duplicates.
+    async addLatestIndex(books: BookTypeDef[]) {
+      books.forEach(book=> this.index.latest.push(book));
     },
   }
 });
 
-const deproxyBook = (books: Book[]) => {
-  const ret = [] as Book[];
-  books.forEach(book => {
-    switch (book.type) {
-      case 'kindle':
-        ret.push(deproxyKindleBook(book as KindleBook));
-        break;
-      default:
-        break;
-    }
-  })
-  return ret;
+const deproxyBook = (book: BookTypeDef): BookTypeDef => {
+  switch (book.type) {
+    case 'kindle': return deproxyKindleBook(book as KindleBook);
+    case 'pdf': return deproxyPDFBook(book as PDFBook);
+  }
 }
 
 const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
@@ -121,6 +106,19 @@ const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
     resourceType: kindle.resourceType,
     originType: kindle.originType,
     mangaOrComicAsin: kindle.mangaOrComicAsin,
+  }
+}
+
+const deproxyPDFBook = (book: PDFBook): PDFBook => {
+  return {
+    id: book.id,
+    type: book.type,
+    connectorId: book.connectorId,
+    labels: book.labels.concat([]),
+    hash: book.hash,
+    path: book.path,
+    title: book.title,
+    author: book.author,
   }
 }
 

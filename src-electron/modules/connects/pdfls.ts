@@ -3,6 +3,7 @@
  */
 
 import { IpcMainInvokeEvent } from 'electron';
+import log from 'electron-log';
 import crypto from 'crypto';
 import fs from 'fs';
 import { PDFDocument } from 'pdf-lib';
@@ -15,8 +16,10 @@ export default {
   },
 
   collectPdfLs: async (event:IpcMainInvokeEvent, path:string) :Promise<unknown[]> => {
+    log.info('call collectPdfLs.');
     const files = await ls.readdirSync(event, path, { filter: /.pdf$/ });
     return await Promise.all(files.map(async item => {
+      log.info('parse ' + item);
       const file = fs.readFileSync(item);
       const pdf = await PDFDocument.load(file, { ignoreEncryption: true, updateMetadata: false });
       return {
@@ -28,5 +31,4 @@ export default {
       }
     }));
   },
-
 }

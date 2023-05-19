@@ -30,7 +30,7 @@
               </q-item-section>
               <q-item-section>
                 <div>
-                  <q-img src="pdf-48x48.png" width="32px" />
+                  <q-img src="pdf-47x47.png" width="32px" />
                   PDF(Local Storage)
                 </div>
               </q-item-section>

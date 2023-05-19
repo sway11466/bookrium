@@ -165,14 +165,13 @@ export const useConnectsStore = defineStore('connects', {
           id: uuid(),
           type: 'pdf',
           connectorId: connect.id,
-          labels: [book.labels],
+          labels: book.labels ? [...book.labels] : [],
           hash: book.hash,
           path: book.path,
           title: book.title,
           author: book.author,
         }
       });
-      console.log(books);
       booksStore.addBooks(books);
       return true;
     },

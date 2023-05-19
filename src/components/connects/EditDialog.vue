@@ -6,7 +6,7 @@
           <q-img src="kindle-48x48.svg" width="32px" />kindle Setting
         </template>
         <template v-if="type == 'pdfls'">
-          <q-img src="pdf-48x48.png" width="32px" />PDF (Local Storage) Setting
+          <q-img src="pdf-47x47.png" width="32px" />PDF (Local Storage) Setting
         </template>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />

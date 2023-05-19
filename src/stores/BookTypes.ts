@@ -10,7 +10,7 @@ import { Queue } from 'src/components/Queue';
  *   latest     -> book index of top x latest books.
  */
 export type BookStore = {
-  books: Map<string, KindleBook | PDFBook>,
+  books: Map<string, BookTypeDef>,
   index: {
     label: Map<string, Book[]>,
     connector: Map<string, Book[]>,
@@ -64,3 +64,4 @@ export type PDFBook = Book & {
  * 
  */
 export type ContentType = 'kindle' | 'pdf';
+export type BookTypeDef = KindleBook | PDFBook;
