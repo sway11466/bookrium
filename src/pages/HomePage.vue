@@ -23,6 +23,7 @@
 </script>
 
 <script lang="ts">
+import { ShellApi } from 'src-electron/modules/shell-api';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
@@ -33,6 +34,7 @@ import { SettingApi } from 'src-electron/modules/settings/setting-api';
 // --------------------------------
 export declare var window: Window;
 export interface Window {
+  shellApi: ShellApi
   localStorageApi: LocalStorageApi
   configApi: ConfigApi
   connectApi: ConnectApi
@@ -73,6 +75,7 @@ const settings = useSettingsStore();
 //  init 
 // --------------------------------
 const init = async () => {
+  apiManager.bindShellApi(window.shellApi);
   apiManager.bindLocalStorageApi(window.localStorageApi);
   apiManager.bindConfigApi(window.configApi);
   apiManager.bindConnectApi(window.connectApi);

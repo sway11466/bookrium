@@ -20,6 +20,8 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
 import { PDFBook } from 'src/stores/BookTypes';
+import { useApiManager } from 'src/stores/ApiManager';
+import { store } from 'quasar/wrappers';
 
 // --------------------------------
 //  prop
@@ -35,6 +37,7 @@ const props = defineProps({
 //  emit
 // --------------------------------
 const emit = defineEmits([
+  'showBook',       // show book via parent component(ContentsPage).
   'showPDFDialog',  // show edit dialog via parent component(ContentsPage).
 ]);
 
@@ -51,7 +54,6 @@ function showEditDialog(): void {
 }
 
 function view(): void {
-  // window.open(book.value.path);
-  //Todo: auto login if not logined.
+  emit('showBook', book.value);
 }
 </script>

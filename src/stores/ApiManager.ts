@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ShellApi } from 'src-electron/modules/shell-api';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
@@ -7,6 +8,7 @@ import { useSettingsStore } from 'src/stores/Settings';
 
 export const useApiManager = defineStore('ApiManager', {
   state: () => ({
+    shelApi: {} as ShellApi,
     localStorageApi: {} as LocalStorageApi,
     configApi: {} as ConfigApi,
     connectApi: {} as ConnectApi,
@@ -21,6 +23,10 @@ export const useApiManager = defineStore('ApiManager', {
   },
 
   actions: {
+    bindShellApi(api: ShellApi): void {
+      this.shelApi = api;
+    },
+
     bindLocalStorageApi(api: LocalStorageApi): void {
       this.localStorageApi = api;
     },

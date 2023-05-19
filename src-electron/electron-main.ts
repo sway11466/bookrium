@@ -66,6 +66,10 @@ app.on('activate', () => {
   }
 });
 
+// import and handle shell
+import shell from 'src-electron/modules/shell';
+for (const [k,v] of Object.entries(shell)) { ipcMain.handle(k, v) }
+
 // import and handle LocalStrage
 import ls from 'src-electron/modules/ls';
 for (const [k,v] of Object.entries(ls)) { ipcMain.handle(k, v) }

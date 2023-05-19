@@ -30,6 +30,11 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 
+contextBridge.exposeInMainWorld('shellApi', {
+  // src-electron/modules/shell
+  openExternal: async (url: string, option: object) :Promise<void> => await ipcRenderer.invoke('openExternal', url, option),
+})
+
 contextBridge.exposeInMainWorld('localStorageApi', {
   // src-electron/modules/ls
   getUserAppDataFolder: async () :Promise<string> => await ipcRenderer.invoke('getUserAppDataFolder'),

@@ -53,6 +53,15 @@ export const useBooksStore = defineStore('books', {
       this.addLatestIndex(books);  //async
     },
 
+    show(book: BookTypeDef): void {
+      const apiManager = useApiManager();
+      switch (book.type) {
+        case 'pdf':
+          apiManager.shelApi.openExternal((book as PDFBook).path, {});
+          break;
+      }
+    },
+
     // Todo: Remove duplicates.
     async addLabelIndex(books: BookTypeDef[]) {
       books.forEach(book=> {
