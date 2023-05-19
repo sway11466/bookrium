@@ -1,7 +1,7 @@
 <template>
   <q-item @click="view" clickable v-ripple>
     <q-item-section avatar>
-      <!-- <q-img :src="book.productUrl" fit="fill" /> -->
+      <q-img src="pdf-94x94.png" fit="fill" />
     </q-item-section>
     <q-item-section>
       <q-item-label>{{book.title}}</q-item-label>
@@ -20,8 +20,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
 import { PDFBook } from 'src/stores/BookTypes';
-import { useApiManager } from 'src/stores/ApiManager';
-import { store } from 'quasar/wrappers';
 
 // --------------------------------
 //  prop

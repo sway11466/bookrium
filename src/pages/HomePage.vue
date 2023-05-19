@@ -3,16 +3,7 @@
     <q-list>
       <q-item-label class="q-pb-none" header>Books</q-item-label>
       <q-item>
-        <q-virtual-scroll :items="books.latest" virtual-scroll-horizontal v-slot="{ item }">
-          <q-card :key="item.id" class="q-ma-md" style="min-width: 128px; max-width: 192px;">
-            <q-card-section>
-              <q-img :src="item.productUrl" fit="fill" />
-            </q-card-section>
-            <q-card-section class="text-caption">
-              {{ item.title }}
-            </q-card-section>
-          </q-card>
-        </q-virtual-scroll>
+        <BookSlide />
       </q-item>
     </q-list>
   </q-page>
@@ -23,6 +14,7 @@
 </script>
 
 <script lang="ts">
+import BookSlide from 'src/components/home/BookSlide.vue';
 import { ShellApi } from 'src-electron/modules/shell-api';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 import { ConfigApi } from 'src-electron/modules/config-api';
