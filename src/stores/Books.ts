@@ -56,8 +56,12 @@ export const useBooksStore = defineStore('books', {
     show(book: BookTypeDef): void {
       const apiManager = useApiManager();
       switch (book.type) {
+        case 'kindle':
+          apiManager.shellApi.openElectron((book as KindleBook).webReaderUrl, {});
+          break;
         case 'pdf':
-          apiManager.shelApi.openExternal((book as PDFBook).path, {});
+          apiManager.shellApi.openElectron((book as PDFBook).path, {});
+          // apiManager.shellApi.openExternal((book as PDFBook).path, {});
           break;
       }
     },

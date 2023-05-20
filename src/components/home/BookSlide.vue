@@ -11,13 +11,13 @@
       </q-card-section>
 
       <q-card-actions align="around">
-        <q-btn @click="showBook(item)" flat>
+        <q-btn @click="showBook(item)" no-caps flat>
           <q-avatar size="md"><img src="show-book-cuteui-64x64.png" /></q-avatar>
-          <q-item-label>show</q-item-label>
+          <q-item-label class="q-ml-xs">show</q-item-label>
         </q-btn>
-        <q-btn @click="editBook(item)" flat>
+        <q-btn @click="editBook(item)" no-caps flat>
           <q-avatar size="md" square><img src="edit-prop-cuteui-64x64.png" /></q-avatar>
-          <q-item-label>edit</q-item-label>
+          <q-item-label class="q-ml-xs">edit</q-item-label>
         </q-btn>
       </q-card-actions>
 

@@ -8,7 +8,7 @@ import { useSettingsStore } from 'src/stores/Settings';
 
 export const useApiManager = defineStore('ApiManager', {
   state: () => ({
-    shelApi: {} as ShellApi,
+    shellApi: {} as ShellApi,
     localStorageApi: {} as LocalStorageApi,
     configApi: {} as ConfigApi,
     connectApi: {} as ConnectApi,
@@ -24,7 +24,7 @@ export const useApiManager = defineStore('ApiManager', {
 
   actions: {
     bindShellApi(api: ShellApi): void {
-      this.shelApi = api;
+      this.shellApi = api;
     },
 
     bindLocalStorageApi(api: LocalStorageApi): void {

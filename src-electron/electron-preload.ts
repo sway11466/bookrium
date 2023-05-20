@@ -32,6 +32,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('shellApi', {
   // src-electron/modules/shell
+  openElectron: async (url: string, option: object) :Promise<void> => await ipcRenderer.invoke('openElectron', url, option),
   openExternal: async (url: string, option: object) :Promise<void> => await ipcRenderer.invoke('openExternal', url, option),
 })
 
