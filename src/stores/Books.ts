@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
 import { BookStore, Book, KindleBook, PDFBook, BookTypeDef } from 'src/stores/BookTypes';
 import { useSettingsStore } from 'src/stores/Settings';
+import { ShowAppType } from 'src/stores/SettingTypes';
 import { Queue } from 'src/components/Queue';
 
 const CONFIG_ROOT_KEY = 'bookrium';
@@ -54,14 +55,27 @@ export const useBooksStore = defineStore('books', {
     },
 
     show(book: BookTypeDef): void {
+      // TODO: 設定に応じて開き方を変える
       const apiManager = useApiManager();
+      const setting = useSettingsStore();
+      let url = '';
+      let way: ShowAppType = 'builtin';
       switch (book.type) {
         case 'kindle':
-          apiManager.shellApi.openElectron((book as KindleBook).webReaderUrl, {});
+          url = (book as KindleBook).webReaderUrl;
+          way = setting.showapp.kindle;
           break;
         case 'pdf':
-          apiManager.shellApi.openElectron((book as PDFBook).path, {});
-          // apiManager.shellApi.openExternal((book as PDFBook).path, {});
+          url = (book as PDFBook).path;
+          way = setting.showapp.pdf;
+          break;
+      }
+      switch (way) {
+        case 'builtin':
+          apiManager.shellApi.openElectron(url, {});
+          break;
+        case 'os':
+          apiManager.shellApi.openExternal(url, {});
           break;
       }
     },

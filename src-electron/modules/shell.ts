@@ -9,6 +9,8 @@ export default {
 
   openElectron: async (event: IpcMainInvokeEvent, url: string, option: object): Promise<void> => {
     log.info('call openElectron.');
+    log.debug(url);
+    log.debug(option);
     const window = new BrowserWindow({ width: 800, height: 600 });
     window.setMenuBarVisibility(false);
     window.loadURL(url);

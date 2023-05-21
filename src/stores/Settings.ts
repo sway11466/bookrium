@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { PlatformType, SettingStore, Storage } from 'src/stores/SettingTypes';
+import { PlatformType, SettingStore, SettingUpdatable, ShowApp, Storage } from 'src/stores/SettingTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_SETTING_KEY = CONFIG_ROOT_KEY + '.setting';
@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore('settings', {
   state: (): SettingStore => ({
     settingPath: '',
     storage: {} as Storage,
+    showapp: {} as ShowApp,
     platform: 'win32',
     version: 'unknown',
   }),
@@ -21,7 +22,7 @@ export const useSettingsStore = defineStore('settings', {
     // --------------------------------
     async init() {
       const apiManager = useApiManager();
-      const defaultSetting = await this.newSetting();
+      const defaultSetting = await this.new();
       if (await apiManager.configApi.hasConfig(defaultSetting.settingPath)) {
         await this.load(); // TODO: error handling
       } else {
@@ -35,10 +36,10 @@ export const useSettingsStore = defineStore('settings', {
     // --------------------------------
     async load() {
       const apiManager = useApiManager();
-      const defaultSetting = await this.newSetting();
+      const defaultSetting = await this.new();
       const loaded = await apiManager.configApi.loadConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY) as SettingStore;
       // Todo: setting validation
-      Object.assign(this, loaded);
+      Object.assign(this, defaultSetting, loaded);
     },
 
     async save() {
@@ -46,7 +47,7 @@ export const useSettingsStore = defineStore('settings', {
       apiManager.configApi.saveConfig(this.settingPath, CONFIG_SETTING_KEY, deproxy(this));
     },
 
-    async newSetting(): Promise<SettingStore> {
+    async new(): Promise<SettingStore> {
       const apiManager = useApiManager();
       const appDirPath = await apiManager.localStorageApi.getUserAppDataFolder();
       return {
@@ -58,9 +59,22 @@ export const useSettingsStore = defineStore('settings', {
           cacheFolderPath: appDirPath + '\\Bookrium\\cache',
           labelFolderPath: appDirPath + '\\Bookrium\\labels',
         },
+        showapp: {
+          kindle: 'builtin',
+          pdf: 'builtin',
+        },
         platform: await apiManager.settingApi.getPlatform() as PlatformType,
         version: await apiManager.settingApi.getAppVersion() as string,
       }
+    },
+
+    update(items: SettingUpdatable): boolean {
+      this.showapp.kindle = items.showapp.kindle
+      this.showapp.pdf = items.showapp.pdf
+      this.settingPath = items.settingPath;
+      this.storage.dataFolderPath = items.storage.dataFolderPath;
+      this.save();
+      return true;
     },
 
     // --------------------------------
@@ -82,6 +96,10 @@ const deproxy = (setting: SettingStore): SettingStore => {
       bookFolderPath: setting.storage.bookFolderPath,
       cacheFolderPath: setting.storage.cacheFolderPath,
       labelFolderPath: setting.storage.labelFolderPath,
+    },
+    showapp: {
+      kindle: setting.showapp.kindle,
+      pdf: setting.showapp.pdf,
     },
     platform: setting.platform,
     version: setting.version,
