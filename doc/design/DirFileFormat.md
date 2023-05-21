@@ -6,6 +6,11 @@
  +-- artwork/
  |
  +-- books/
+ |   |
+ |   +-- pdf/
+ |   |   |
+ |   |   +-- [connector.id]
+ |   |
  |   +-- books.json
  |
  +-- cache/
@@ -24,9 +29,10 @@
 ```json
 {
     "bookrium": {
-        "books": [
-            [book-object]
-          ]
+        "books": {
+            [book.id]: {
+                [key]: [val]
+            }
         }
     }
 }
@@ -37,8 +43,14 @@
 {
     "bookrium": {
         "labels": {
-            [label-name]: {
-                "count": 0,
+            "[label.id]": {
+				"id": "uuid4",
+				"name": "label name",
+				"fore_color": "#000000",
+				"back_color": "#ffffff",
+				"parent_id": "parent label id",
+				"count": 0,
+				"createdAt": "2000-01-01T01:01:01.001Z"
             }
         }
     }
@@ -57,17 +69,27 @@
                 "cacheFolderPath": "",
                 "artworkFolderPath": ""
             }
+			"showapp": {
+				"kindle": "[builtin | os]",
+				"pdf": "[builtin | os]"
+			},
+			"platform": "[win32]",
+			"version": "0.0.0"
         },
         "connector": {
-            [connector-id]: {
-                [attr-key]: [attr-val]
+            "[connector.id]": {
+                "[key]": "[val]"
             }
-            "kindle": {
-                "email": "",
-                "password": ""
+            "kindle-case": {
+                "id": "uuid4",
+                "tyee": "kindle",
+                "email": "kindle login email address",
+                "password": "kindle login password"
             }
-            "pdfls": {
-                "path": ""
+            "pdfls-case": {
+                "id": "uuid4",
+                "tyee": "pdfls",
+                "path": "[path to base directory]"
             }
         }
     }
