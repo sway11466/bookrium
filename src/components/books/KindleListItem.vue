@@ -10,7 +10,7 @@
     <q-item-section side>
       <q-btn @click.stop="showEditDialog" flat square>
         <q-avatar square>
-          <q-img src="detail-cuteui-64x64.png" no-spinner />
+          <q-img src="edit-prop-cuteui-64x64.png" no-spinner />
         </q-avatar>
       </q-btn>
     </q-item-section>
