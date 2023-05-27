@@ -2,7 +2,7 @@
  * PDF (Local Storage) Connector
  */
 
-import { app, BrowserWindow, IpcMainInvokeEvent } from 'electron';
+import { IpcMainInvokeEvent } from 'electron';
 import log from 'electron-log';
 import crypto from 'crypto';
 import fs from 'fs';
@@ -10,18 +10,18 @@ import path from 'path';
 import { PDFDocument } from 'pdf-lib';
 import { v4 as uuid } from 'uuid';
 import ls from 'src-electron/modules/ls';
-import puppeteer, { Browser } from 'puppeteer-core';
-import pie from 'puppeteer-in-electron';
+// import puppeteer, { Browser } from 'puppeteer-core';
+// import pie from 'puppeteer-in-electron';
 import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
 import { SettingStore } from 'src/stores/SettingTypes';
 import { PDFBook } from 'src/stores/BookTypes';
 
-let browser: Browser;
-const init = async () => {
-  await pie.initialize(app);
-  browser = await pie.connect(app, puppeteer);
-}
-init();
+// let browser: Browser;
+// const init = async () => {
+//   await pie.initialize(app);
+//   browser = await pie.connect(app, puppeteer);
+// }
+// init();
 
 export default {
 
@@ -44,7 +44,7 @@ const collectMeta = async (files: string[], connector: PDFLocalStorageConnect, s
     const file = fs.readFileSync(item);
     const pdf = await PDFDocument.load(file, { ignoreEncryption: true, updateMetadata: false });
     const id = uuid();
-    const artworkPath = path.join(setting.storage.artworkFolderPath, id + ".jpg");
+    const artworkPath = path.join(setting.storage.artworkFolderPath, id + '.jpg');
     return {
       id,
       type: 'pdf',
@@ -59,13 +59,13 @@ const collectMeta = async (files: string[], connector: PDFLocalStorageConnect, s
   }));
 }
 
-const createArtworks = async (books: PDFBook[]): Promise<void> => {
-  log.info('call createArtworks');
-  const window = new BrowserWindow(); // debug param {show: true}
-  const page = await pie.getPage(browser, window);
-  for (const book of books) { 
-    await page.goto(book.path);
-    await page.waitForNavigation();
-    await page.screenshot({ path: book.artworkPath });
-  }
-}
+// const createArtworks = async (books: PDFBook[]): Promise<void> => {
+//   log.info('call createArtworks');
+//   const window = new BrowserWindow(); // debug param {show: true}
+//   const page = await pie.getPage(browser, window);
+//   for (const book of books) { 
+//     await page.goto(book.path);
+//     await page.waitForNavigation();
+//     await page.screenshot({ path: book.artworkPath });
+//   }
+// }

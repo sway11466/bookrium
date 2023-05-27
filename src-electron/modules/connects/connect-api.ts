@@ -1,6 +1,6 @@
-import { PDFBook } from "src/stores/BookTypes";
-import { PDFLocalStorageConnect } from "src/stores/ConnectTypes";
-import { SettingStore } from "src/stores/SettingTypes";
+import { PDFBook } from 'src/stores/BookTypes';
+import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
+import { SettingStore } from 'src/stores/SettingTypes';
 
 export interface ConnectApi {
   testKindle: (email: string, password: string) => Promise<boolean>,
