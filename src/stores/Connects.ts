@@ -55,10 +55,10 @@ export const useConnectsStore = defineStore('connects', {
       apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
     },
 
-    new(division: ConnectType): ConnectTypeDef {
-      switch (division) {
-        case 'kindle': return this.newKindleConnect();
-        case 'pdfls': return this.newPDFLocalStorageConnect();
+    new(type: ConnectType): ConnectTypeDef {
+      switch (type) {
+        case 'kindle': return newKindleConnect();
+        case 'pdfls': return newPDFLocalStorageConnect();
       }
     },
 
@@ -70,18 +70,33 @@ export const useConnectsStore = defineStore('connects', {
       }
     },
 
+    del(id: string): boolean {
+      // Validation
+      if (!this.connectors.has(id)) {
+        throw new Error(); //Todo implements
+      }
+      // delete from store
+      this.connectors.delete(id);
+      // delete from file
+      const apiManager = useApiManager();
+      const settingsStore = useSettingsStore();
+      const key = CONFIG_CONNECTOR_KEY + '.' + id;
+      apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
+      // Todo: delete all books on delete connection
+
+      return true;
+    },
+
+    deproxy(connect: ConnectTypeDef): ConnectTypeDef {
+      switch (connect.type) {
+        case 'kindle': return deproxyKindleConnect(connect as KindleConnect);
+        case 'pdfls': return deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect);
+      }
+    },
+
     // --------------------------------
     //  kindle functions
     // --------------------------------
-    newKindleConnect(): KindleConnect {
-      return {
-        id: uuid(),
-        type: 'kindle' as ConnectType,
-        bookCount: -1,
-        email: '',
-        password: '',
-      }
-    },
 
     async testKindleSetting(connect: KindleConnect): Promise<boolean> {
       const apiManager = useApiManager();
@@ -142,14 +157,6 @@ export const useConnectsStore = defineStore('connects', {
     // --------------------------------
     //  PDFLocalStorage functions
     // --------------------------------
-    newPDFLocalStorageConnect(): PDFLocalStorageConnect {
-      return {
-        id: uuid(),
-        type: 'pdfls' as ConnectType,
-        bookCount: -1,
-        path: '',
-      }
-    },
 
     async testPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<boolean> {
       const apiManager = useApiManager();
@@ -158,25 +165,27 @@ export const useConnectsStore = defineStore('connects', {
 
     async collectPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<boolean> {
       const apiManager = useApiManager();
+      const settingStore = useSettingsStore();
+      const books = await apiManager.connectApi.collectPdfLs(deproxyPDFLocalStorageConnect(connect), settingStore.deproxy()) as PDFBook[];
       const booksStore = useBooksStore();
-      const collected = await apiManager.connectApi.collectPdfLs(connect.path) as PDFBook[];
-      const books: PDFBook[] = collected.map((book: PDFBook) => {
-        return {
-          id: uuid(),
-          type: 'pdf',
-          connectorId: connect.id,
-          labels: book.labels ? [...book.labels] : [],
-          hash: book.hash,
-          path: book.path,
-          title: book.title,
-          author: book.author,
-        }
-      });
       booksStore.addBooks(books);
       return true;
     },
   }
 });
+
+// --------------------------------
+//  kindle functions
+// --------------------------------
+const newKindleConnect = (): KindleConnect => {
+  return {
+    id: uuid(),
+    type: 'kindle' as ConnectType,
+    bookCount: -1,
+    email: '',
+    password: '',
+  }
+}
 
 const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
   return {
@@ -185,6 +194,18 @@ const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
     bookCount: connect.bookCount,
     email: connect.email,
     password: connect.password,
+  }
+}
+
+// --------------------------------
+//  PDFLocalStorage functions
+// --------------------------------
+const newPDFLocalStorageConnect = (): PDFLocalStorageConnect => {
+  return {
+    id: uuid(),
+    type: 'pdfls' as ConnectType,
+    bookCount: -1,
+    path: '',
   }
 }
 

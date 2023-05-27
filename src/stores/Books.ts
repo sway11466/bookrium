@@ -55,7 +55,6 @@ export const useBooksStore = defineStore('books', {
     },
 
     show(book: BookTypeDef): void {
-      // TODO: 設定に応じて開き方を変える
       const apiManager = useApiManager();
       const setting = useSettingsStore();
       let url = '';
@@ -146,6 +145,7 @@ const deproxyPDFBook = (book: PDFBook): PDFBook => {
     path: book.path,
     title: book.title,
     author: book.author,
+    artworkPath: book.artworkPath,
   }
 }
 

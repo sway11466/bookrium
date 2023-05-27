@@ -2,7 +2,7 @@
  * Kindle Connector
  */
 
-import { BrowserWindow, app, IpcMainInvokeEvent } from 'electron';
+import { app, BrowserWindow, IpcMainInvokeEvent } from 'electron';
 import puppeteer, { Browser } from 'puppeteer-core';
 import pie from 'puppeteer-in-electron';
 import { KindleBook } from 'src/stores/BookTypes';

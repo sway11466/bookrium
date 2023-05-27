@@ -29,6 +29,9 @@
  */
 
 import { contextBridge, ipcRenderer } from 'electron';
+import { SettingStore } from 'src/stores/SettingTypes';
+import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
+import { PDFBook } from 'src/stores/BookTypes';
 
 contextBridge.exposeInMainWorld('shellApi', {
   // src-electron/modules/shell
@@ -64,6 +67,6 @@ contextBridge.exposeInMainWorld('connectApi', {
   testKindle: async (email: string, password: string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
   collectKindle: async (email: string, password: string) :Promise<unknown[]> => await ipcRenderer.invoke('collectKindle', email, password),
   // src-electron/modules/connects/pdfls
-  testPdfLs: async (path: string) :Promise<boolean> => await ipcRenderer.invoke('testPdfLs', path),
-  collectPdfLs: async (path: string) :Promise<unknown[]> => await ipcRenderer.invoke('collectPdfLs', path),
+  testPdfLs: async (testPath: string) :Promise<boolean> => await ipcRenderer.invoke('testPdfLs', testPath),
+  collectPdfLs: async (connect: PDFLocalStorageConnect, setting: SettingStore) :Promise<PDFBook[]> => await ipcRenderer.invoke('collectPdfLs', connect, setting),
 })

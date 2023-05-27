@@ -58,6 +58,7 @@ export type PDFBook = Book & {
   path: string,
   title: string,
   author: string,
+  artworkPath: string,
 };
 
 /**

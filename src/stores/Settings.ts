@@ -44,7 +44,7 @@ export const useSettingsStore = defineStore('settings', {
 
     async save() {
       const apiManager = useApiManager();
-      apiManager.configApi.saveConfig(this.settingPath, CONFIG_SETTING_KEY, deproxy(this));
+      apiManager.configApi.saveConfig(this.settingPath, CONFIG_SETTING_KEY, this.deproxy());
     },
 
     async new(): Promise<SettingStore> {
@@ -77,6 +77,25 @@ export const useSettingsStore = defineStore('settings', {
       return true;
     },
 
+    deproxy(): SettingStore {
+      return {
+        settingPath: this.settingPath,
+        storage: {
+          dataFolderPath: this.storage.dataFolderPath,
+          artworkFolderPath: this.storage.artworkFolderPath,
+          bookFolderPath: this.storage.bookFolderPath,
+          cacheFolderPath: this.storage.cacheFolderPath,
+          labelFolderPath: this.storage.labelFolderPath,
+        },
+        showapp: {
+          kindle: this.showapp.kindle,
+          pdf: this.showapp.pdf,
+        },
+        platform: this.platform,
+        version: this.version,
+      }
+    },
+
     // --------------------------------
     //  api bredge
     // --------------------------------
@@ -86,22 +105,3 @@ export const useSettingsStore = defineStore('settings', {
     }
   }
 });
-
-const deproxy = (setting: SettingStore): SettingStore => {
-  return {
-    settingPath: setting.settingPath,
-    storage: {
-      dataFolderPath: setting.storage.dataFolderPath,
-      artworkFolderPath: setting.storage.artworkFolderPath,
-      bookFolderPath: setting.storage.bookFolderPath,
-      cacheFolderPath: setting.storage.cacheFolderPath,
-      labelFolderPath: setting.storage.labelFolderPath,
-    },
-    showapp: {
-      kindle: setting.showapp.kindle,
-      pdf: setting.showapp.pdf,
-    },
-    platform: setting.platform,
-    version: setting.version,
-  }
-}
