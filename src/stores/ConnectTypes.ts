@@ -9,6 +9,10 @@ export type Connect = {
   id: string
   type: ConnectType
   bookCount: number
+  state: {
+    test: ConnectStateTest
+    collect: ConnectStateCollect
+  }
   //Todo: LastCollect: string
 };
 
@@ -27,8 +31,7 @@ export type PDFLocalStorageConnect = Connect & {
   path: string
 };
 
-/**
- * 
- */
 export type ConnectType = 'kindle' | 'pdfls';
+export type ConnectStateTest = 'none' | 'testing' | 'ok' | 'error';
+export type ConnectStateCollect = 'none' | 'collecting' | 'ok' | 'error';
 export type ConnectTypeDef = KindleConnect | PDFLocalStorageConnect;

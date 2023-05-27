@@ -8,16 +8,30 @@
         </template>
       </q-input>
     </q-card-section>
-    <q-card-actions vertical >
-        <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" padding="xs lg" color="primary" unelevated no-caps />
-        <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" padding="xs lg" color="primary" unelevated no-caps />
-        <div class="q-pt-lg"/>
+
+    <q-card-actions class="q-mt-xl" vertical>
+      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" padding="xs lg" color="primary" unelevated no-caps />
+      <div v-if="connect.state.test === 'none'" style="height:2em"></div>
+      <div v-if="connect.state.test === 'testing'"><q-spinner color="primary" size="2em" /> Connection Testing...</div>
+      <div v-if="connect.state.test === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Connection Success.</div>
+      <div v-if="connect.state.test === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Connection Failed.</div>
+
+      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" class="q-mt-md" padding="xs lg" color="primary" unelevated no-caps />
+      <div v-if="props.mode === 'edit' &&  changed" style="height:2em"><q-icon name="mdi-alert-outline" color="orange" size="2em" /> Need Save Changes.</div>
+      <div v-if="props.mode === 'edit' && !changed"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Saved.</div>
+
       <template v-if="mode === 'add'">
-        <q-btn icon="mdi-arrow-left" label="Select Type" @click="back" padding="xs lg" color="primary" outline no-caps />
+        <q-btn icon="mdi-arrow-left" label="Select Type" @click="back" class="q-mt-md" padding="xs lg" color="primary" outline no-caps />
       </template>
+
       <template v-if="mode === 'edit'">
-        <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" padding="xs lg" color="primary" unelevated no-caps />
-        <div class="q-pt-lg"/>
+        <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" class="q-mt-md" padding="xs lg" color="primary" unelevated no-caps />
+        <div v-if="connect.state.collect === 'none'" style="height:2em"></div>
+        <div v-if="connect.state.collect === 'collecting'"><q-spinner color="primary" size="2em" /> Collecting Books ...</div>
+        <div v-if="connect.state.collect === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Collected {{ connect.bookCount }} Books.</div>
+        <div v-if="connect.state.collect === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Collect Failed.</div>
+
+        <div class="q-mt-xl"/>
         <q-btn icon="delete" label="Delete Connection Setting" @click="del" padding="xs lg" color="red" outline no-caps />
       </template>
     </q-card-actions>
@@ -25,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue';
+import { ref, Ref, computed } from 'vue';
 import { useConnectsStore } from 'src/stores/Connects';
 import { useSettingsStore } from 'src/stores/Settings';
 import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
@@ -62,63 +76,62 @@ const emit = defineEmits([
 ]);
 
 // --------------------------------
-//  local var
+//  edit control
 // --------------------------------
-const connect: Ref<PDFLocalStorageConnect> = ref(props.mode === 'add' ? connectsStore.newPDFLocalStorageConnect() : connectsStore.get(props.id) as PDFLocalStorageConnect);
-
-// --------------------------------
-//  lifecycle events
-// --------------------------------
-onMounted(() => {
-  // if (props.id) {
-  //   kindle.value = connectsStore.connectors.get(props.id) as KindleConnect;
-  // } else {
-  //   kindle.value = connectsStore.newKindleConnect();
-  // }
+const connect: Ref<PDFLocalStorageConnect> = ref((props.mode === 'add' ? connectsStore.new('pdfls') : connectsStore.clone(props.id)) as PDFLocalStorageConnect);
+const changed = computed<boolean>(() => {
+  return (
+    !connectsStore.has(props.id) ||
+    (connect.value.path != (connectsStore.get(props.id) as PDFLocalStorageConnect).path)
+  );
 })
 
 // --------------------------------
 //  actions
 // --------------------------------
 async function selectDataFolderPath () {
-  console.log('not implements.');
   const { canceled, filePaths } = await settingsStore.selectFolder();
   if (canceled) { return }
   connect.value.path = filePaths[0];
-}
+};
 
-async function test() {
-  connectsStore.testPDFLocalStorageConnect(connect.value).then(ret => {
-    console.log('collect ok!'); //Todo: implements
-    console.log(ret);
+function test() {
+  connect.value.state.test = 'testing';
+  connectsStore.test(connect.value).then(ret => {
+    connect.value.state.test = 'ok';
   }).catch(reason => {
-    console.log(reason); //Todo: implements
+    connect.value.state.test = 'error';
   });
 };
 
-async function save() {
-  await connectsStore.save(connect.value);
+function save() {
+  switch (props.mode) {
+    case 'add':
+      connectsStore.add(connect.value);
+      break;
+    case 'edit':
+      connectsStore.update(connect.value);
+      break;
+  }
 };
 
 async function collect() {
-  connectsStore.collectPDFLocalStorageConnect(connect.value).then((ret: boolean) => {
-    // TODO: show ok message & badge
-    console.log(ret);
+  connect.value.state.collect = 'collecting';
+  connectsStore.collectPDFLocalStorageConnect(connect.value).then((count: number) => {
+    connect.value.bookCount = count;
+    connect.value.state.collect = 'ok';
+    save();
   }).catch(e => {
-    // TODO: show ng message & badge
-    console.log(e);
-  }).finally(() => {
-    // TODO: close spinner
-    emit('hideDialog');
-  });
+    connect.value.state.collect = 'error';
+  })
 };
 
-async function back() {
+function back() {
   emit('back');
-}
+};
 
 async function del() {
-  // await connectsStore.deleteKindleSetting(kindle.value.id);
+  await connectsStore.del(connect.value.id);
   emit('hideDialog');
 };
 </script>

@@ -12,7 +12,7 @@
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section class="q-pa-lg">
         <template v-if="type == 'kindle'">
           <KindleSetting mode="edit" :id="id" @hideDialog="hide" />
         </template>

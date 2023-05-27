@@ -4,12 +4,16 @@
 ```
 ./
  +-- artwork/
+ |   |
+ |   +-- pdf/
+ |       |
+ |       +-- [connector.id]/[book.id].jpg
  |
  +-- books/
  |   |
  |   +-- pdf/
  |   |   |
- |   |   +-- [connector.id]
+ |   |   +-- [connector.id]/
  |   |
  |   +-- books.json
  |
