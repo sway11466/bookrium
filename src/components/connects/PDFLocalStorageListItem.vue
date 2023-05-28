@@ -5,17 +5,17 @@
     </q-item-section>
     <q-item-section>
       <q-item-label>
-          PDF (Local Storage)
+        PDF (Local Storage)
       </q-item-label>
       <q-item-label caption>{{ connect.path }}</q-item-label>
     </q-item-section>
-    <q-item-section side top>
+    <q-item-section side>
+      <template v-if="connect.state.collect === 'collecting'">
+        <q-spinner color="primary" size="2em" />
+      </template>
       <template v-if="connect.bookCount > 0">
         <q-badge :label="connect.bookCount" />
       </template>
-    </q-item-section>
-    <q-item-section side>
-      <q-btn @click.stop="showEditDialog(props.id)" icon="mdi-square-edit-outline" color="primary" flat square />
     </q-item-section>
   </q-item>
 </template>

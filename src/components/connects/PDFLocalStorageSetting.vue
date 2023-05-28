@@ -16,16 +16,19 @@
       <div v-if="connect.state.test === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Connection Success.</div>
       <div v-if="connect.state.test === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Connection Failed.</div>
 
-      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" class="q-mt-md" padding="xs lg" color="primary" unelevated no-caps />
+      <div class="q-mt-md"/>
+      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" padding="xs lg" color="primary" unelevated no-caps />
       <div v-if="props.mode === 'edit' &&  changed" style="height:2em"><q-icon name="mdi-alert-outline" color="orange" size="2em" /> Need Save Changes.</div>
       <div v-if="props.mode === 'edit' && !changed"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Saved.</div>
 
       <template v-if="mode === 'add'">
-        <q-btn icon="mdi-arrow-left" label="Select Type" @click="back" class="q-mt-md" padding="xs lg" color="primary" outline no-caps />
+        <div class="q-mt-xl"/>
+        <q-btn icon="mdi-arrow-left" label="Select Type" @click="back" padding="xs lg" color="primary" outline no-caps />
       </template>
 
       <template v-if="mode === 'edit'">
-        <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" class="q-mt-md" padding="xs lg" color="primary" unelevated no-caps />
+        <div class="q-mt-md"/>
+        <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" padding="xs lg" color="primary" unelevated no-caps />
         <div v-if="connect.state.collect === 'none'" style="height:2em"></div>
         <div v-if="connect.state.collect === 'collecting'"><q-spinner color="primary" size="2em" /> Collecting Books ...</div>
         <div v-if="connect.state.collect === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Collected {{ connect.bookCount }} Books.</div>
@@ -108,6 +111,7 @@ function save() {
   switch (props.mode) {
     case 'add':
       connectsStore.add(connect.value);
+      emit('hideDialog');
       break;
     case 'edit':
       connectsStore.update(connect.value);

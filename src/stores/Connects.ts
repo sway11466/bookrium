@@ -122,7 +122,7 @@ export const useConnectsStore = defineStore('connects', {
     //  kindle functions
     // --------------------------------
 
-    async collectKindleBooks(connect: KindleConnect): Promise<boolean> {
+    async collectKindleBooks(connect: KindleConnect): Promise<number> {
       const apiManager = useApiManager();
       const booksStore = useBooksStore();
       const collected = await apiManager.connectApi.collectKindle(connect.email, connect.password) as KindleBook[];
@@ -145,7 +145,7 @@ export const useConnectsStore = defineStore('connects', {
         });
       }
       booksStore.addBooks(books);
-      return true;
+      return books.length;
     },
 
     // --------------------------------

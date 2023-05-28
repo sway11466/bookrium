@@ -1,16 +1,21 @@
 <template>
-  <q-item @click="showEditDialog(kindle.id)" clickable v-ripple>
+  <q-item @click="showEditDialog(connect.id)" clickable v-ripple>
     <q-item-section avatar>
-        <q-img src="kindle-48x48.svg" width="48px" />
+      <q-img src="kindle-48x48.svg" width="48px" />
     </q-item-section>
     <q-item-section>
       <q-item-label>
-          Amazon Kindle
+        Amazon Kindle
       </q-item-label>
-      <q-item-label caption>{{ kindle.email }}</q-item-label>
+      <q-item-label caption>{{ connect.email }}</q-item-label>
     </q-item-section>
-    <q-item-section side top>
-      <q-badge label="100" />
+    <q-item-section side>
+      <template v-if="connect.state.collect === 'collecting'">
+        <q-spinner color="primary" size="2em" />
+      </template>
+      <template v-if="connect.bookCount > 0">
+        <q-badge :label="connect.bookCount" />
+      </template>
     </q-item-section>
   </q-item>
 </template>
@@ -45,7 +50,7 @@ const emit = defineEmits([
 // --------------------------------
 //  local var
 // --------------------------------
-const kindle: Ref<KindleConnect> = ref(store.get(props.id) as KindleConnect);
+const connect: Ref<KindleConnect> = ref(store.get(props.id) as KindleConnect);
 
 // --------------------------------
 //  item actions
