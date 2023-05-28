@@ -39,7 +39,7 @@ export const useBooksStore = defineStore('books', {
     new(type: BookType): BookTypeDef {
       switch (type) {
         case 'kindle': return newKindleBook();
-        case 'pdf': throw Error(); // Todo: implements
+        case 'pdf': return newPDFBook();
       }
     },
 
@@ -123,6 +123,28 @@ const deproxyBook = (book: BookTypeDef): BookTypeDef => {
   }
 }
 
+// --------------------------------
+//  kindle functions
+// --------------------------------
+
+const newKindleBook = (): KindleBook => {
+  return {
+    id: '',
+    type: 'kindle',
+    connectorId: '',
+    labels: [] as string[],
+    asin: '',
+    webReaderUrl: '',
+    productUrl: '',
+    title: '',
+    percentageRead: 0,
+    authors: [] as string[],
+    resourceType: '',
+    originType: '',
+    mangaOrComicAsin: false,
+  }
+}
+
 const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
   return {
     id: kindle.id,
@@ -141,6 +163,24 @@ const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
   }
 }
 
+// --------------------------------
+//  pdf functions
+// --------------------------------
+
+const newPDFBook = (): PDFBook => {
+  return {
+    id: '',
+    type: 'pdf',
+    connectorId: '',
+    labels: [] as string[],
+    hash: '',
+    path: '',
+    title: '',
+    author: '',
+    artworkPath: '',
+  }
+}
+
 const deproxyPDFBook = (book: PDFBook): PDFBook => {
   return {
     id: book.id,
@@ -152,23 +192,5 @@ const deproxyPDFBook = (book: PDFBook): PDFBook => {
     title: book.title,
     author: book.author,
     artworkPath: book.artworkPath,
-  }
-}
-
-const newKindleBook = (): KindleBook => {
-  return {
-    id: '',
-    type: 'kindle',
-    connectorId: '',
-    labels: [] as string[],
-    asin: '',
-    webReaderUrl: '',
-    productUrl: '',
-    title: '',
-    percentageRead: 0,
-    authors: [] as string[],
-    resourceType: '',
-    originType: '',
-    mangaOrComicAsin: false,
   }
 }

@@ -45,7 +45,7 @@ const kindleDialog = ref();
 //  actions
 // --------------------------------
 function next(index: number, done: (stop?: boolean) => void) {
-  const items = store.list((index-1)*2, index*2);
+  const items = store.list((index-1)*10, index*10);
   books.value.push(...items);
   done(items.length === 0);
 }
