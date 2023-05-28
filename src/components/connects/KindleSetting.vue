@@ -94,9 +94,10 @@ const changed = computed<boolean>(() => {
 
 function test() {
   connect.value.state.test = 'testing';
-  connectsStore.test(connect.value).then((ret) => {
+  connectsStore.test(connect.value).then(() => {
     connect.value.state.test = 'ok';
-  }).catch(e => {
+  }).catch(reason => {
+    console.log(reason);
     connect.value.state.test = 'error';
   })
 };
