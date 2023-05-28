@@ -125,26 +125,8 @@ export const useConnectsStore = defineStore('connects', {
     async collectKindleBooks(connect: KindleConnect): Promise<number> {
       const apiManager = useApiManager();
       const booksStore = useBooksStore();
-      const collected = await apiManager.connectApi.collectKindle(connect.email, connect.password) as KindleBook[];
-      const books = [] as KindleBook[];
-      for (const book of Object.values(collected)) {
-        books.push({
-          id: uuid(),
-          type: 'kindle',
-          connectorId: connect.id,
-          labels: [],
-          asin: book.asin,
-          webReaderUrl: book.webReaderUrl,
-          productUrl: book.productUrl,
-          title: book.title,
-          percentageRead: book.percentageRead,
-          authors: book.authors,
-          resourceType: book.resourceType,
-          originType: book.originType,
-          mangaOrComicAsin: book.mangaOrComicAsin,
-        });
-      }
-      booksStore.addBooks(books);
+      const books = await apiManager.connectApi.collectKindle(deproxyKindleConnect(connect)) as KindleBook[];
+      booksStore.add(books);
       return books.length;
     },
 
@@ -158,7 +140,7 @@ export const useConnectsStore = defineStore('connects', {
       const settingStore = useSettingsStore();
       const books = await apiManager.connectApi.collectPdfLs(deproxyPDFLocalStorageConnect(connect), settingStore.deproxy()) as PDFBook[];
       const booksStore = useBooksStore();
-      booksStore.addBooks(books);
+      booksStore.add(books);
       return books.length;
     },
   }

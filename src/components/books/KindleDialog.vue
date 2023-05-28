@@ -37,7 +37,7 @@ const store = useBooksStore();
 // --------------------------------
 //  local var
 // --------------------------------
-const book: Ref<KindleBook> = ref(store.newKindleBook());
+const book: Ref<KindleBook> = ref(store.new('kindle') as KindleBook);
 const tag: Ref<string> = ref('');
 
 // --------------------------------

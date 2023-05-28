@@ -119,7 +119,8 @@ function collect() {
     connect.value.bookCount = count;
     connect.value.state.collect = 'ok';
     save();
-  }).catch(e => {
+  }).catch(reason => {
+    console.log(reason);
     connect.value.state.collect = 'error';
   })
 };

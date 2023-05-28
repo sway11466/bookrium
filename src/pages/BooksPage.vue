@@ -1,15 +1,22 @@
 <template>
   <q-page>
     <q-list>
-      <template v-for="book in list" :key="book.id">
-        <template v-if="book.type == 'kindle'">
-          <KindleListItem :param="book" @showKindleDialog="showKindleDialog" />
+      <q-infinite-scroll @load="next" :offset="250">
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner color="primary" size="40px" />
+          </div>
         </template>
-        <template v-if="book.type == 'pdf'">
-          <PDFListItem :param="book" @showBook="showBook" @showKindleDialog="showKindleDialog" />
+        <template v-for="(item, index) in books" :key="index">
+          <template v-if="item.type == 'kindle'">
+            <KindleListItem :param="item" @showKindleDialog="showKindleDialog" />
+          </template>
+          <template v-if="item.type == 'pdf'">
+            <PDFListItem :param="item" @showBook="showBook" @showKindleDialog="showKindleDialog" />
+          </template>
+          <q-separator />
         </template>
-        <q-separator />
-      </template>
+      </q-infinite-scroll>
     </q-list>
     <KindleDialog ref="kindleDialog" />
   </q-page>
@@ -31,12 +38,18 @@ const store = useBooksStore();
 // --------------------------------
 //  component ref
 // --------------------------------
-const list = ref(store.list);
+const books = ref([] as BookTypeDef[]);
 const kindleDialog = ref();
 
 // --------------------------------
 //  actions
 // --------------------------------
+function next(index: number, done: (stop?: boolean) => void) {
+  const items = store.list((index-1)*2, index*2);
+  books.value.push(...items);
+  done(items.length === 0);
+}
+
 function showBook(book: BookTypeDef) {
   store.show(book);
 }

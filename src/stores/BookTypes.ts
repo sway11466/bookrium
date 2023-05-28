@@ -28,7 +28,7 @@ export type BookStore = {
  */
 export type Book = {
   id: string,
-  type: ContentType,
+  type: BookType,
   connectorId: string,
   labels: string[],
 }
@@ -64,5 +64,5 @@ export type PDFBook = Book & {
 /**
  * 
  */
-export type ContentType = 'kindle' | 'pdf';
+export type BookType = 'kindle' | 'pdf';
 export type BookTypeDef = KindleBook | PDFBook;
