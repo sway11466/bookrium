@@ -1,14 +1,19 @@
 <template>
-  <q-dialog v-model="visible">
-    <q-card style="min-width: 350px">
-      <q-card-section class="text-center">
-        <img :src="book.artworkPath" />
-      </q-card-section>
-      <q-card-section class="row">
-        <div class="text-h6">{{ book.title }}</div>
-        <div>{{ book.author }}</div>
-      </q-card-section>
-      <q-card-section class="row wrap">
+  <q-card>
+    <q-card-section class="text-center">
+      <img :src="book.extends.artworkPath" height="160px" />
+    </q-card-section>
+    <q-card-section class="q-pt-none">
+      <div class="text-caption grey">title</div>
+      <q-input v-model="book.title" :borderless="true" class="q-pl-sm" dense />
+    </q-card-section>
+    <q-card-section class="q-pt-none">
+      <div class="text-caption grey">author</div>
+      <q-input v-model="book.author" :borderless="false" class="q-pl-sm" dense />
+    </q-card-section>
+    <q-card-section>
+      <div class="text-caption grey">tags</div>
+      <div class="row wrap">
         <template v-for="tag in book.labels" :key="tag">
           <q-chip removable @remove="remove(tag)" color="primary" text-color="white">
             {{ tag }}
@@ -17,15 +22,25 @@
         <div class="col" style="max-width: 7em;">
         <q-input v-model="tag" @keydown.enter="add" rounded standout dense />
         </div>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import { PDFBook } from 'src/stores/BookTypes';
 import { useBooksStore } from 'src/stores/Books.js';
+
+// --------------------------------
+//  prop
+// --------------------------------
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  }
+});
 
 // --------------------------------
 //  store init
@@ -35,7 +50,7 @@ const store = useBooksStore();
 // --------------------------------
 //  local var
 // --------------------------------
-const book: Ref<PDFBook> = ref(store.new('pdf') as PDFBook);
+const book: Ref<PDFBook> = ref(store.get(props.id) as PDFBook);
 const tag: Ref<string> = ref('');
 
 // --------------------------------
@@ -60,8 +75,8 @@ function remove(param: string) {
 // --------------------------------
 let visible = ref(false);
 
-function show(pdf: PDFBook) {
-  book.value = pdf;
+function show(id: string) {
+  book.value = store.get(id) as PDFBook;
   visible.value = true;
 }
 

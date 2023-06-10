@@ -9,10 +9,10 @@
         </template>
         <template v-for="(item, index) in books" :key="index">
           <template v-if="item.type == 'kindle'">
-            <KindleListItem :param="item" @showKindleDialog="showKindleDialog" />
+            <KindleListItem :param="item" @showKindleDialog="showEditDialog" />
           </template>
           <template v-if="item.type == 'pdf'">
-            <PDFListItem :param="item" @showBook="showBook" @showKindleDialog="showKindleDialog" />
+            <PDFListItem :book="item" @showBook="showBook" />
           </template>
           <q-separator />
         </template>
@@ -28,7 +28,7 @@ import KindleDialog from 'src/components/books/KindleDialog.vue';
 import PDFListItem from 'src/components/books/PDFListItem.vue';
 import { ref } from 'vue';
 import { useBooksStore } from 'src/stores/Books.js';
-import { BookTypeDef, KindleBook } from 'src/stores/BookTypes';
+import { BookTypeDef } from 'src/stores/BookTypes';
 
 // --------------------------------
 //  store init
@@ -54,7 +54,10 @@ function showBook(book: BookTypeDef) {
   store.show(book);
 }
 
-function showKindleDialog(book: KindleBook) {
-  kindleDialog.value.show(book);
+function showEditDialog(book: BookTypeDef) {
+  switch (book.type) {
+    case 'kindle': kindleDialog.value.show(book); break;
+    case 'pdf': break;
+  }
 }
 </script>

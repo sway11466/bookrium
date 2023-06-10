@@ -56,6 +56,17 @@ export const useBooksStore = defineStore('books', {
       this.createLatestIndex(books);  //async
     },
 
+    has(id: string): boolean {
+      return this.books.has(id);
+    },
+
+    get(id: string): BookTypeDef {
+      if (this.has(id)) {
+        return this.books.get(id) as BookTypeDef;
+      }
+      throw new Error("book not found."); //Todo: implements
+    },
+
     list(index: number, size: number): BookTypeDef[] {
       return [...this.books.values()].slice(index, size);
     },
@@ -67,11 +78,11 @@ export const useBooksStore = defineStore('books', {
       let way: ShowAppType = 'builtin';
       switch (book.type) {
         case 'kindle':
-          url = (book as KindleBook).webReaderUrl;
+          url = (book as KindleBook).extends.webReaderUrl;
           way = setting.showapp.kindle;
           break;
         case 'pdf':
-          url = (book as PDFBook).path;
+          url = (book as PDFBook).extends.path;
           way = setting.showapp.pdf;
           break;
       }
@@ -132,16 +143,21 @@ const newKindleBook = (): KindleBook => {
     id: '',
     type: 'kindle',
     connectorId: '',
-    labels: [] as string[],
-    asin: '',
-    webReaderUrl: '',
-    productUrl: '',
     title: '',
-    percentageRead: 0,
-    authors: [] as string[],
-    resourceType: '',
-    originType: '',
-    mangaOrComicAsin: false,
+    author: '',
+    artwork: '',
+    labels: [] as string[],
+    extends: {
+      asin: '',
+      webReaderUrl: '',
+      productUrl: '',
+      title: '',
+      percentageRead: 0,
+      authors: [] as string[],
+      resourceType: '',
+      originType: '',
+      mangaOrComicAsin: false,
+    }
   }
 }
 
@@ -150,16 +166,21 @@ const deproxyKindleBook = (kindle: KindleBook): KindleBook => {
     id: kindle.id,
     type: kindle.type,
     connectorId: kindle.connectorId,
-    labels: kindle.labels,
-    asin: kindle.asin,
-    webReaderUrl: kindle.webReaderUrl,
-    productUrl: kindle.productUrl,
     title: kindle.title,
-    percentageRead: kindle.percentageRead,
-    authors: kindle.authors,
-    resourceType: kindle.resourceType,
-    originType: kindle.originType,
-    mangaOrComicAsin: kindle.mangaOrComicAsin,
+    author: kindle.author,
+    artwork: kindle.artwork,
+    labels: kindle.labels,
+    extends: {
+      asin: kindle.extends.asin,
+      webReaderUrl: kindle.extends.webReaderUrl,
+      productUrl: kindle.extends.productUrl,
+      title: kindle.extends.title,
+      percentageRead: kindle.extends.percentageRead,
+      authors: kindle.extends.authors,
+      resourceType: kindle.extends.resourceType,
+      originType: kindle.extends.originType,
+      mangaOrComicAsin: kindle.extends.mangaOrComicAsin,
+    }
   }
 }
 
@@ -172,12 +193,17 @@ const newPDFBook = (): PDFBook => {
     id: '',
     type: 'pdf',
     connectorId: '',
-    labels: [] as string[],
-    hash: '',
-    path: '',
     title: '',
     author: '',
-    artworkPath: '',
+    artwork: '',
+    labels: [] as string[],
+    extends: {
+      hash: '',
+      path: '',
+      title: '',
+      author: '',
+      artworkPath: '',
+    }
   }
 }
 
@@ -186,11 +212,16 @@ const deproxyPDFBook = (book: PDFBook): PDFBook => {
     id: book.id,
     type: book.type,
     connectorId: book.connectorId,
-    labels: book.labels.concat([]),
-    hash: book.hash,
-    path: book.path,
     title: book.title,
     author: book.author,
-    artworkPath: book.artworkPath,
+    artwork: book.artwork,
+    labels: book.labels.concat([]),
+    extends: {
+      hash: book.extends.hash,
+      path: book.extends.path,
+      title: book.extends.title,
+      author: book.extends.author,
+      artworkPath: book.extends.artworkPath,
+    }
   }
 }

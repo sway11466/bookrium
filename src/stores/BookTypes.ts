@@ -30,7 +30,11 @@ export type Book = {
   id: string,
   type: BookType,
   connectorId: string,
+  title: string,
+  author: string,
+  artwork: string,
   labels: string[],
+  extends: {}
 }
 
 /**
@@ -38,15 +42,17 @@ export type Book = {
  * 
  */
 export type KindleBook = Book & {
-  asin: string,
-  webReaderUrl: string,
-  productUrl: string,
-  title: string,
-  percentageRead: number,
-  authors: string[],
-  resourceType: string,
-  originType: string,
-  mangaOrComicAsin: boolean,
+  extends: {
+    asin: string,
+    webReaderUrl: string,
+    productUrl: string,
+    title: string,
+    percentageRead: number,
+    authors: string[],
+    resourceType: string,
+    originType: string,
+    mangaOrComicAsin: boolean,
+  }
 };
 
 /**
@@ -54,11 +60,13 @@ export type KindleBook = Book & {
  * 
  */
 export type PDFBook = Book & {
-  hash: string,
-  path: string,
-  title: string,
-  author: string,
-  artworkPath: string,
+  extends: {
+    hash: string,
+    path: string,
+    title: string,
+    author: string,
+    artworkPath: string,
+  }
 };
 
 /**

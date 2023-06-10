@@ -25,7 +25,6 @@
     <q-separator vertical inset />
   </q-virtual-scroll>
   <KindleDialog ref="kindleDialog" />
-  <PDFDialog ref="pdfDialog" />
 </template>
 
 <style>
@@ -40,7 +39,6 @@
 
 <script setup lang="ts">
 import KindleDialog from 'src/components/books/KindleDialog.vue';
-import PDFDialog from 'src/components/books/PDFDialog.vue';
 import { ref } from 'vue';
 import { useBooksStore } from 'src/stores/Books';
 import { BookTypeDef } from 'src/stores/BookTypes';
@@ -54,7 +52,6 @@ const store = useBooksStore();
 //  component ref
 // --------------------------------
 const kindleDialog = ref();
-const pdfDialog = ref();
 
 // --------------------------------
 //  actions
@@ -66,7 +63,7 @@ function showBook(book: BookTypeDef) {
 function editBook(book: BookTypeDef) {
   switch (book.type) {
     case 'kindle': kindleDialog.value.show(book); break;
-    case 'pdf': pdfDialog.value.show(book); break;
+    case 'pdf': break;
   }
 }
 </script>

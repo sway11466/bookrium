@@ -1,5 +1,5 @@
 <template>
-  <q-item @click="view" clickable v-ripple>
+  <q-item @click="show" clickable v-ripple>
     <q-item-section avatar>
       <q-img src="pdf-94x94.png" fit="fill" />
     </q-item-section>
@@ -8,7 +8,7 @@
       <q-item-label caption>{{book.author}}</q-item-label>
     </q-item-section>
     <q-item-section side>
-      <q-btn @click.stop="showEditDialog" flat square>
+      <q-btn @click.stop="edit" flat square>
         <q-avatar square>
           <q-img src="edit-prop-cuteui-64x64.png" no-spinner />
         </q-avatar>
@@ -19,13 +19,14 @@
 
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
+import { useRouter } from 'vue-router'
 import { PDFBook } from 'src/stores/BookTypes';
 
 // --------------------------------
 //  prop
 // --------------------------------
 const props = defineProps({
-  param: {
+  book: {
     type: Object,
     required: true,
   }
@@ -35,23 +36,23 @@ const props = defineProps({
 //  emit
 // --------------------------------
 const emit = defineEmits([
-  'showBook',       // show book via parent component(ContentsPage).
-  'showPDFDialog',  // show edit dialog via parent component(ContentsPage).
+  'showBook', // show book via parent component(ContentsPage).
 ]);
 
 // --------------------------------
 //  local var
 // --------------------------------
-const book: Ref<PDFBook> = ref(props.param as PDFBook);
+const router = useRouter();
+const book: Ref<PDFBook> = ref(props.book as PDFBook);
 
 // --------------------------------
 //  actions
 // --------------------------------
-function showEditDialog(): void {
-  emit('showPDFDialog', book.value);
+function show(): void {
+  emit('showBook', book.value);
 }
 
-function view(): void {
-  emit('showBook', book.value);
+function edit(): void {
+  router.push({ path:`/books/${book.value.id}` });
 }
 </script>

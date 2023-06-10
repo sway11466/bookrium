@@ -7,26 +7,37 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/HomePage.vue') }],
   },
+
   {
     path: '/books',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/BooksPage.vue') }],
+    children: [{ path: '', component: () => import('pages/BooksList.vue') }],
   },
+
+  {
+    path: '/books/:bookid',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{ path: '', component: () => import('pages/BookPage.vue') }],
+  },
+
   {
     path: '/shelf',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
+
   {
     path: '/labels',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/LabelsPage.vue') }],
   },
+
   {
     path: '/connects',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('src/pages/ConnectsPage.vue') }],
   },
+
   {
     path: '/settings',
     component: () => import('layouts/MainLayout.vue'),

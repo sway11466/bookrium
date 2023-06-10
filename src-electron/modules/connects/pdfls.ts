@@ -44,17 +44,24 @@ const collectMeta = async (files: string[], connector: PDFLocalStorageConnect, s
     const file = fs.readFileSync(item);
     const pdf = await PDFDocument.load(file, { ignoreEncryption: true, updateMetadata: false });
     const id = uuid();
-    const artworkPath = path.join(setting.storage.artworkFolderPath, id + '.jpg');
+    const title = pdf.getTitle() ?? '';
+    const author = pdf.getAuthor() ?? '';
+    const artwork = path.join(setting.storage.artworkFolderPath, id + '.jpg');
     return {
       id,
       type: 'pdf',
       connectorId: connector.id,
+      title: title,
+      author: author,
+      artwork: artwork,
       labels: [], // pdf.getKeywords(),
-      hash: crypto.createHash('md5').update(file).digest('hex'),
-      path: item,
-      title: pdf.getTitle() ?? '',
-      author: pdf.getAuthor() ?? '',
-      artworkPath,
+      extends: {
+        hash: crypto.createHash('md5').update(file).digest('hex'),
+        path: item,
+        title: title,
+        author: author,
+        artworkPath: artwork,
+      }
     }
   }));
 }
