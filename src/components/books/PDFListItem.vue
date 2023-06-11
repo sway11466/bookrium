@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { useRouter } from 'vue-router'
 import { PDFBook } from 'src/stores/BookTypes';
 
 // --------------------------------
@@ -36,23 +35,23 @@ const props = defineProps({
 //  emit
 // --------------------------------
 const emit = defineEmits([
-  'showBook', // show book via parent component(ContentsPage).
+  'show', // show book via parent component(ContentsPage).
+  'edit', // edit book via parent component(ContentsPage).
 ]);
 
 // --------------------------------
 //  local var
 // --------------------------------
-const router = useRouter();
 const book: Ref<PDFBook> = ref(props.book as PDFBook);
 
 // --------------------------------
 //  actions
 // --------------------------------
 function show(): void {
-  emit('showBook', book.value);
+  emit('show', book.value);
 }
 
 function edit(): void {
-  router.push({ path:`/books/${book.value.id}` });
+  emit('edit', book.value);
 }
 </script>

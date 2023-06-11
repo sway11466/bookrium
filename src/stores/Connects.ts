@@ -124,8 +124,8 @@ export const useConnectsStore = defineStore('connects', {
 
     async collectKindleBooks(connect: KindleConnect): Promise<number> {
       const apiManager = useApiManager();
-      const booksStore = useBooksStore();
       const books = await apiManager.connectApi.collectKindle(deproxyKindleConnect(connect)) as KindleBook[];
+      const booksStore = useBooksStore();
       booksStore.add(books);
       return books.length;
     },

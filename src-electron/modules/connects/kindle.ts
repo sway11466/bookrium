@@ -7,7 +7,7 @@ import log from 'electron-log';
 import puppeteer, { Browser } from 'puppeteer-core';
 import pie from 'puppeteer-in-electron';
 import { v4 as uuid } from 'uuid';
-import { KindleBook } from 'src/stores/BookTypes';
+import { KindleBook, KindleExtends } from 'src/stores/BookTypes';
 import { KindleConnect } from 'src/stores/ConnectTypes';
 
 let browser: Browser;
@@ -81,21 +81,26 @@ export default {
       }
 
       // collect books
-      let books: KindleBook[] = []
+      let kindles = [] as KindleExtends[];
       const paginationToken = 0;
       // for (let paginationToken=0; paginationToken != undefined;) {
-        await page.goto('https://read.amazon.co.jp/kindle-library/search?&sortType=acquisition_asc&paginationToken=' + paginationToken)
-        const respons = JSON.parse((await page.$eval('pre', e => e.textContent)) ?? '{}')
-        books = books.concat(respons.itemsList)
+        await page.goto('https://read.amazon.co.jp/kindle-library/search?&sortType=acquisition_asc&paginationToken=' + paginationToken);
+        const respons = JSON.parse((await page.$eval('pre', e => e.textContent)) ?? '{}');
+        kindles = kindles.concat(respons.itemsList)
       //  paginationToken = respons.paginationToken
       // }
 
-      for (const book of books) {
-        Object.assign(book, {
+      const books = [] as KindleBook[];
+      for (const kindle of kindles) {
+        books.push({
           id: uuid(),
           type: 'kindle',
           connectorId: connect.id,
+          title: kindle.title,
+          author: kindle.authors.join(','),
+          artwork: kindle.productUrl,
           labels: [],
+          extends: kindle,
         });
       }
 

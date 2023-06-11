@@ -9,10 +9,10 @@
         </template>
         <template v-for="(item, index) in books" :key="index">
           <template v-if="item.type == 'kindle'">
-            <KindleListItem :param="item" @showKindleDialog="showEditDialog" />
+            <KindleListItem :book="item" @show="show" @edit="edit" />
           </template>
           <template v-if="item.type == 'pdf'">
-            <PDFListItem :book="item" @showBook="showBook" />
+            <PDFListItem :book="item" @show="show" @edit="edit" />
           </template>
           <q-separator />
         </template>
@@ -27,6 +27,7 @@ import KindleListItem from 'src/components/books/KindleListItem.vue';
 import KindleDialog from 'src/components/books/KindleDialog.vue';
 import PDFListItem from 'src/components/books/PDFListItem.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'
 import { useBooksStore } from 'src/stores/Books.js';
 import { BookTypeDef } from 'src/stores/BookTypes';
 
@@ -38,8 +39,13 @@ const store = useBooksStore();
 // --------------------------------
 //  component ref
 // --------------------------------
-const books = ref([] as BookTypeDef[]);
 const kindleDialog = ref();
+
+// --------------------------------
+//  local var
+// --------------------------------
+const router = useRouter();
+const books = ref([] as BookTypeDef[]);
 
 // --------------------------------
 //  actions
@@ -50,14 +56,11 @@ function next(index: number, done: (stop?: boolean) => void) {
   done(items.length === 0);
 }
 
-function showBook(book: BookTypeDef) {
+function show(book: BookTypeDef) {
   store.show(book);
 }
 
-function showEditDialog(book: BookTypeDef) {
-  switch (book.type) {
-    case 'kindle': kindleDialog.value.show(book); break;
-    case 'pdf': break;
-  }
+function edit(book: BookTypeDef) {
+  router.push({ path:`/books/${book.id}` });
 }
 </script>

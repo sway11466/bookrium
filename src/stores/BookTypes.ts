@@ -41,18 +41,19 @@ export type Book = {
  * Kindle Book attributes.
  * 
  */
+export type KindleExtends = {
+  asin: string,
+  webReaderUrl: string,
+  productUrl: string,
+  title: string,
+  percentageRead: number,
+  authors: string[],
+  resourceType: string,
+  originType: string,
+  mangaOrComicAsin: boolean,
+};
 export type KindleBook = Book & {
-  extends: {
-    asin: string,
-    webReaderUrl: string,
-    productUrl: string,
-    title: string,
-    percentageRead: number,
-    authors: string[],
-    resourceType: string,
-    originType: string,
-    mangaOrComicAsin: boolean,
-  }
+  extends: KindleExtends
 };
 
 /**

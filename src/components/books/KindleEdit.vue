@@ -1,27 +1,22 @@
 <template>
   <q-card>
     <q-card-section class="text-center">
-      <img :src="book.extends.artworkPath" height="160px" />
+      <img :src="book.artwork" />
     </q-card-section>
-    <q-card-section class="q-pt-none">
-      <div class="text-caption grey">title</div>
-      <q-input v-model="book.title" :borderless="true" class="q-pl-sm" dense />
+    <q-card-section class="row">
+      <div class="text-h6">{{ book.title }}</div>
+      <template v-for="author in book.author" :key="author">
+        <div>{{ author.replace(':','') }}</div>
+      </template>
     </q-card-section>
-    <q-card-section class="q-pt-none">
-      <div class="text-caption grey">author</div>
-      <q-input v-model="book.author" :borderless="false" class="q-pl-sm" dense />
-    </q-card-section>
-    <q-card-section>
-      <div class="text-caption grey">tags</div>
-      <div class="row wrap">
-        <template v-for="tag in book.labels" :key="tag">
-          <q-chip removable @remove="remove(tag)" color="primary" text-color="white">
-            {{ tag }}
-          </q-chip>
-        </template>
-        <div class="col" style="max-width: 7em;">
-        <q-input v-model="tag" @keydown.enter="add" rounded standout dense />
-        </div>
+    <q-card-section class="row wrap">
+      <template v-for="tag in book.labels" :key="tag">
+        <q-chip removable @remove="remove(tag)" color="primary" text-color="white">
+          {{ tag }}
+        </q-chip>
+      </template>
+      <div class="col" style="max-width: 7em;">
+      <q-input v-model="tag" @keydown.enter="add" rounded standout dense />
       </div>
     </q-card-section>
   </q-card>
@@ -29,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
-import { PDFBook } from 'src/stores/BookTypes';
+import { KindleBook } from 'src/stores/BookTypes';
 import { useBooksStore } from 'src/stores/Books.js';
 
 // --------------------------------
@@ -50,7 +45,7 @@ const store = useBooksStore();
 // --------------------------------
 //  local var
 // --------------------------------
-const book: Ref<PDFBook> = ref(store.get(props.id) as PDFBook);
+const book: Ref<KindleBook> = ref(store.get(props.id) as KindleBook);
 const tag: Ref<string> = ref('');
 
 // --------------------------------
