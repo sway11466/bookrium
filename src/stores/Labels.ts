@@ -33,14 +33,15 @@ export const useLabelsStore = defineStore('labels', {
   },
 
   actions: {
+
     // --------------------------------
     //  comoon functions
     // --------------------------------
     async init(): Promise<void> {
-      await this.loadAllConnects();
+      await this.loadLabels();
     },
 
-    async loadAllConnects(): Promise<boolean> {
+    async loadLabels(): Promise<boolean> {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
@@ -50,9 +51,6 @@ export const useLabelsStore = defineStore('labels', {
       return true;
     },
 
-    // --------------------------------
-    //  kindle functions
-    // --------------------------------
     newLabel(): Label {
       return {
         id: uuid(),

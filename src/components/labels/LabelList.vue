@@ -15,7 +15,7 @@
     <div class="q-pa-lg">
       <q-btn @click="showAddDialog" padding="xs lg" no-caps>
         <q-avatar square>
-          <q-img src="add-tag-color-96x96.png" />
+          <q-img src="add-tag-cuteui-64x64.png" />
         </q-avatar>
         <span class="q-px-lg">Add Label</span>
       </q-btn>
