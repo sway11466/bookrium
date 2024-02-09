@@ -19,7 +19,7 @@
  |
  +-- cache/
  |
- +-- index/
+ +-- shelves/
  |
  +-- labels/
  |   +-- label.json
@@ -36,6 +36,22 @@
         "books": {
             [book.id]: {
                 [key]: [val]
+            }
+        }
+    }
+}
+```
+
+## /shelves/shelves.json
+```json
+{
+    "bookrium": {
+        "shelves": {
+            "[label.id]": {
+				"id": "uuid4",
+				"name": "shelf name",
+				"description": "",
+                "books": [book.id]
             }
         }
     }

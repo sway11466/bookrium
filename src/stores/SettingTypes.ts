@@ -17,6 +17,7 @@ export type Storage = {
   artworkFolderPath: string,
   bookFolderPath: string,
   cacheFolderPath: string,
+  shelvesFolderPath: string,
   labelFolderPath: string,
 };
 

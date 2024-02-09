@@ -57,6 +57,7 @@ export const useSettingsStore = defineStore('settings', {
           artworkFolderPath: appDirPath + '\\Bookrium\\artworks',
           bookFolderPath: appDirPath + '\\Bookrium\\books',
           cacheFolderPath: appDirPath + '\\Bookrium\\cache',
+          shelvesFolderPath: appDirPath + '\\Bookrium\\shelves',
           labelFolderPath: appDirPath + '\\Bookrium\\labels',
         },
         showapp: {
@@ -72,7 +73,14 @@ export const useSettingsStore = defineStore('settings', {
       this.showapp.kindle = items.showapp.kindle
       this.showapp.pdf = items.showapp.pdf
       this.settingPath = items.settingPath;
-      this.storage.dataFolderPath = items.storage.dataFolderPath;
+      this.storage = {
+        dataFolderPath: items.storage.dataFolderPath,
+        artworkFolderPath: items.storage.dataFolderPath + '\\Bookrium\\artworks',
+        bookFolderPath: items.storage.dataFolderPath + '\\Bookrium\\books',
+        cacheFolderPath: items.storage.dataFolderPath + '\\Bookrium\\cache',
+        shelvesFolderPath: items.storage.dataFolderPath + '\\Bookrium\\shelves',
+        labelFolderPath: items.storage.dataFolderPath + '\\Bookrium\\labels',
+    };
       this.save();
       return true;
     },
@@ -85,6 +93,7 @@ export const useSettingsStore = defineStore('settings', {
           artworkFolderPath: this.storage.artworkFolderPath,
           bookFolderPath: this.storage.bookFolderPath,
           cacheFolderPath: this.storage.cacheFolderPath,
+          shelvesFolderPath: this.storage.shelvesFolderPath,
           labelFolderPath: this.storage.labelFolderPath,
         },
         showapp: {
