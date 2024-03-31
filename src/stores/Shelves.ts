@@ -23,10 +23,13 @@ export const useShelvesStore = defineStore('shelves', {
     //  comoon functions
     // --------------------------------
     async init(): Promise<void> {
-      await this.loadShelves();
+      await this.load();
     },
 
-    async loadShelves(): Promise<boolean> {
+    /**
+     * load store from file.
+     */
+    async load(): Promise<boolean> {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
@@ -36,6 +39,21 @@ export const useShelvesStore = defineStore('shelves', {
       return true;
     },
 
+    /**
+     * save store to file.
+     */
+    // async save() : Promise<void> {
+    //   const apiManager = useApiManager();
+    //   const settingsStore = useSettingsStore();
+    //   const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
+    //   const shelves = new Map<string, Shelf>();
+    //   this.shelves.forEach((value, key) => shelves.set(key, deproxyShelf(value)));
+    //   await apiManager.configApi.saveConfig(path, CONFIG_SHELVES_KEY, shelves);
+    // }
+
+    /**
+     * create new Shelf. but not store.
+     */
     newShelf(): Shelf {
       return {
         id: uuid(),
@@ -45,9 +63,31 @@ export const useShelvesStore = defineStore('shelves', {
       }
     },
 
+    /**
+     * create new Shelf from already Shelf. not store.
+     */
+    // clone(shelf: Shelf): Shelf {
+    //   return {
+    //     id: uuid(),
+    //     name: shelf.name,
+    //     description: shelf.description,
+    //     books: shelf.books.concat([]),
+    //   }
+    // },
+
+    /**
+     * check to see if it exists on store.
+     */
+    // has(id: string): boolean {
+    //   return this.shelves.has(id);
+    // },
+
+    /**
+     * get Shelf from store.
+     */
     get(id: string): Shelf {
       if (this.shelves.has(id)) {
-        return this.shelves.get(id) as Shelf
+        return this.shelves.get(id) as Shelf;
       } else {
         // Todo: implements
         throw new Error('not implements');
@@ -55,8 +95,7 @@ export const useShelvesStore = defineStore('shelves', {
     },
 
     /**
-     * add store and update file.
-     * @param shelf
+     * add store and save file.
      */
     async add(shelf: Shelf) {
       const apiManager = useApiManager();
@@ -65,13 +104,11 @@ export const useShelvesStore = defineStore('shelves', {
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
       const key = CONFIG_SHELVES_KEY + '.' + shelf.id;
       const value = deproxyShelf(shelf);
-console.log(value);
       apiManager.configApi.saveConfig(path, key, value);
     },
 
     /**
-     * update store and file.
-     * @param shelf
+     * update store and save file.
      */
     async update(shelf: Shelf) {
       const apiManager = useApiManager();
@@ -85,7 +122,7 @@ console.log(value);
     },
 
     /**
-     * delete from file and update file.
+     * delete from store and file.
      * @param id 
      */
     async del(id: string) {

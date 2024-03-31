@@ -18,12 +18,12 @@ import ShelfSetting from 'src/components/shelves/ShelfSetting.vue';
 import { ref, Ref } from 'vue';
 
 // --------------------------------
-//  local var
+//  target shelf id
 // --------------------------------
 const id: Ref<string> = ref('');
 
 // --------------------------------
-//  self visibility
+//  dialog visibility
 // --------------------------------
 let visible: Ref<boolean> = ref(false);
 

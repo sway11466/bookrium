@@ -8,7 +8,7 @@
         <q-toolbar-title>Add Shelf</q-toolbar-title>
         <q-btn flat round dense icon="close" v-close-popup />
       </q-toolbar>
-      <ShelfSetting :mode="'add'" :id="''" @hideDialog="hide" />
+      <ShelfSetting :mode="'add'" @hideDialog="hide" />
     </q-card>
   </q-dialog>
 </template>
@@ -18,7 +18,7 @@ import ShelfSetting from 'src/components/shelves/ShelfSetting.vue';
 import { ref } from 'vue';
 
 // --------------------------------
-//  self visibility
+//  dialog visibility
 // --------------------------------
 let visible = ref(false);
 
