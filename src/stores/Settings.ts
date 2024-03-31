@@ -75,11 +75,11 @@ export const useSettingsStore = defineStore('settings', {
       this.settingPath = items.settingPath;
       this.storage = {
         dataFolderPath: items.storage.dataFolderPath,
-        artworkFolderPath: items.storage.dataFolderPath + '\\Bookrium\\artworks',
-        bookFolderPath: items.storage.dataFolderPath + '\\Bookrium\\books',
-        cacheFolderPath: items.storage.dataFolderPath + '\\Bookrium\\cache',
-        shelvesFolderPath: items.storage.dataFolderPath + '\\Bookrium\\shelves',
-        labelFolderPath: items.storage.dataFolderPath + '\\Bookrium\\labels',
+        artworkFolderPath: items.storage.dataFolderPath + '\\artworks',
+        bookFolderPath: items.storage.dataFolderPath + '\\books',
+        cacheFolderPath: items.storage.dataFolderPath + '\\cache',
+        shelvesFolderPath: items.storage.dataFolderPath + '\\shelves',
+        labelFolderPath: items.storage.dataFolderPath + '\\labels',
     };
       this.save();
       return true;

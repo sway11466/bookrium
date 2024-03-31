@@ -20,7 +20,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item clickable to="/shelf">
+    <q-item clickable to="/shelves">
       <q-item-section avatar>
         <q-img src="shelf-cuteui-64x64.png" />
       </q-item-section>

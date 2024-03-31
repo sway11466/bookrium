@@ -24,7 +24,7 @@
  +-- labels/
  |   +-- label.json
  |
- +-- shelf/
+ +-- shelves/
  |
  +-- booklium.json
 ```
