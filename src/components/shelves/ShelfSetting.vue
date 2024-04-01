@@ -35,7 +35,7 @@ import { useShelvesStore } from 'src/stores/Shelves';
 import { Shelf } from 'src/stores/ShelvesTypes';
 
 // --------------------------------
-//  store init
+//  shelf store init
 // --------------------------------
 const store = useShelvesStore();
 

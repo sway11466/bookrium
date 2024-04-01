@@ -20,6 +20,13 @@ import EditDialog from 'src/components/shelves/EditDialog.vue';
 import { ref } from 'vue';
 
 // --------------------------------
+//  shelf store init
+// --------------------------------
+import { useShelvesStore } from 'src/stores/Shelves';
+const shelves = useShelvesStore();
+shelves.init();
+
+// --------------------------------
 //  component ref
 // --------------------------------
 const addDialog = ref();
