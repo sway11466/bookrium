@@ -18,13 +18,13 @@
         </template>
       </q-infinite-scroll>
     </q-list>
-    <KindleDialog ref="kindleDialog" />
+    <!-- <KindleDialog ref="kindleDialog" /> -->
   </q-page>
 </template>
 
 <script setup lang="ts">
 import KindleListItem from 'src/components/books/KindleListItem.vue';
-import KindleDialog from 'src/components/books/KindleDialog.vue';
+// import KindleDialog from 'src/components/books/KindleDialog.vue';
 import PDFListItem from 'src/components/books/PDFListItem.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'
@@ -39,7 +39,7 @@ const store = useBooksStore();
 // --------------------------------
 //  component ref
 // --------------------------------
-const kindleDialog = ref();
+// const kindleDialog = ref();
 
 // --------------------------------
 //  local var
