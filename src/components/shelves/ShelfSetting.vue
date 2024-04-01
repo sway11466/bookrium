@@ -58,31 +58,20 @@ const props = defineProps({
 });
 
 // --------------------------------
-//  fire parent component events
-// --------------------------------
-const emit = defineEmits([
-  'showDialog', // show dialog via parent component.
-  'hideDialog', // hide dialog via parent component.
-]);
-
-// --------------------------------
 //  Label Editor
 // --------------------------------
 const shelf: Ref<Shelf> = ref(props.mode === 'add' ? store.newShelf(): store.get(props.id));
 
 async function add() {
   await store.add(shelf.value);
-  emit('hideDialog');
 };
 
 async function update() {
   await store.update(shelf.value);
-  emit('hideDialog');
 };
 
 async function del() {
   // Todo: confirm Dialog
   await store.del(shelf.value.id);
-  emit('hideDialog');
 };
 </script>
