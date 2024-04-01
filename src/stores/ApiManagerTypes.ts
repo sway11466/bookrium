@@ -1,6 +1,6 @@
 import { ShellApi } from 'src-electron/modules/shell-api';
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
-import { ConfigApi } from 'src-electron/modules/config-api';
+import { ConfigApi } from 'src-electron/modules/config/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
 import { SettingApi } from 'src-electron/modules/settings/setting-api';
 

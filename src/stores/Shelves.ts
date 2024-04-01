@@ -33,7 +33,7 @@ export const useShelvesStore = defineStore('shelves', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
-      if (!apiManager.configApi.hasConfig(path)) { return false; }
+      if (!apiManager.configApi.hasConfig(path, CONFIG_SHELVES_KEY)) { return false; }
       const shelves = (await apiManager.configApi.loadConfig(path, CONFIG_SHELVES_KEY)) as Map<string, Shelf>;
       Object.entries(shelves).forEach(([key, value]) => this.shelves.set(key, value));
       return true;

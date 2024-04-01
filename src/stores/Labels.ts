@@ -45,7 +45,7 @@ export const useLabelsStore = defineStore('labels', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       const path = apiManager.path.join(settingsStore.storage.labelFolderPath, 'labels.json');
-      if (!apiManager.configApi.hasConfig(path)) { return false; }
+      if (!apiManager.configApi.hasConfig(path, CONFIG_LABEL_KEY)) { return false; }
       const labels = (await apiManager.configApi.loadConfig(path, CONFIG_LABEL_KEY)) as Map<string, Label>;
       Object.entries(labels).forEach(([key, value]) => this.labels.set(key, value));
       return true;

@@ -36,7 +36,7 @@ export const useConnectsStore = defineStore('connects', {
     async loadAllConnects(): Promise<boolean> {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
-      if (!apiManager.configApi.hasConfig(settingsStore.settingPath)) { return false; }
+      if (!apiManager.configApi.hasConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) { return false; }
       const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, ConnectTypeDef>;
       for (const [key, value] of Object.entries(connectors)) { this.connectors.set(key, Object.assign(this.new(value.type), value)); };
       return true;

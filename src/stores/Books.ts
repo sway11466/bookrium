@@ -64,7 +64,7 @@ export const useBooksStore = defineStore('books', {
       if (this.has(id)) {
         return this.books.get(id) as BookTypeDef;
       }
-      throw new Error("book not found."); //Todo: implements
+      throw new Error('book not found.'); //Todo: implements
     },
 
     list(index: number, size: number): BookTypeDef[] {

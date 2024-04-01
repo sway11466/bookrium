@@ -23,7 +23,7 @@ export const useSettingsStore = defineStore('settings', {
     async init() {
       const apiManager = useApiManager();
       const defaultSetting = await this.new();
-      if (await apiManager.configApi.hasConfig(defaultSetting.settingPath)) {
+      if (await apiManager.configApi.hasConfig(defaultSetting.settingPath, CONFIG_SETTING_KEY)) {
         await this.load(); // TODO: error handling
       } else {
         Object.assign(this, defaultSetting);
