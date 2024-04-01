@@ -58,7 +58,7 @@ const props = defineProps({
 });
 
 // --------------------------------
-//  Label Editor
+//  shelf
 // --------------------------------
 const shelf: Ref<Shelf> = ref(props.mode === 'add' ? store.newShelf(): store.get(props.id));
 

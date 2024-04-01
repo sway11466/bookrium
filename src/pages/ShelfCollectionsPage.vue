@@ -1,7 +1,7 @@
 <template>
   <q-page class="col">
     <template v-if="shelves.list.length > 0">
-      <ShelfList @add="add" @edit="edit"/>
+      <ShelfCollections @add="add" @edit="edit"/>
     </template>
 
     <template v-if="shelves.list.length == 0">
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import ShelfList from 'src/components/shelves/ShelfList.vue';
+import ShelfCollections from 'src/components/shelves/ShelfCollections.vue';
 import { useShelvesStore } from 'src/stores/Shelves';
 import { Shelf } from 'src/stores/ShelvesTypes';
 

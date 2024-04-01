@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md row items-start q-gutter-md">
     <template v-for="(shelf, index) in store.list" :key="index">
-      <ShelfListItem :shelf="shelf" @edit="edit" />
+      <ShelfCard :shelf="shelf" @edit="edit" />
     </template>
   </div>
 </template>
@@ -10,7 +10,7 @@
 </style>
 
 <script setup lang="ts">
-import ShelfListItem from 'src/components/shelves/ShelfListItem.vue';
+import ShelfCard from 'src/components/shelves/ShelfCard.vue';
 import { useShelvesStore } from 'src/stores/Shelves';
 import { Shelf } from 'src/stores/ShelvesTypes';
 
