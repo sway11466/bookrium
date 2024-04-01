@@ -5,14 +5,15 @@ import { ConfigApi } from 'src-electron/modules/config-api';
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
 import { SettingApi } from 'src-electron/modules/settings/setting-api';
 import { useSettingsStore } from 'src/stores/Settings';
+import { ApiManagerStore } from './ApiManagerTypes';
 
 export const useApiManager = defineStore('ApiManager', {
-  state: () => ({
-    shellApi: {} as ShellApi,
-    localStorageApi: {} as LocalStorageApi,
-    configApi: {} as ConfigApi,
-    connectApi: {} as ConnectApi,
-    settingApi: {} as SettingApi,
+  state: (): ApiManagerStore => ({
+    shellApi: null,
+    localStorageApi: null,
+    configApi: null,
+    connectApi: null,
+    settingApi: null,
     path: {
       separator,
       join,
