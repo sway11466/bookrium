@@ -27,7 +27,7 @@ if (!apiManager.shellApi) { apiManager.bindShellApi(window.shellApi); }
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
 if (!apiManager.localStorageApi) { apiManager.bindLocalStorageApi(window.localStorageApi); }
 
-import { ConfigApi } from 'src-electron/modules/config-api';
+import { ConfigApi } from 'src-electron/modules/config/config-api';
 if (!apiManager.configApi) { apiManager.bindConfigApi(window.configApi); }
 
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
