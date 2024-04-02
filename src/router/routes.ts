@@ -29,13 +29,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/shelves/:shelfid',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ShelfItemPage.vue') }],
+    children: [{ path: '', component: () => import('pages/ShelfViewPage.vue') }],
+  },
+
+  {
+    path: '/shelves/:shelfid/edit',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ShelfEditPage.vue') }],
   },
 
   {
     path: '/shelves/new',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ShelfItemPage.vue') }],
+    children: [{ path: '', component: () => import('pages/ShelfEditPage.vue') }],
   },
 
   {

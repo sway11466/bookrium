@@ -2,15 +2,20 @@
   <q-card class="q-gutter-y-md q-pa-md" flat>
 
     <q-card-section class="q-px-none">
-      <div>shelf name</div>
-      <q-input dense v-model="shelf.name" autofocus />
+      <div>name</div>
+      <div class="q-ml-sm"><q-input filled dense v-model="shelf.name" autofocus /></div>
     </q-card-section>
 
     <q-card-section class="q-px-none">
       <div>description</div>
-      <q-input dense v-model="shelf.description" autofocus />
+      <div class="q-ml-sm"><q-input filled dense v-model="shelf.description" type="textarea" /></div>
     </q-card-section>
-    
+
+    <q-card-section class="q-px-none">
+      <div>image</div>
+      <div class="q-ml-sm"><q-img src="bookshelf-640x427.jpg" /></div>
+    </q-card-section>
+
     <template v-if="props.mode == 'add'">
       <q-card-actions class="q-px-none qu-py-lg" vertical>
           <q-btn label="Add Shelf" @click="add" icon="mdi-plus" padding="xs lg" color="primary" unelevated no-caps />
@@ -23,11 +28,18 @@
       </q-card-actions>
       <q-separator />
       <q-card-actions class="q-px-none qu-py-lg" vertical>
-          <q-btn label="Delet Shelf" @click="del" icon="mdi-delete" padding="xs lg" color="red" unelevated no-caps />
+          <q-btn label="Delet Shelf" @click="del" icon="mdi-delete" padding="xs lg" color="red" outline no-caps />
       </q-card-actions>
     </template>
   </q-card>
 </template>
+
+
+<style scoped>
+.q-img {
+  max-width: 20em;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
