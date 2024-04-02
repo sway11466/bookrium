@@ -19,22 +19,20 @@ export interface Window {
 //  Init ApiManager
 // --------------------------------
 import { useApiManager } from 'src/stores/ApiManager'
-const apiManager = useApiManager();
-
 import { ShellApi } from 'src-electron/modules/shell-api';
-if (!apiManager.shellApi) { apiManager.bindShellApi(window.shellApi); }
-
 import { LocalStorageApi } from 'src-electron/modules/ls-api';
-if (!apiManager.localStorageApi) { apiManager.bindLocalStorageApi(window.localStorageApi); }
-
 import { ConfigApi } from 'src-electron/modules/config/config-api';
-if (!apiManager.configApi) { apiManager.bindConfigApi(window.configApi); }
-
 import { ConnectApi } from 'src-electron/modules/connects/connect-api';
-if (!apiManager.connectApi) { apiManager.bindConnectApi(window.connectApi); }
-
 import { SettingApi } from 'src-electron/modules/settings/setting-api';
-if (!apiManager.settingApi) { apiManager.bindSettingApi(window.settingApi); }
+
+const apiManager = useApiManager();
+if (!apiManager.initialized) {
+  apiManager.bindShellApi(window.shellApi);
+  apiManager.bindLocalStorageApi(window.localStorageApi);
+  apiManager.bindConfigApi(window.configApi);
+  apiManager.bindConnectApi(window.connectApi);
+  apiManager.bindSettingApi(window.settingApi);
+}
 
 // --------------------------------
 //  Books Store

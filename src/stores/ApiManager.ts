@@ -9,11 +9,12 @@ import { ApiManagerStore } from './ApiManagerTypes';
 
 export const useApiManager = defineStore('ApiManager', {
   state: (): ApiManagerStore => ({
-    shellApi: null,
-    localStorageApi: null,
-    configApi: null,
-    connectApi: null,
-    settingApi: null,
+    initialized: false,
+    shellApi: {} as ShellApi,
+    localStorageApi: {} as LocalStorageApi,
+    configApi: {} as ConfigApi,
+    connectApi: {} as ConnectApi,
+    settingApi: {} as SettingApi,
     path: {
       separator,
       join,

@@ -8,11 +8,12 @@ import { SettingApi } from 'src-electron/modules/settings/setting-api';
  * ApiManager Store.
  */
 export type ApiManagerStore = {
-  shellApi: ShellApi | null,
-  localStorageApi: LocalStorageApi | null,
-  configApi: ConfigApi | null,
-  connectApi: ConnectApi | null,
-  settingApi: SettingApi | null,
+  initialized: boolean,
+  shellApi: ShellApi,
+  localStorageApi: LocalStorageApi,
+  configApi: ConfigApi,
+  connectApi: ConnectApi,
+  settingApi: SettingApi,
   path: PathApi,
 }
 
