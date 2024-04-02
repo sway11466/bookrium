@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <template v-if="labels.list.length > 0">
-      <LabelList @edit="edit"/>
+      <LabelCollections @edit="edit"/>
     </template>
 
     <template v-if="labels.list.length === 0">
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import LabelList from 'src/components/labels/LabelList.vue';
+import LabelCollections from 'src/components/labels/LabelCollections.vue';
 import { useLabelsStore } from 'src/stores/Labels';
 import { Label } from 'src/stores/LabelTypes';
 
