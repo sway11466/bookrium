@@ -1,10 +1,10 @@
 <template>
-  <q-page class="col">
+  <q-page padding>
     <template v-if="shelves.list.length > 0">
       <ShelfCollections @add="add" @edit="edit"/>
     </template>
 
-    <template v-if="shelves.list.length == 0">
+    <template v-if="shelves.list.length === 0">
       <div class="q-pa-lg text-h5">Shelf is not registered.</div>
       <div class="q-pl-lg">Bookshelf is a function to create a collection of books. The order can be rearranged freely within the collection.</div>
       <div class="q-pa-lg">

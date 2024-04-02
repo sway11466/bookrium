@@ -88,14 +88,6 @@ const props = defineProps({
 });
 
 // --------------------------------
-//  fire parent component events
-// --------------------------------
-const emit = defineEmits([
-  'showDialog', // show dialog via parent component.
-  'hideDialog', // hide dialog via parent component.
-]);
-
-// --------------------------------
 //  parent label selector
 // --------------------------------
 const parent = ref(store.newLabel());
@@ -124,17 +116,14 @@ const label: Ref<Label> = ref(props.mode === 'add' ? store.newLabel(): store.get
 
   async function add() {
   await store.add(label.value);
-  emit('hideDialog');
 };
 
 async function update() {
   await store.update(label.value);
-  emit('hideDialog');
 };
 
 async function del() {
   // Todo: confirm Dialog
   await store.del(label.value.id);
-  emit('hideDialog');
 };
 </script>

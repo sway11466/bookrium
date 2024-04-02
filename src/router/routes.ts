@@ -41,7 +41,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/labels',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/LabelsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/LabelCollectionPage.vue') }],
+  },
+
+  {
+    path: '/labels/:labelid',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{ path: '', component: () => import('pages/LabelItemPage.vue') }],
+  },
+
+  {
+    path: '/labels/new',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{ path: '', component: () => import('pages/LabelItemPage.vue') }],
   },
 
   {

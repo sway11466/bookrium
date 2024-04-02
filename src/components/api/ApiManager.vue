@@ -43,12 +43,6 @@ import { useBooksStore } from 'src/stores/Books';
 const books = useBooksStore();
 
 // --------------------------------
-//  Labels Store
-// --------------------------------
-import { useLabelsStore } from 'src/stores/Labels';
-const labels = useLabelsStore();
-
-// --------------------------------
 //  Connectors Store
 // --------------------------------
 import { useConnectsStore } from 'src/stores/Connects';
@@ -67,7 +61,6 @@ const init = async () => {
   await settings.init();
   await connects.init();
   await books.init();
-  await labels.init();
 };
 init();
 
