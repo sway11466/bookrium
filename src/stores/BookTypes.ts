@@ -34,7 +34,7 @@ export type Book = {
   author: string,
   artwork: string,
   labels: string[],
-  extends: {}
+  extends: KindleExtends | PDFExtends,
 }
 
 /**
@@ -60,14 +60,15 @@ export type KindleBook = Book & {
  * PDF Book attributes.
  * 
  */
+export type PDFExtends = {
+  hash: string,
+  path: string,
+  title: string,
+  author: string,
+  artworkPath: string,
+};
 export type PDFBook = Book & {
-  extends: {
-    hash: string,
-    path: string,
-    title: string,
-    author: string,
-    artworkPath: string,
-  }
+  extends: PDFExtends
 };
 
 /**

@@ -71,7 +71,7 @@ export const useBooksStore = defineStore('books', {
       return [...this.books.values()].slice(index, size);
     },
 
-    show(book: BookTypeDef): void {
+    show(book: Book): void {
       const apiManager = useApiManager();
       const setting = useSettingsStore();
       let url = '';

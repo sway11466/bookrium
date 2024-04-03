@@ -26,7 +26,7 @@
   </q-virtual-scroll>
 </template>
 
-<style>
+<style scoped>
 .title {
   height: 3em;
   overflow: hidden;

@@ -27,21 +27,20 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
-    path: '/shelves/:shelfid',
-    component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/shelves/ShelfViewPage.vue') }],
-  },
-
-  {
-    path: '/shelves/:shelfid/edit',
+    path: '/shelves/new',
     component: () => import('layouts/DetailLayout.vue'),
     children: [{ path: '', component: () => import('pages/shelves/ShelfEditPage.vue') }],
   },
 
   {
-    path: '/shelves/new',
+    path: '/shelves/:shelfid',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ShelfEditPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/shelves/ShelfViewPage.vue') },
+      { path: 'edit', component: () => import('pages/shelves/ShelfEditPage.vue') },
+      { path: 'addBook', component: () => import('pages/shelves/ShelfEditPage.vue') },
+      { path: 'delBook', component: () => import('pages/shelves/ShelfEditPage.vue') }
+    ],
   },
 
   {
