@@ -1,17 +1,16 @@
 <template>
-  <q-card flat bordered>
-    <q-img src="bookshelf-640x427.jpg"  @click="show">
+  <q-card @click="show" flat bordered>
+    <q-img src="bookshelf-640x427.jpg">
       <div class="absolute-bottom row justify-between">
         <div class="col-9">{{props.shelf.name}}</div>
         <div class="col-3"><q-chip square dense color="primary" text-color="white" :ripple="false">9999+</q-chip></div><!-- todo: book count -->
       </div>
     </q-img>
-    <q-card-actions align="right">
-      <q-btn @click="edit" no-caps flat>
-        <q-avatar size="md" square><img src="edit-prop-cuteui-64x64.png" /></q-avatar>
-        <q-item-label class="q-ml-xs">edit</q-item-label>
-      </q-btn>
-    </q-card-actions>
+    <q-fab @click.stop direction="down" vertical-actions-align="right"
+           color="primary" icon="menu" padding="xs" class="absolute" style="top: 1em; right: 1em;">
+      <q-fab-action @click="edit" icon="mdi-file-document-edit" color="primary" label="edit" />
+      <q-fab-action @click="edit" icon="delete" color="red" label="delete" />
+    </q-fab>
   </q-card>
 </template>
 
