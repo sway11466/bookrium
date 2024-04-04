@@ -3,7 +3,7 @@
     <q-img src="bookshelf-640x427.jpg">
       <div class="absolute-bottom row justify-between">
         <div class="col-9">{{props.shelf.name}}</div>
-        <div class="col-3"><q-chip square dense color="primary" text-color="white" :ripple="false">9999+</q-chip></div><!-- todo: book count -->
+        <div class="col-3"><q-chip square dense color="primary" text-color="white" class=" float-right" :ripple="false">{{shelf.books.length}}</q-chip></div>
       </div>
     </q-img>
     <q-fab @click.stop direction="down" vertical-actions-align="right"
