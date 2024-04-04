@@ -1,10 +1,10 @@
 <template>
   <q-page padding>
-    <BookCollections :books="bookCollection"/>
+    <BookCollections :books="bookCollection" />
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-fab icon="menu" direction="up" color="primary">
-        <q-fab-action @click="addBook" color="primary" icon="add" />
-        <q-fab-action @click="delBook" color="primary" icon="delete" />
+      <q-fab icon="menu" direction="up" vertical-actions-align="right" color="primary">
+        <q-fab-action @click="addBook" icon="mdi-book-plus-multiple-outline" label="add books" color="primary"/>
+        <q-fab-action @click="delBook" icon="mdi-book-remove-multiple-outline" label="delete books" color="red"/>
       </q-fab>
     </q-page-sticky>
   </q-page>

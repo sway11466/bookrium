@@ -13,7 +13,6 @@
 import { PropType, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import BookCard from 'src/components/books/BookCard.vue';
-import { BookCollectionsOption, BookCollectionsOptionDefault } from 'src/components/books/BookCollectionsOption';
 import { useBooksStore } from 'src/stores/Books.js';
 import { Book, BookTypeDef } from 'src/stores/BookTypes';
 
@@ -21,11 +20,6 @@ const props = defineProps({
   books: {
     type: Array as PropType<Book[]>,
     required: true,
-  },
-  option: {
-    type: Object as () => BookCollectionsOption,
-    required: false,
-    default: BookCollectionsOptionDefault
   },
 });
 

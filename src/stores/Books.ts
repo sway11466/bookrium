@@ -20,6 +20,7 @@ export const useBooksStore = defineStore('books', {
   }),
 
   getters: {
+    list: (state) => [...state.books.values()],
     latest: (state) => state.index.latest.array(),
   },
 
@@ -33,7 +34,7 @@ export const useBooksStore = defineStore('books', {
       const settings = useSettingsStore();
       const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
       const books = await apiManager.configApi.loadConfig(path, CONFIG_BOOK_KEY) as Map<string, BookTypeDef>;
-      this.add([...Object.values(books)]); // Todo: do not save in addBooks function.
+      this._addStore([...Object.values(books)]);
     },
 
     new(type: BookType): BookTypeDef {
@@ -50,6 +51,9 @@ export const useBooksStore = defineStore('books', {
       const path = apiManager.path.join(settings.storage.bookFolderPath, 'books.json');
       books.forEach(book => apiManager.configApi.saveConfig(path, CONFIG_BOOK_KEY + '.' + book.id, deproxyBook(book)));
       // update store
+      this._addStore(books);
+    },
+    _addStore(books: BookTypeDef[]) {
       books.forEach(book => this.books.set(book.id, book));
       this.createLabelIndex(books);  //async
       this.createConnectorIndx(books);  //async
@@ -67,7 +71,7 @@ export const useBooksStore = defineStore('books', {
       throw new Error('book not found.'); //Todo: implements
     },
 
-    list(index: number, size: number): BookTypeDef[] {
+    slice(index: number, size: number): Book[] {
       return [...this.books.values()].slice(index, size);
     },
 

@@ -10,7 +10,7 @@ import { Queue } from 'src/components/Queue';
  *   latest     -> book index of top x latest books.
  */
 export type BookStore = {
-  books: Map<string, BookTypeDef>,
+  books: Map<string, Book>,
   index: {
     label: Map<string, Book[]>,
     connector: Map<string, Book[]>,

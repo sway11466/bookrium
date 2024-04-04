@@ -29,7 +29,7 @@ import PDFListItem from 'src/components/books/PDFListItem.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { useBooksStore } from 'src/stores/Books.js';
-import { BookTypeDef } from 'src/stores/BookTypes';
+import { Book } from 'src/stores/BookTypes';
 
 // --------------------------------
 //  store init
@@ -45,22 +45,22 @@ const store = useBooksStore();
 //  local var
 // --------------------------------
 const router = useRouter();
-const books = ref([] as BookTypeDef[]);
+const books = ref([] as Book[]);
 
 // --------------------------------
 //  actions
 // --------------------------------
 function next(index: number, done: (stop?: boolean) => void) {
-  const items = store.list((index-1)*10, index*10);
+  const items = store.slice((index-1)*10, index*10);
   books.value.push(...items);
   done(items.length === 0);
 }
 
-function show(book: BookTypeDef) {
+function show(book: Book) {
   store.show(book);
 }
 
-function edit(book: BookTypeDef) {
+function edit(book: Book) {
   router.push({ path:`/books/${book.id}` });
 }
 </script>
