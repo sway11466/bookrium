@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('pages/shelves/ShelfViewPage.vue') },
       { path: 'edit', component: () => import('pages/shelves/ShelfEditPage.vue') },
       { path: 'addBook', component: () => import('pages/shelves/BookSelectorPage.vue') },
-      { path: 'delBook', component: () => import('pages/shelves/ShelfEditPage.vue') }
+      { path: 'delBook', component: () => import('pages/shelves/BookSelectorPage.vue') }
     ],
   },
 
