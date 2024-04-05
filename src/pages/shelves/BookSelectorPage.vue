@@ -40,7 +40,6 @@ function addBooks() {
   switch (mode) {
     case 'add':
       shelf.books.splice(0, 0, ...selectable.filter(book => book.selected).map(book => book.id));
-      shelves.update(shelf);
       break;
     case 'del':
       selectable.filter(book => book.selected).forEach(book => {
@@ -49,6 +48,7 @@ function addBooks() {
       });
       break;
   }
+  shelves.update(shelf);
   router.go(-1)
 }
 </script>
