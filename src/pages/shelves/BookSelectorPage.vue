@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <BookSelector :books="selectable" mode="select" @click="click" />
+    <BookSelector :books="selectable" @click="click" />
     <q-page-sticky position="bottom" :offset="[0, 18]">
       <q-btn @click="addBooks" unelevated rounded no-caps color="primary" class="q-px-xl">
         <q-icon :name=" mode === 'add' ? 'mdi-book-plus-multiple-outline' : 'mdi-book-remove-multiple-outline'" />

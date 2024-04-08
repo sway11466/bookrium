@@ -11,13 +11,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/books',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/BooksListPage.vue') }],
+    children: [{ path: '', component: () => import('pages/books/BooksCollectionPage.vue') }],
   },
 
   {
     path: '/books/:bookid',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/BookDetailPage.vue') }],
+    children: [{ path: '', component: () => import('pages/books/BookDetailPage.vue') }],
   },
 
   {

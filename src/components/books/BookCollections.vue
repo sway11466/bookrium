@@ -28,4 +28,3 @@ function next(index: number, done: (stop?: boolean) => void) {
   done(items.length === 0);
 }
 </script>
-src/components/books/BookCollectionsOption

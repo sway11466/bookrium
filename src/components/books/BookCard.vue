@@ -9,6 +9,12 @@
       {{ props.book.title }}
     </q-card-section>
 
+    <q-fab @click.stop direction="down" vertical-actions-align="right"
+           color="primary" icon="menu" padding="xs" class="absolute" style="top: 1em; right: 1em;">
+      <q-fab-action @click="edit" icon="mdi-file-document-edit" color="primary" label="edit" />
+      <q-fab-action @click="del" icon="delete" color="red" label="delete" />
+    </q-fab>
+
   </q-card>
 </template>
 
@@ -45,12 +51,17 @@ const store = useBooksStore();
 const router = useRouter();
 
 function show() {
-  // store.show(props.book);
-  console.log();
+  console.info('[BookCard] show');
+  store.show(props.book);
 }
 
-function edit(book: Book) {
-  router.push({ path:`/books/${book.id}` });
+function edit() {
+  router.push({ path:`/books/${props.book.id}` });
+}
+
+function del() {
+  console.info('[BookCard] del');
+  // todo delete
 }
 </script>
 src/components/books/BookCollectionsOption

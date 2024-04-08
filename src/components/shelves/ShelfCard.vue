@@ -9,7 +9,7 @@
     <q-fab @click.stop direction="down" vertical-actions-align="right"
            color="primary" icon="menu" padding="xs" class="absolute" style="top: 1em; right: 1em;">
       <q-fab-action @click="edit" icon="mdi-file-document-edit" color="primary" label="edit" />
-      <q-fab-action @click="edit" icon="delete" color="red" label="delete" />
+      <q-fab-action @click="del" icon="delete" color="red" label="delete" />
     </q-fab>
   </q-card>
 </template>
@@ -42,5 +42,10 @@ function show() {
 
 function edit() {
   router.push({ path: `/shelves/${props.shelf.id}/edit` });
+}
+
+function del() {
+  console.log('not implemented yet');
+  // todo implement delete
 }
 </script>
