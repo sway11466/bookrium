@@ -17,7 +17,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/books/:bookid',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/books/BookDetailPage.vue') }],
+    children: [{
+      path: '', 
+      components: {
+        default: () => import('pages/books/BookDetailPage.vue'),
+        header: () => import('pages/books/BookDetailHeader.vue'),
+        page: () => import('pages/books/BookDetailPage.vue'),
+    }}],
   },
 
   {
@@ -29,17 +35,43 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/shelves/new',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/shelves/ShelfEditPage.vue') }],
+    children: [{
+      path: '',
+      components:{
+        default: ()  => import('pages/shelves/ShelfEditPage.vue'),
+        header: () => import('pages/shelves/ShelfEditHeader.vue'),
+        page: () => import('pages/shelves/ShelfEditPage.vue'),
+    }}],
   },
 
   {
     path: '/shelves/:shelfid',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/shelves/ShelfViewPage.vue') },
-      { path: 'edit', component: () => import('pages/shelves/ShelfEditPage.vue') },
-      { path: 'addBook', component: () => import('pages/shelves/BookSelectorPage.vue') },
-      { path: 'delBook', component: () => import('pages/shelves/BookSelectorPage.vue') }
+    children: [{
+        path: '',
+        components: {
+          default: () => import('pages/shelves/ShelfViewPage.vue'),
+          header: () => import('pages/shelves/ShelfViewHeader.vue'),
+          page: () => import('pages/shelves/ShelfViewPage.vue'),
+      }},{
+        path: 'edit',
+        components: {
+          default: () => import('pages/shelves/ShelfEditPage.vue'),
+          header: () => import('pages/shelves/ShelfEditHeader.vue'),
+          page: () => import('pages/shelves/ShelfEditPage.vue')
+      }},{
+        path: 'addBook',
+        components: {
+          default: () => import('pages/shelves/BookSelectorPage.vue'),
+          header: () => import('pages/shelves/BookSelectorHeader.vue'),
+          page: () => import('pages/shelves/BookSelectorPage.vue'),
+      }},{
+        path: 'delBook',
+        components: {
+          default: () => import('pages/shelves/BookSelectorPage.vue'),
+          header: () => import('pages/shelves/BookSelectorHeader.vue'),
+          page: () => import('pages/shelves/BookSelectorPage.vue'),
+      }}
     ],
   },
 

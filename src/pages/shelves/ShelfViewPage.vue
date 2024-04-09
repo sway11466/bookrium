@@ -27,6 +27,7 @@ function addBook() {
 }
 
 function delBook() {
+  console.log('[ShelfViewPage] delete book button clicked');
   router.push({ path:`/shelves/${id}/delBook` });
 }
 </script>

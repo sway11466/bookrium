@@ -1,13 +1,8 @@
 <template>
   <q-layout view="hHh LpR fFf">
 
-    <q-header bordered class="bg-primary text-white">
-      <q-toolbar>
-        <q-btn @click="$router.go(-1)" icon="arrow_back" dense flat round />
-        <q-toolbar-title>
-          back
-        </q-toolbar-title>
-      </q-toolbar>
+    <q-header elevated class="bg-primary text-white">
+      <router-view name="header" />
     </q-header>
 
     <q-page-container>
