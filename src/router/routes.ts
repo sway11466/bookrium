@@ -20,7 +20,6 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '', 
       components: {
-        default: () => import('pages/books/BookDetailPage.vue'),
         header: () => import('pages/books/BookDetailHeader.vue'),
         page: () => import('pages/books/BookDetailPage.vue'),
     }}],
@@ -37,8 +36,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/DetailLayout.vue'),
     children: [{
       path: '',
-      components:{
-        default: ()  => import('pages/shelves/ShelfEditPage.vue'),
+      components: {
         header: () => import('pages/shelves/ShelfEditHeader.vue'),
         page: () => import('pages/shelves/ShelfEditPage.vue'),
     }}],
@@ -50,47 +48,52 @@ const routes: RouteRecordRaw[] = [
     children: [{
         path: '',
         components: {
-          default: () => import('pages/shelves/ShelfViewPage.vue'),
           header: () => import('pages/shelves/ShelfViewHeader.vue'),
           page: () => import('pages/shelves/ShelfViewPage.vue'),
       }},{
         path: 'edit',
         components: {
-          default: () => import('pages/shelves/ShelfEditPage.vue'),
           header: () => import('pages/shelves/ShelfEditHeader.vue'),
           page: () => import('pages/shelves/ShelfEditPage.vue')
       }},{
         path: 'addBook',
         components: {
-          default: () => import('pages/shelves/BookSelectorPage.vue'),
           header: () => import('pages/shelves/BookSelectorHeader.vue'),
           page: () => import('pages/shelves/BookSelectorPage.vue'),
       }},{
         path: 'delBook',
         components: {
-          default: () => import('pages/shelves/BookSelectorPage.vue'),
           header: () => import('pages/shelves/BookSelectorHeader.vue'),
           page: () => import('pages/shelves/BookSelectorPage.vue'),
-      }}
-    ],
+      }}],
   },
 
   {
     path: '/labels',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/LabelCollectionPage.vue') }],
-  },
-
-  {
-    path: '/labels/:labelid',
-    component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/LabelItemPage.vue') }],
+    children: [{ path: '', component: () => import('pages/labels/LabelCollectionPage.vue') }],
   },
 
   {
     path: '/labels/new',
     component: () => import('layouts/DetailLayout.vue'),
-    children: [{ path: '', component: () => import('pages/LabelItemPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/labels/LabelItemHeader.vue'),
+        page: () => import('pages/labels/LabelItemPage.vue'),
+    }}],
+  },
+
+  {
+    path: '/labels/:labelid',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/labels/LabelItemHeader.vue'),
+        page: () => import('pages/labels/LabelItemPage.vue'),
+    }}],
   },
 
   {

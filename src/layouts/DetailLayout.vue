@@ -6,7 +6,7 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <router-view name="page" />
     </q-page-container>
   </q-layout>
 </template>
