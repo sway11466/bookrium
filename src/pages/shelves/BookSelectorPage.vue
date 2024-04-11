@@ -2,7 +2,7 @@
   <q-page padding>
     <BookSelector :books="selectable" @click="click" />
     <q-page-sticky position="bottom" :offset="[0, 18]">
-      <q-btn @click="addBooks" unelevated rounded no-caps color="primary" class="q-px-xl">
+      <q-btn @click="complete" unelevated rounded no-caps color="primary" class="q-px-xl">
         <q-icon :name=" mode === 'add' ? 'mdi-book-plus-multiple-outline' : 'mdi-book-remove-multiple-outline'" />
         <div class="q-pl-md">{{ (mode === 'add' ? 'add' : 'delete') }} {{ count }} books to shelf</div>
       </q-btn>
@@ -35,7 +35,7 @@ function click(book: SelectableBook) {
   count.value = selectable.filter(book => book.selected).length;
 }
 
-function addBooks() {
+function complete() {
   console.log('[BookSelectorPage] add book button clicked');
   switch (mode) {
     case 'add':
