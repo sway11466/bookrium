@@ -19,12 +19,12 @@
 
     <q-separator vertical inset color="white" />
     <div class="q-mx-md no-wrap">
-      <q-btn label="sort" icon="sort" square dense no-caps />
+      <q-btn label="filter" icon="filter_alt" square dense no-caps />
     </div>
 
     <q-separator vertical inset color="white" />
     <div class="q-mx-md no-wrap">
-      <q-btn label="filter" icon="filter_alt" square dense no-caps />
+      <q-btn label="sort" icon="sort" square dense no-caps />
     </div>
 
     <q-separator vertical inset color="white" />
