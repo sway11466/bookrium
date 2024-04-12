@@ -4,6 +4,7 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="menu" direction="up" vertical-actions-align="right" color="primary">
         <q-fab-action @click="addBook" icon="mdi-book-plus-multiple-outline" label="add books" color="primary"/>
+        <q-fab-action @click="sortBook" icon="mdi-book-multiple-outline" label="sort books" color="primary"/>
         <q-fab-action @click="delBook" icon="mdi-book-remove-multiple-outline" label="delete books" color="red"/>
       </q-fab>
     </q-page-sticky>
@@ -24,6 +25,10 @@ const bookCollection = shelf.books.map((id) => books.get(id));
 
 function addBook() {
   router.push({ path:`/shelves/${id}/addBook` });
+}
+
+function sortBook() {
+  router.push({ path:`/shelves/${id}/sortBook` });
 }
 
 function delBook() {
