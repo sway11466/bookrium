@@ -7,7 +7,7 @@
       <q-item-label>
         Amazon Kindle
       </q-item-label>
-      <q-item-label caption>{{ connect.email }}</q-item-label>
+      <q-item-label caption>{{ connect.extends.email }}</q-item-label>
     </q-item-section>
     <q-item-section side>
       <template v-if="connect.state.collect === 'collecting'">

@@ -2,36 +2,45 @@
  * Connection settings for setting file.
  */
 export type ConnectStore = {
-  connectors: Map<string, ConnectTypeDef>,
+  connectors: Map<string, Connect>,
 }
 
+/**
+ * Connection settings for setting file.
+ */
 export type Connect = {
   id: string
+  name: string
+  lastCollect: Date | null
   type: ConnectType
   bookCount: number
   state: {
     test: ConnectStateTest
     collect: ConnectStateCollect
   }
-  //Todo: LastCollect: string
+  extends: KindleExtends | PDFLocalStorageExtends
 };
+export type ConnectType = 'kindle' | 'pdfls';
+export type ConnectStateTest = 'none' | 'testing' | 'ok' | 'error';
+export type ConnectStateCollect = 'none' | 'collecting' | 'ok' | 'error';
 
 /**
  * Kindle Connect Setting.
  */
-export type KindleConnect = Connect & {
+export type KindleExtends = {
   email: string
   password: string
+};
+export type KindleConnect = Connect & {
+  extends: KindleExtends
 };
 
 /**
  * LocalStorage Connect Setting.
  */
-export type PDFLocalStorageConnect = Connect & {
+export type PDFLocalStorageExtends = {
   path: string
 };
-
-export type ConnectType = 'kindle' | 'pdfls';
-export type ConnectStateTest = 'none' | 'testing' | 'ok' | 'error';
-export type ConnectStateCollect = 'none' | 'collecting' | 'ok' | 'error';
-export type ConnectTypeDef = KindleConnect | PDFLocalStorageConnect;
+export type PDFLocalStorageConnect = Connect & {
+  extends: PDFLocalStorageExtends
+};

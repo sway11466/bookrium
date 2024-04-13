@@ -104,7 +104,35 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/connects',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/ConnectsPage.vue') }],
+    children: [{ path: '', component: () => import('src/pages/connects/ConnectsPage.vue') }],
+  },
+
+  {
+    path: '/connects/new',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{
+      path: '',
+      components: {
+        header: () => import('src/pages/connects/ConnectEditHeader.vue'),
+        page: () => import('src/pages/connects/ConnectEditPage.vue') 
+      }},{
+        path: 'kindle',
+        alias: ['pdfls'],
+        components: {
+          header: () => import('src/pages/connects/ConnectEditHeader.vue'),
+          page: () => import('src/pages/connects/ConnectEditPage.vue') 
+      }}],
+  },
+
+  {
+    path: '/connects/:connectid',
+    component: () => import('layouts/DetailLayout.vue'),
+    children: [{
+      path: '',
+      components: {
+        header: () => import('src/pages/connects/ConnectEditHeader.vue'),
+        page: () => import('src/pages/connects/ConnectEditPage.vue') 
+    }}]
   },
 
   {

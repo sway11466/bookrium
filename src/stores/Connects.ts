@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
-import { ConnectStore, ConnectType, Connect, KindleConnect, PDFLocalStorageConnect, ConnectTypeDef } from 'src/stores/ConnectTypes';
+import { ConnectStore, ConnectType, Connect, KindleConnect, PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
 import { KindleBook, PDFBook } from 'src/stores/BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
@@ -37,24 +37,24 @@ export const useConnectsStore = defineStore('connects', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       if (!apiManager.configApi.hasConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) { return false; }
-      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, ConnectTypeDef>;
+      const connectors = (await apiManager.configApi.loadConfig(settingsStore.settingPath, CONFIG_CONNECTOR_KEY)) as Map<string, Connect>;
       for (const [key, value] of Object.entries(connectors)) { this.connectors.set(key, Object.assign(this.new(value.type), value)); };
       return true;
     },
 
-    new(type: ConnectType): ConnectTypeDef {
+    new(type: ConnectType): Connect {
       switch (type) {
         case 'kindle': return newKindleConnect();
         case 'pdfls': return newPDFLocalStorageConnect();
       }
     },
 
-    clone(id: string): ConnectTypeDef {
+    clone(id: string): Connect {
       const connect = this.get(id);
       return this.deproxy(connect);
     },
 
-    async add(connect: ConnectTypeDef) {
+    async add(connect: Connect) {
       await this.update(connect);
     },
 
@@ -62,26 +62,26 @@ export const useConnectsStore = defineStore('connects', {
       return this.connectors.has(id);
     },
 
-    get(id: string): ConnectTypeDef {
+    get(id: string): Connect {
       if (this.connectors.has(id)) {
-        return this.connectors.get(id) as ConnectTypeDef;
+        return this.connectors.get(id) as Connect;
       } else {
         throw new Error(); //Todo implements
       }
     },
 
-    async update(connect: ConnectTypeDef) {
+    async update(connect: Connect) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       // update store
       this.connectors.set(connect.id, connect);
       // save to file
-      const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       let value = {};
       switch (connect.type) {
         case 'kindle': value = deproxyKindleConnect(connect as KindleConnect); break;
         case 'pdfls': value = deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect); break;
       }
+      const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
     },
 
@@ -98,11 +98,10 @@ export const useConnectsStore = defineStore('connects', {
       const key = CONFIG_CONNECTOR_KEY + '.' + id;
       apiManager.configApi.deleteConfig(settingsStore.settingPath, key);
       // Todo: delete all books on delete connection
-
       return true;
     },
 
-    deproxy(connect: ConnectTypeDef): ConnectTypeDef {
+    deproxy(connect: Connect): Connect {
       switch (connect.type) {
         case 'kindle': return deproxyKindleConnect(connect as KindleConnect);
         case 'pdfls': return deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect);
@@ -110,11 +109,11 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     // Todo: Error Handling
-    async test(connect: ConnectTypeDef): Promise<boolean> {
+    async test(connect: Connect): Promise<boolean> {
       const apiManager = useApiManager();
       switch (connect.type) {
-        case 'kindle': return await apiManager.connectApi.testKindle((connect as KindleConnect).email, (connect as KindleConnect).password);
-        case 'pdfls': return await apiManager.connectApi.testPdfLs((connect as PDFLocalStorageConnect).path);
+        case 'kindle': return await apiManager.connectApi.testKindle((connect as KindleConnect).extends.email, (connect as KindleConnect).extends.password);
+        case 'pdfls': return await apiManager.connectApi.testPdfLs((connect as PDFLocalStorageConnect).extends.path);
       }
     },
 
@@ -152,28 +151,36 @@ export const useConnectsStore = defineStore('connects', {
 const newKindleConnect = (): KindleConnect => {
   return {
     id: uuid(),
+    name: '',
+    lastCollect: null,
     type: 'kindle' as ConnectType,
     bookCount: -1,
     state: {
       test: 'none',
       collect: 'none',
     },
-    email: '',
-    password: '',
+    extends: {
+      email: '',
+      password: '',
+    }
   }
 }
 
 const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
   return {
     id: connect.id,
+    name: connect.name,
+    lastCollect: connect.lastCollect,
     type: connect.type,
     bookCount: connect.bookCount,
     state: {
       test: connect.state.test,
       collect: connect.state.collect,
     },
-    email: connect.email,
-    password: connect.password,
+    extends: {
+      email: connect.extends.email,
+      password: connect.extends.password,
+    }
   }
 }
 
@@ -183,25 +190,33 @@ const deproxyKindleConnect = (connect: KindleConnect): KindleConnect => {
 const newPDFLocalStorageConnect = (): PDFLocalStorageConnect => {
   return {
     id: uuid(),
+    name: '',
+    lastCollect: null,
     type: 'pdfls' as ConnectType,
     bookCount: -1,
     state: {
       test: 'none',
       collect: 'none',
     },
-    path: '',
+    extends: {
+      path: '',
+    }
   }
 }
 
 const deproxyPDFLocalStorageConnect = (connect: PDFLocalStorageConnect): PDFLocalStorageConnect => {
   return {
     id: connect.id,
+    name: connect.name,
+    lastCollect: connect.lastCollect,
     type: connect.type,
     bookCount: connect.bookCount,
     state: {
       test: connect.state.test,
       collect: connect.state.collect,
     },
-    path: connect.path,
+    extends: {
+      path: connect.extends.path,
+    }
   }
 }

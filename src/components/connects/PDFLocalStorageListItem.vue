@@ -7,7 +7,7 @@
       <q-item-label>
         PDF (Local Storage)
       </q-item-label>
-      <q-item-label caption>{{ connect.path }}</q-item-label>
+      <q-item-label caption>{{ connect.extends.path }}</q-item-label>
     </q-item-section>
     <q-item-section side>
       <template v-if="connect.state.collect === 'collecting'">

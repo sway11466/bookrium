@@ -1,55 +1,66 @@
 <template>
-  <q-card class="q-gutter-y-md" flat>
-    <q-card-section class="q-pa-none">
-      user name
-      <q-input dense v-model="connect.email" autofocus />
-    </q-card-section>
-    <q-card-section class="q-pa-none">
-      password
-      <q-input dense v-model="connect.password" />
-    </q-card-section>
+  <div>
 
-    <q-card-actions class="q-mt-xl" vertical>
-      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" padding="xs lg" color="primary" unelevated no-caps />
+    <div class="q-ma-md">
+      name
+      <q-input dense v-model="connect.name" autofocus />
+    </div>
+
+    <div class="q-ma-md">
+      amazon user name
+      <q-input dense v-model="connect.extends.email" />
+    </div>
+
+    <div class="q-ma-md">
+      amazon password
+      <q-input dense v-model="connect.extends.password" />
+    </div>
+
+    <div class="q-mt-xl" />
+
+    <div class="q-ma-md text-center">
+      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" color="primary" unelevated no-caps />
       <div v-if="connect.state.test === 'none'" style="height:2em"></div>
       <div v-if="connect.state.test === 'testing'"><q-spinner color="primary" size="2em" /> Connection Testing...</div>
       <div v-if="connect.state.test === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Connection Success.</div>
       <div v-if="connect.state.test === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Connection Failed.</div>
+    </div>
 
-      <div class="q-mt-md"/>
-      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" padding="xs lg" color="primary" unelevated no-caps />
-      <div v-if="props.mode === 'edit' &&  changed" style="height:2em"><q-icon name="mdi-alert-outline" color="orange" size="2em" /> Need Save Changes.</div>
-      <div v-if="props.mode === 'edit' && !changed"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Saved.</div>
+    <div class="q-ma-md text-center">
+      <q-btn label="Save Connection" @click="save" icon="mdi-arrow-down-bold-box-outline" color="primary" unelevated no-caps />
+      <div v-if=" changed"><q-icon name="mdi-alert-outline" color="orange" size="2em" /> Need Save Changes.</div>
+      <div v-if="!changed"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Saved.</div>
+    </div>
 
-      <template v-if="mode === 'add'">
-        <div class="q-mt-xl"/>
-        <q-btn icon="mdi-arrow-left" label="Select Type" @click="back" padding="xs lg" color="primary" outline no-caps />
-      </template>
+    <div class="q-ma-md text-center">
+      <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" :disable="collectable" color="primary" unelevated no-caps />
+      <div v-if="connect.state.collect === 'none'" style="height:2em"></div>
+      <div v-if="connect.state.collect === 'collecting'"><q-spinner color="primary" size="2em" /> Collecting Books ...</div>
+      <div v-if="connect.state.collect === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Collected {{ connect.bookCount }} Books.</div>
+      <div v-if="connect.state.collect === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Collect Failed.</div>
+    </div>
 
+    <div>
       <template v-if="mode === 'edit'">
-        <div class="q-mt-md"/>
-        <q-btn label="Collect Books" @click="collect" icon="mdi-book-open-page-variant-outline" padding="xs lg" color="primary" unelevated no-caps />
-        <div v-if="connect.state.collect === 'none'" style="height:2em"></div>
-        <div v-if="connect.state.collect === 'collecting'"><q-spinner color="primary" size="2em" /> Collecting Books ...</div>
-        <div v-if="connect.state.collect === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Collected {{ connect.bookCount }} Books.</div>
-        <div v-if="connect.state.collect === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Collect Failed.</div>
-
         <div class="q-pt-lg"/>
         <q-btn icon="delete" label="Delete Connection Setting" @click="del" padding="xs lg" color="red" outline no-caps />
       </template>
-    </q-card-actions>
-  </q-card>
+    </div>
+
+  </div> 
 </template>
+
+<style scoped>
+.q-btn {
+  width: 40%;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, Ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { useConnectsStore } from 'src/stores/Connects';
 import { KindleConnect } from 'src/stores/ConnectTypes';
-
-// --------------------------------
-//  store init
-// --------------------------------
-const connectsStore = useConnectsStore();
 
 // --------------------------------
 //  prop
@@ -61,31 +72,31 @@ const props = defineProps({
     validator(value: string) {
       return ['add', 'edit'].includes(value);
     }
-  },
-  id: {
-    type: String,
-    required: true,
   }
 });
 
 // --------------------------------
-//  fire parent component events
+//  store init
 // --------------------------------
-const emit = defineEmits([
-  'back',       // back step via parent component.
-  'hideDialog', // hide dialog via parent component.
-]);
+const route = useRoute();
+const connects = useConnectsStore();
 
 // --------------------------------
 //  edit control
 // --------------------------------
-const connect: Ref<KindleConnect> = ref((props.mode === 'add' ? connectsStore.new('kindle') : connectsStore.get(props.id)) as KindleConnect);
+const connectid = route.params.connectid as string;
+const connect: Ref<KindleConnect> = ref((props.mode === 'add' ? connects.new('kindle') : connects.clone(connectid)) as KindleConnect);
 const changed = computed<boolean>(() => {
   return (
-    !connectsStore.has(props.id) ||
-    (connect.value.email != (connectsStore.get(props.id) as KindleConnect).email) ||
-    (connect.value.password != (connectsStore.get(props.id) as KindleConnect).password)
+    props.mode === 'add' ?
+      (!connects.has(connect.value.id))
+      :
+      (connect.value.extends.email != (connects.get(connect.value.id) as KindleConnect).extends.email) ||
+      (connect.value.extends.password != (connects.get(connect.value.id) as KindleConnect).extends.password)
   );
+})
+const collectable = computed<boolean>(() => {
+  return connect.value.state.test !== 'ok';
 })
 
 // --------------------------------
@@ -94,29 +105,28 @@ const changed = computed<boolean>(() => {
 
 function test() {
   connect.value.state.test = 'testing';
-  connectsStore.test(connect.value).then(() => {
+  connects.test(connect.value).then(() => {
     connect.value.state.test = 'ok';
   }).catch(reason => {
     console.log(reason);
     connect.value.state.test = 'error';
   })
-};
+}
 
 function save() {
   switch (props.mode) {
     case 'add':
-      connectsStore.add(connect.value);
-      emit('hideDialog');
+      connects.add(connect.value);
       break;
     case 'edit':
-      connectsStore.update(connect.value);
+      connects.update(connect.value);
       break;
   }
-};
+}
 
 function collect() {
   connect.value.state.collect = 'collecting';
-  connectsStore.collectKindleBooks(connect.value).then((count: number) => {
+  connects.collectKindleBooks(connect.value).then((count: number) => {
     connect.value.bookCount = count;
     connect.value.state.collect = 'ok';
     save();
@@ -124,14 +134,9 @@ function collect() {
     console.log(reason);
     connect.value.state.collect = 'error';
   })
-};
-
-function back() {
-  emit('back');
 }
 
 async function del() {
-  await connectsStore.del(connect.value.id);
-  emit('hideDialog');
-};
+  await connects.del(connect.value.id);
+}
 </script>

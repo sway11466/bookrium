@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { useConnectsStore } from 'src/stores/Connects';
 import { ConnectType } from 'src/stores/ConnectTypes';
 import KindleListItem from 'src/components/connects/KindleListItem.vue';
@@ -21,19 +22,14 @@ import PDFLocalStorageListItem from 'src/components/connects/PDFLocalStorageList
 // --------------------------------
 //  store init
 // --------------------------------
+const router = useRouter();
 const connects = useConnectsStore();
-
-// --------------------------------
-//  emit
-// --------------------------------
-const emit = defineEmits([
-  'showEditDialog',  // show edit dialog via parent component(ContentsPage).
-]);
 
 // --------------------------------
 //  item actions
 // --------------------------------
 function showEditDialog(id:string, type:ConnectType) {
-  emit('showEditDialog', id, type);
+  // emit('showEditDialog', id, type);
+  router.push(`/connects/${id}`);
 }
 </script>
