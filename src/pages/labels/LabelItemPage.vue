@@ -9,5 +9,5 @@ import { useRoute } from 'vue-router';
 import LabelEditor from 'src/components/labels/LabelEditor.vue';
 const route = useRoute();
 const mode = route.path.endsWith('/new') ? 'add' : 'edit';
-const id = route.params.labelid as string;
+const id = (mode === 'add') ? '' : route.params.labelid as string;
 </script>
