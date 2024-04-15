@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { PropType, Ref, ref } from 'vue';
-import { SortableBook } from './BookSorterTypes';
+import { SortableBook } from './BookReorderTypes';
 
 const props = defineProps({
   books: {
@@ -89,3 +89,4 @@ function drop(event: DragEvent, to: SortableBook) {
   emit('shift', from, to); // todo: Reconsider whether a double update is needed
 }
 </script>
+./BookReorderTypes

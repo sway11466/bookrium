@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <BookSorter :books="createSortableBook()" @shift="shift" />
+    <BookReorder :books="createSortableBook()" @shift="shift" />
     <q-page-sticky position="bottom" :offset="[0, 18]">
       <q-btn @click="complete" unelevated rounded no-caps color="primary" class="q-px-xl">
         <q-icon name="mdi-check-outline" />
@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import BookSorter from 'src/components/books/BookSorter.vue';
-import { SortableBook } from 'src/components/books/BookSorterTypes';
+import BookReorder from 'src/components/books/BookReorder.vue';
+import { SortableBook } from 'src/components/books/BookReorderTypes';
 import { useBooksStore } from 'src/stores/Books';
 import { useShelvesStore } from 'src/stores/Shelves';
 const route = useRoute();
@@ -40,3 +40,4 @@ function complete() {
   router.go(-1);
 }
 </script>
+src/components/books/BookReorderTypes
