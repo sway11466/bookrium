@@ -5,13 +5,23 @@ const routes: RouteRecordRaw[] = [
     path: '/home',
     alias: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/HomePage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/DefaultHeader.vue'),
+        page:  () => import('pages/HomePage.vue'),
+    }}],
   },
 
   {
     path: '/books',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/books/BooksCollectionPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/books/BookCollectionHeader.vue'),
+        page: () => import('pages/books/BookCollectionPage.vue'),
+    }}]
   },
 
   {
@@ -28,7 +38,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/shelves',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/shelves/ShelfCollectionsPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/DefaultHeader.vue'),
+        page: () => import('pages/shelves/ShelfCollectionsPage.vue'),
+    }}],
   },
 
   {
@@ -76,7 +91,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/labels',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/labels/LabelCollectionPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/DefaultHeader.vue'),
+        page: () => import('pages/labels/LabelCollectionPage.vue'),
+    }}],
   },
 
   {
@@ -104,7 +124,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/connects',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/connects/ConnectsPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/DefaultHeader.vue'),
+        page: () => import('pages/connects/ConnectsPage.vue'),
+    }}],
   },
 
   {
@@ -113,14 +138,14 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('src/pages/connects/ConnectEditHeader.vue'),
-        page: () => import('src/pages/connects/ConnectEditPage.vue') 
+        header: () => import('pages/connects/ConnectEditHeader.vue'),
+        page: () => import('pages/connects/ConnectEditPage.vue') 
       }},{
         path: 'kindle',
         alias: ['pdfls'],
         components: {
-          header: () => import('src/pages/connects/ConnectEditHeader.vue'),
-          page: () => import('src/pages/connects/ConnectEditPage.vue') 
+          header: () => import('pages/connects/ConnectEditHeader.vue'),
+          page: () => import('pages/connects/ConnectEditPage.vue') 
       }}],
   },
 
@@ -130,15 +155,20 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('src/pages/connects/ConnectEditHeader.vue'),
-        page: () => import('src/pages/connects/ConnectEditPage.vue') 
+        header: () => import('pages/connects/ConnectEditHeader.vue'),
+        page: () => import('pages/connects/ConnectEditPage.vue') 
     }}]
   },
 
   {
     path: '/settings',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
+    children: [{
+      path: '',
+      components: {
+        header: () => import('pages/DefaultHeader.vue'),
+        page: () => import('pages/SettingsPage.vue')
+    }}],
   },
 
   // Always leave this as last one,
