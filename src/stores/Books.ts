@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { BookStore, Book, KindleBook, PDFBook, BookType, BookTypeDef } from 'src/stores/BookTypes';
+import { BookStore, Book, KindleBook, PDFBook, BookType, BookSortType, BookTypeDef } from 'src/stores/BookTypes';
 import { useSettingsStore } from 'src/stores/Settings';
 import { ShowAppType } from 'src/stores/SettingTypes';
 import { Queue } from 'src/components/Queue';
@@ -127,6 +127,37 @@ export const useBooksStore = defineStore('books', {
     // Todo: Remove duplicates.
     async createLatestIndex(books: BookTypeDef[]) {
       books.forEach(book=> this.index.latest.push(book));
+    },
+
+    sort(type: BookSortType): Book[] {
+      switch (type) {
+        case 'author_ascending':
+          return this.list.sort((a, b) => {
+            if (a.author < b.author) { return -1; }
+            if (a.author > b.author) { return 1; }
+            return 0;
+          });
+        case 'author_descending':
+          return this.list.sort((a, b) => {
+            if (a.author > b.author) { return -1; }
+            if (a.author < b.author) { return 1; }
+            return 0;
+          });
+        case 'title_ascending':
+          return this.list.sort((a, b) => {
+            if (a.title < b.title) { return -1; }
+            if (a.title > b.title) { return 1; }
+            return 0;
+          });
+        case 'title_descending':
+          return this.list.sort((a, b) => {
+            if (a.title > b.title) { return -1; }
+            if (a.title < b.title) { return 1; }
+            return 0;
+          });
+        default:
+          return this.list;
+      }
     },
   }
 });

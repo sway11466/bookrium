@@ -64,4 +64,3 @@ function del() {
   // todo delete
 }
 </script>
-src/components/books/BookCollectionsOption

@@ -40,4 +40,3 @@ function complete() {
   router.go(-1);
 }
 </script>
-src/components/books/BookReorderTypes

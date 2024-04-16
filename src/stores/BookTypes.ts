@@ -71,6 +71,8 @@ export type PDFBook = Book & {
   extends: PDFExtends
 };
 
+export type BookSortType = 'none' | 'title_ascending' | 'title_descending' | 'author_ascending' | 'author_descending';
+
 /**
  * 
  */

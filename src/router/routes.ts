@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/books/BookCollectionHeader.vue'),
+        header: () => import('src/header/books/BookCollectionHeader.vue'),
         page: () => import('pages/books/BookCollectionPage.vue'),
     }}]
   },
