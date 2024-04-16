@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/DefaultHeader.vue'),
+        header: () => import('headers/DefaultHeader.vue'),
         page:  () => import('pages/HomePage.vue'),
     }}],
   },
@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('src/header/books/BookCollectionHeader.vue'),
+        header: () => import('headers/books/BookCollectionHeader.vue'),
         page: () => import('pages/books/BookCollectionPage.vue'),
     }}]
   },
@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '', 
       components: {
-        header: () => import('pages/books/BookDetailHeader.vue'),
+        header: () => import('headers/books/BookDetailHeader.vue'),
         page: () => import('pages/books/BookDetailPage.vue'),
     }}],
   },
@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/DefaultHeader.vue'),
+        header: () => import('headers/DefaultHeader.vue'),
         page: () => import('pages/shelves/ShelfCollectionsPage.vue'),
     }}],
   },
@@ -52,7 +52,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/shelves/ShelfEditHeader.vue'),
+        header: () => import('headers/shelves/ShelfEditHeader.vue'),
         page: () => import('pages/shelves/ShelfEditPage.vue'),
     }}],
   },
@@ -63,27 +63,27 @@ const routes: RouteRecordRaw[] = [
     children: [{
         path: '',
         components: {
-          header: () => import('pages/shelves/ShelfViewHeader.vue'),
+          header: () => import('headers/shelves/ShelfViewHeader.vue'),
           page: () => import('pages/shelves/ShelfViewPage.vue'),
       }},{
         path: 'edit',
         components: {
-          header: () => import('pages/shelves/ShelfEditHeader.vue'),
+          header: () => import('headers/shelves/ShelfEditHeader.vue'),
           page: () => import('pages/shelves/ShelfEditPage.vue')
       }},{
         path: 'addBook',
         components: {
-          header: () => import('pages/shelves/BookSelectorHeader.vue'),
+          header: () => import('headers/shelves/BookSelectorHeader.vue'),
           page: () => import('pages/shelves/BookSelectorPage.vue'),
       }},{
         path: 'sortBook',
         components: {
-          header: () => import('pages/shelves/BookReorderHeader.vue'),
+          header: () => import('headers/shelves/BookReorderHeader.vue'),
           page: () => import('pages/shelves/BookReorderPage.vue'),
       }},{
         path: 'delBook',
         components: {
-          header: () => import('pages/shelves/BookSelectorHeader.vue'),
+          header: () => import('headers/shelves/BookSelectorHeader.vue'),
           page: () => import('pages/shelves/BookSelectorPage.vue'),
       }}],
   },
@@ -94,7 +94,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/DefaultHeader.vue'),
+        header: () => import('headers/DefaultHeader.vue'),
         page: () => import('pages/labels/LabelCollectionPage.vue'),
     }}],
   },
@@ -105,7 +105,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/labels/LabelItemHeader.vue'),
+        header: () => import('headers/labels/LabelItemHeader.vue'),
         page: () => import('pages/labels/LabelItemPage.vue'),
     }}],
   },
@@ -116,7 +116,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/labels/LabelItemHeader.vue'),
+        header: () => import('headers/labels/LabelItemHeader.vue'),
         page: () => import('pages/labels/LabelItemPage.vue'),
     }}],
   },
@@ -127,7 +127,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/DefaultHeader.vue'),
+        header: () => import('headers/DefaultHeader.vue'),
         page: () => import('pages/connects/ConnectsPage.vue'),
     }}],
   },
@@ -138,13 +138,13 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/connects/ConnectEditHeader.vue'),
+        header: () => import('headers/connects/ConnectEditHeader.vue'),
         page: () => import('pages/connects/ConnectEditPage.vue') 
       }},{
         path: 'kindle',
         alias: ['pdfls'],
         components: {
-          header: () => import('pages/connects/ConnectEditHeader.vue'),
+          header: () => import('headers/connects/ConnectEditHeader.vue'),
           page: () => import('pages/connects/ConnectEditPage.vue') 
       }}],
   },
@@ -155,7 +155,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/connects/ConnectEditHeader.vue'),
+        header: () => import('headers/connects/ConnectEditHeader.vue'),
         page: () => import('pages/connects/ConnectEditPage.vue') 
     }}]
   },
@@ -166,7 +166,7 @@ const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       components: {
-        header: () => import('pages/DefaultHeader.vue'),
+        header: () => import('headers/DefaultHeader.vue'),
         page: () => import('pages/SettingsPage.vue')
     }}],
   },
