@@ -14,6 +14,9 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import ConnectCollections from 'src/components/connects/ConnectCollections.vue';
+import { useConnectsStore } from 'src/stores/Connects';
+const connects = useConnectsStore();
+connects.init();
 const router = useRouter();
 function add() {
   router.push('/connects/new');
