@@ -128,7 +128,7 @@ const routes: RouteRecordRaw[] = [
       path: '',
       components: {
         header: () => import('headers/DefaultHeader.vue'),
-        page: () => import('pages/connects/ConnectsPage.vue'),
+        page: () => import('pages/connects/ConnectCollectionsPage.vue'),
     }}],
   },
 

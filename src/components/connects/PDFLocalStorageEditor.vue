@@ -7,19 +7,18 @@
     </div>
 
     <div class="q-ma-md">
-      amazon user name
-      <q-input dense v-model="connect.extends.email" />
-    </div>
-
-    <div class="q-ma-md">
-      amazon password
-      <q-input dense v-model="connect.extends.password" />
+      path
+      <q-input dense v-model="connect.extends.path" autofocus>
+        <template v-slot:append>
+          <q-btn icon="mdi-folder-settings" @click="selectDataFolderPath" round unelevated />
+        </template>
+      </q-input>
     </div>
 
     <div class="q-mt-xl" />
 
     <div class="q-ma-md text-center">
-      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" color="primary" unelevated no-caps />
+      <q-btn label="Connection Test" @click="test" icon="mdi-account-check-outline" padding="xs lg" color="primary" unelevated no-caps />
       <div v-if="connect.state.test === 'none'" style="height:2em"></div>
       <div v-if="connect.state.test === 'testing'"><q-spinner color="primary" size="2em" /> Connection Testing...</div>
       <div v-if="connect.state.test === 'ok'"><q-icon name="mdi-check-circle-outline" color="green" size="2em" /> Connection Success.</div>
@@ -40,14 +39,13 @@
       <div v-if="connect.state.collect === 'error'"><q-icon name="mdi-alert-circle-outline" color="red" size="2em" /> Collect Failed.</div>
     </div>
 
-    <div>
+    <div class="q-ma-md text-center">
       <template v-if="mode === 'edit'">
-        <div class="q-pt-lg"/>
         <q-btn icon="delete" label="Delete Connection Setting" @click="del" padding="xs lg" color="red" outline no-caps />
       </template>
     </div>
 
-  </div> 
+  </div>
 </template>
 
 <style scoped>
@@ -60,7 +58,8 @@
 import { ref, Ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConnectsStore } from 'src/stores/Connects';
-import { KindleConnect } from 'src/stores/ConnectTypes';
+import { useSettingsStore } from 'src/stores/Settings';
+import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
 
 // --------------------------------
 //  prop
@@ -80,19 +79,19 @@ const props = defineProps({
 // --------------------------------
 const route = useRoute();
 const connects = useConnectsStore();
+const settings = useSettingsStore();
 
 // --------------------------------
 //  edit control
 // --------------------------------
 const connectid = route.params.connectid as string;
-const connect: Ref<KindleConnect> = ref((props.mode === 'add' ? connects.new('kindle') : connects.clone(connectid)) as KindleConnect);
+const connect: Ref<PDFLocalStorageConnect> = ref((props.mode === 'add' ? connects.new('pdfls') : connects.clone(connectid)) as PDFLocalStorageConnect);
 const changed = computed<boolean>(() => {
   return (
     props.mode === 'add' ?
       (!connects.has(connect.value.id))
       :
-      (connect.value.extends.email != (connects.get(connect.value.id) as KindleConnect).extends.email) ||
-      (connect.value.extends.password != (connects.get(connect.value.id) as KindleConnect).extends.password)
+      (connect.value.extends.path != (connects.get(connect.value.id) as PDFLocalStorageConnect).extends.path)
   );
 })
 const collectable = computed<boolean>(() => {
@@ -102,6 +101,11 @@ const collectable = computed<boolean>(() => {
 // --------------------------------
 //  actions
 // --------------------------------
+async function selectDataFolderPath () {
+  const { canceled, filePaths } = await settings.selectFolder();
+  if (canceled) { return }
+  connect.value.extends.path = filePaths[0];
+};
 
 function test() {
   connect.value.state.test = 'testing';
@@ -110,8 +114,8 @@ function test() {
   }).catch(reason => {
     console.log(reason);
     connect.value.state.test = 'error';
-  })
-}
+  });
+};
 
 function save() {
   switch (props.mode) {
@@ -122,11 +126,11 @@ function save() {
       connects.update(connect.value);
       break;
   }
-}
+};
 
-function collect() {
+async function collect() {
   connect.value.state.collect = 'collecting';
-  connects.collectKindleBooks(connect.value).then((count: number) => {
+  connects.collectPDFLocalStorageConnect(connect.value).then((count: number) => {
     connect.value.bookCount = count;
     connect.value.state.collect = 'ok';
     save();
@@ -134,9 +138,9 @@ function collect() {
     console.log(reason);
     connect.value.state.collect = 'error';
   })
-}
+};
 
 async function del() {
   await connects.del(connect.value.id);
-}
+};
 </script>

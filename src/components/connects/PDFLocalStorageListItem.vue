@@ -1,5 +1,5 @@
 <template>
-  <q-item @click="showEditDialog(connect.id)" clickable v-ripple>
+  <q-item @click="edit(connect.id)" clickable v-ripple>
     <q-item-section avatar>
       <q-img src="pdf-47x47.png" width="48px" />
     </q-item-section>
@@ -22,17 +22,10 @@
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useConnectsStore } from 'src/stores/Connects';
 import { PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
 
-// --------------------------------
-//  store init
-// --------------------------------
-const store = useConnectsStore();
-
-// --------------------------------
-//  prop
-// --------------------------------
 const props = defineProps({
   id: {
     type: String,
@@ -40,22 +33,11 @@ const props = defineProps({
   }
 });
 
-// --------------------------------
-//  emit
-// --------------------------------
-const emit = defineEmits([
-  'showEditDialog',  // show edit dialog via parent component(ContentsPage).
-]);
+const connects = useConnectsStore();
+const connect: Ref<PDFLocalStorageConnect> = ref(connects.get(props.id) as PDFLocalStorageConnect);
 
-// --------------------------------
-//  local var
-// --------------------------------
-const connect: Ref<PDFLocalStorageConnect> = ref(store.get(props.id) as PDFLocalStorageConnect);
-
-// --------------------------------
-//  item actions
-// --------------------------------
-function showEditDialog(id: string) {
-  emit('showEditDialog', id, 'pdfls');
+const router = useRouter();
+function edit(id: string) {
+  router.push(`/connects/${id}`);
 }
 </script>

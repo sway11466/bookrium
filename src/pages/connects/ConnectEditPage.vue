@@ -1,8 +1,8 @@
 <template>
   <q-page class="col">
-    <NewConnectSelector v-if="$route.path.endsWith('/new')" />
-    <KindleSetting v-if="showKindle" :mode="mode" />
-    <PDFLocalStorageSetting v-if="showPdfls" :mode="mode" />
+    <NewConnectSelector v-if="showSelector" />
+    <KindleEditor v-if="showKindle" :mode="mode" />
+    <PDFLocalStorageEditor v-if="showPdfls" :mode="mode" />
   </q-page>
 </template>
 
@@ -10,12 +10,16 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import NewConnectSelector from 'src/components/connects/NewConnectSelector.vue';
-import KindleSetting from 'src/components/connects/KindleSetting.vue';
-import PDFLocalStorageSetting from 'src/components/connects/PDFLocalStorageSetting.vue';
+import KindleEditor from 'src/components/connects/KindleEditor.vue';
+import PDFLocalStorageEditor from 'src/components/connects/PDFLocalStorageEditor.vue';
 import { useConnectsStore } from 'src/stores/Connects';
 const route = useRoute();
 const connects = useConnectsStore();
 const mode = route.path.endsWith('/new') ? 'add' : 'edit';
+
+const showSelector = computed<boolean>(() => {
+  return route.path.endsWith('/new');
+})
 
 const showKindle = computed<boolean>(() => {
   if (route.path.includes('/new')) { return route.path.endsWith('/kindle'); }
