@@ -66,14 +66,9 @@ export const useShelvesStore = defineStore('shelves', {
     /**
      * create new Shelf from already Shelf. not store.
      */
-    // clone(shelf: Shelf): Shelf {
-    //   return {
-    //     id: uuid(),
-    //     name: shelf.name,
-    //     description: shelf.description,
-    //     books: shelf.books.concat([]),
-    //   }
-    // },
+    clone(shelf: Shelf): Shelf {
+      return deproxyShelf(shelf);
+    },
 
     /**
      * check to see if it exists on store.
@@ -100,7 +95,9 @@ export const useShelvesStore = defineStore('shelves', {
     async add(shelf: Shelf) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
+      // update store
       this.shelves.set(shelf.id, shelf);
+      // update file
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
       const key = CONFIG_SHELVES_KEY + '.' + shelf.id;
       const value = deproxyShelf(shelf);
@@ -114,7 +111,8 @@ export const useShelvesStore = defineStore('shelves', {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
       // update store
-      //   No need. Because it has already been updated.
+      this.shelves.set(shelf.id, shelf);
+      // update file
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
       const key = CONFIG_SHELVES_KEY + '.' + shelf.id;
       const value = deproxyShelf(shelf);
@@ -128,7 +126,9 @@ export const useShelvesStore = defineStore('shelves', {
     async del(id: string) {
       const apiManager = useApiManager();
       const settingsStore = useSettingsStore();
+      // update store
       this.shelves.delete(id);
+      // update file
       const path = apiManager.path.join(settingsStore.storage.shelvesFolderPath, 'shelves.json');
       const key = CONFIG_SHELVES_KEY + '.' + id;
       await apiManager.configApi.deleteConfig(path, key);

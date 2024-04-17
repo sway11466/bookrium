@@ -74,7 +74,7 @@ const routes: RouteRecordRaw[] = [
         path: 'addBook',
         components: {
           header: () => import('headers/shelves/BookSelectorHeader.vue'),
-          page: () => import('pages/shelves/BookSelectorPage.vue'),
+          page: () => import('pages/shelves/ShelfEditPage.vue'),
       }},{
         path: 'sortBook',
         components: {
@@ -84,7 +84,7 @@ const routes: RouteRecordRaw[] = [
         path: 'delBook',
         components: {
           header: () => import('headers/shelves/BookSelectorHeader.vue'),
-          page: () => import('pages/shelves/BookSelectorPage.vue'),
+          page: () => import('pages/shelves/ShelfEditPage.vue'),
       }}],
   },
 

@@ -46,14 +46,6 @@ import { ref, Ref } from 'vue';
 import { useShelvesStore } from 'src/stores/Shelves';
 import { Shelf } from 'src/stores/ShelvesTypes';
 
-// --------------------------------
-//  shelf store init
-// --------------------------------
-const store = useShelvesStore();
-
-// --------------------------------
-//  prop
-// --------------------------------
 const props = defineProps({
   mode: {
     type: String,
@@ -69,10 +61,8 @@ const props = defineProps({
   }
 });
 
-// --------------------------------
-//  shelf
-// --------------------------------
-const shelf: Ref<Shelf> = ref(props.mode === 'add' ? store.newShelf(): store.get(props.id));
+const store = useShelvesStore();
+const shelf: Ref<Shelf> = ref(props.mode === 'add' ? store.newShelf(): store.clone(store.get(props.id)));
 
 async function add() {
   await store.add(shelf.value);
