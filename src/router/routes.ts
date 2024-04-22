@@ -79,7 +79,7 @@ const routes: RouteRecordRaw[] = [
         path: 'sortBook',
         components: {
           header: () => import('headers/shelves/BookReorderHeader.vue'),
-          page: () => import('pages/shelves/BookReorderPage.vue'),
+          page: () => import('pages/shelves/ShelfEditPage.vue'),
       }},{
         path: 'delBook',
         components: {
