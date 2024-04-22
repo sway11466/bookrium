@@ -110,6 +110,6 @@ function complete() {
       break;
   }
   shelves.update(shelf);
-  router.go(-1)
+  router.go(-1);
 }
 </script>

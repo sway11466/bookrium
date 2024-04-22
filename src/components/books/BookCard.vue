@@ -2,7 +2,7 @@
   <q-card @click="show" flat bordered class="">
 
     <q-card-section>
-      <q-img :src="props.book.artwork" fit="contain" no-spinner />
+      <q-img :src="props.book.artwork" error-src="image-cuteui-64x64.svg" fit="contain" no-spinner />
     </q-card-section>
   
     <q-card-section class="q-pt-none q-mb-sm text-caption title">
