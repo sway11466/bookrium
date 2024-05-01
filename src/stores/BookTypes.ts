@@ -22,7 +22,7 @@ export type BookStore = {
  * Book Common attributes.
  * 
  *  id         -> uuid
- *  type       -> see @ContentType
+ *  type       -> see @BookType
  *  connectId  -> source connector id
  *  labels     -> label id array
  */
@@ -34,7 +34,7 @@ export type Book = {
   author: string,
   artwork: string,
   labels: string[],
-  extends: KindleExtends | PDFExtends,
+  extends: KindleExtends | PDFExtends | ImgDirExtends,
 }
 
 /**
@@ -71,10 +71,29 @@ export type PDFBook = Book & {
   extends: PDFExtends
 };
 
-export type BookSortType = 'none' | 'title_ascending' | 'title_descending' | 'author_ascending' | 'author_descending';
+/**
+ * Image Directory Book attributes.
+ * 
+ */
+export type ImgDirExtends = {
+  hash: string,
+  path: string,
+  title: string,
+  author: string,
+  artworkPath: string,
+  readingPath: string,
+};
+export type ImgDirBook = Book & {
+  extends: ImgDirExtends
+};
 
 /**
  * 
  */
-export type BookType = 'kindle' | 'pdf';
-export type BookTypeDef = KindleBook | PDFBook;
+export type BookType = 'kindle' | 'pdf' | 'imgdir';
+export type BookTypeDef = KindleBook | PDFBook | ImgDirBook;
+
+/**
+ * 
+ */
+export type BookSortType = 'none' | 'title_ascending' | 'title_descending' | 'author_ascending' | 'author_descending';

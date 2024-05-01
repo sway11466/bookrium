@@ -35,6 +35,18 @@
             </q-item-label>
           </q-item-section>
         </q-item>
+        <q-item>
+          <q-item-section>
+            <q-item-label>
+              <q-avatar size="md"><q-img src="img-folder.svg" width="48px" /></q-avatar>
+              Image Folder Reading App
+            </q-item-label>
+            <q-item-label>
+              <q-radio v-model="imgdirShowapp" val="builtin" label="built-in browser (Chrome)" class="q-pl-lg" />
+              <q-radio v-model="imgdirShowapp" val="os" label="os default app" class="q-pl-lg" />
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-expansion-item>
     <q-separator />
@@ -122,6 +134,7 @@ const store = useSettingsStore();
 // --------------------------------
 const kindleShowapp: Ref<ShowAppType> = ref('builtin');
 const pdfShowapp: Ref<ShowAppType> = ref('builtin');
+const imgdirShowapp: Ref<ShowAppType> = ref('builtin');
 const settingFilePath: Ref<string> = ref('');
 const dataFolderPath: Ref<string> = ref('');
 
@@ -132,6 +145,7 @@ onMounted(() => {
 function load() {
   kindleShowapp.value = store.showapp.kindle;
   pdfShowapp.value = store.showapp.pdf;
+  imgdirShowapp.value = store.showapp.imgdir;
   settingFilePath.value = store.settingPath;
   dataFolderPath.value = store.storage.dataFolderPath;
 };
@@ -140,6 +154,7 @@ const changed = computed(() => {
   return (
     (kindleShowapp.value != store.showapp.kindle) ||
     (pdfShowapp.value != store.showapp.pdf) ||
+    (imgdirShowapp.value != store.showapp.imgdir) ||
     (settingFilePath.value != store.settingPath) ||
     (dataFolderPath.value != store.storage.dataFolderPath)
   );
@@ -161,6 +176,7 @@ function save() {
     showapp: {
       kindle: kindleShowapp.value,
       pdf: pdfShowapp.value,
+      imgdir: imgdirShowapp.value,
     }
   });
 };

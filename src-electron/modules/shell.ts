@@ -8,7 +8,7 @@ import log from 'electron-log';
 export default {
 
   openElectron: async (event: IpcMainInvokeEvent, url: string, option: object): Promise<void> => {
-    log.info('call openElectron.');
+    log.info('[shell.ts] openElectron.');
     log.debug(url);
     log.debug(option);
     const window = new BrowserWindow({ width: 800, height: 600 });
@@ -17,8 +17,9 @@ export default {
   },
 
   openExternal: async (event: IpcMainInvokeEvent, url: string, option: object): Promise<void> => {
-    log.info('call openExternal.');
-    return shell.openExternal(url, option);
+    log.info(`[shell.ts] openExternal. url=${url} option=${option}`);
+    shell.openPath(url);
+    // return shell.openExternal(url, option);
   },
 
 }

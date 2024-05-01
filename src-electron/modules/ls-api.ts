@@ -12,4 +12,5 @@ export type ReaddirSyncOption = {
   recursive?: true | false | undefined | null,
   // Extends options
   filter?: RegExp,
+  type?: 'file' | 'dir' | 'all',
 }

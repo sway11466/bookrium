@@ -142,7 +142,7 @@ const routes: RouteRecordRaw[] = [
         page: () => import('pages/connects/ConnectEditPage.vue') 
       }},{
         path: 'kindle',
-        alias: ['pdfls'],
+        alias: ['pdfls', 'imgdirls'],
         components: {
           header: () => import('headers/connects/ConnectEditHeader.vue'),
           page: () => import('pages/connects/ConnectEditPage.vue') 

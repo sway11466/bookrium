@@ -20,7 +20,7 @@ export type Connect = {
   }
   extends: KindleExtends | PDFLocalStorageExtends
 };
-export type ConnectType = 'kindle' | 'pdfls';
+export type ConnectType = 'kindle' | 'pdfls' | 'imgdirls';
 export type ConnectStateTest = 'none' | 'testing' | 'ok' | 'error';
 export type ConnectStateCollect = 'none' | 'collecting' | 'ok' | 'error';
 
@@ -36,11 +36,21 @@ export type KindleConnect = Connect & {
 };
 
 /**
- * LocalStorage Connect Setting.
+ * PDF LocalStorage Connect Setting.
  */
 export type PDFLocalStorageExtends = {
   path: string
 };
 export type PDFLocalStorageConnect = Connect & {
   extends: PDFLocalStorageExtends
+};
+
+/**
+ * Image Folder LocalStorage Connect Setting.
+ */
+export type ImgDirLocalStorageExtends = {
+  path: string
+};
+export type ImgDirLocalStorageConnect = Connect & {
+  extends: ImgDirLocalStorageExtends
 };

@@ -63,6 +63,7 @@ export const useSettingsStore = defineStore('settings', {
         showapp: {
           kindle: 'builtin',
           pdf: 'builtin',
+          imgdir: 'builtin',
         },
         platform: await apiManager.settingApi.getPlatform() as PlatformType,
         version: await apiManager.settingApi.getAppVersion() as string,
@@ -70,9 +71,12 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     update(items: SettingUpdatable): boolean {
-      this.showapp.kindle = items.showapp.kindle
-      this.showapp.pdf = items.showapp.pdf
       this.settingPath = items.settingPath;
+      this.showapp = {
+        kindle: items.showapp.kindle,
+        pdf: items.showapp.pdf,
+        imgdir: items.showapp.imgdir,
+      };
       this.storage = {
         dataFolderPath: items.storage.dataFolderPath,
         artworkFolderPath: items.storage.dataFolderPath + '\\artworks',
@@ -80,7 +84,7 @@ export const useSettingsStore = defineStore('settings', {
         cacheFolderPath: items.storage.dataFolderPath + '\\cache',
         shelvesFolderPath: items.storage.dataFolderPath + '\\shelves',
         labelFolderPath: items.storage.dataFolderPath + '\\labels',
-    };
+      };
       this.save();
       return true;
     },
@@ -99,6 +103,7 @@ export const useSettingsStore = defineStore('settings', {
         showapp: {
           kindle: this.showapp.kindle,
           pdf: this.showapp.pdf,
+          imgdir: this.showapp.imgdir,
         },
         platform: this.platform,
         version: this.version,

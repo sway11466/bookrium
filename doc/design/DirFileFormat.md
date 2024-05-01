@@ -5,26 +5,31 @@
 ./
  +-- artwork/
  |   |
- |   +-- pdf/
- |       |
- |       +-- [connector.id]/[book.id].jpg
+ |   +-- [connector.id]/
+ |        |
+ |        +-- [book.id].png
  |
  +-- books/
  |   |
- |   +-- pdf/
- |   |   |
- |   |   +-- [connector.id]/
- |   |
- |   +-- books.json
+ |   +-- [connector.id].books.json
  |
  +-- cache/
  |
- +-- shelves/
+ +-- connector/
+ |   | 
+ |   +-- connecotrs.json
  |
  +-- labels/
- |   +-- label.json
+ |   |
+ |   +-- labels.json
+ |   |
+ |   +-- [label.id].books.json
  |
  +-- shelves/
+ |   |
+ |   +-- shelves.json
+ |   |
+ |   +-- [shelf.id].books.json
  |
  +-- booklium.json
 ```

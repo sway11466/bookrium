@@ -30,8 +30,8 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 import { SettingStore } from 'src/stores/SettingTypes';
-import { KindleConnect, PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
-import { PDFBook } from 'src/stores/BookTypes';
+import { ImgDirLocalStorageConnect, KindleConnect, PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
+import { ImgDirBook, PDFBook } from 'src/stores/BookTypes';
 
 contextBridge.exposeInMainWorld('shellApi', {
   // src-electron/modules/shell
@@ -61,6 +61,7 @@ contextBridge.exposeInMainWorld('settingApi', {
   getAppVersion: async () :Promise<string> => await ipcRenderer.invoke('getAppVersion'),
 })
 
+// todo: Change Return Type to Book[]?
 contextBridge.exposeInMainWorld('connectApi', {
   // src-electron/modules/connects/kindle
   testKindle: async (email: string, password: string) :Promise<boolean> => await ipcRenderer.invoke('testKindle', email, password),
@@ -68,4 +69,8 @@ contextBridge.exposeInMainWorld('connectApi', {
   // src-electron/modules/connects/pdfls
   testPdfLs: async (testPath: string) :Promise<boolean> => await ipcRenderer.invoke('testPdfLs', testPath),
   collectPdfLs: async (connect: PDFLocalStorageConnect, setting: SettingStore) :Promise<PDFBook[]> => await ipcRenderer.invoke('collectPdfLs', connect, setting),
+  // src-electron/modules/connects/imgdirls
+  testImgDirLs: async (path: string) :Promise<boolean> => await ipcRenderer.invoke('testImgDirLs', path),
+  collectImgDirLs: async (connect: ImgDirLocalStorageConnect, setting: SettingStore) :Promise<ImgDirBook[]> => await ipcRenderer.invoke('collectImgDirLs', connect, setting)
+
 })

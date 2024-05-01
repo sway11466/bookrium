@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { useApiManager } from 'src/stores/ApiManager';
 import { useBooksStore  } from 'src/stores/Books';
 import { useSettingsStore } from 'src/stores/Settings';
-import { ConnectStore, ConnectType, Connect, KindleConnect, PDFLocalStorageConnect } from 'src/stores/ConnectTypes';
-import { KindleBook, PDFBook } from 'src/stores/BookTypes';
+import { ConnectStore, ConnectType, Connect, KindleConnect, PDFLocalStorageConnect, ImgDirLocalStorageConnect } from 'src/stores/ConnectTypes';
+import { KindleBook, PDFBook, ImgDirBook } from 'src/stores/BookTypes';
 
 const CONFIG_ROOT_KEY = 'bookrium';
 const CONFIG_CONNECTOR_KEY = CONFIG_ROOT_KEY + '.connectors';
@@ -46,6 +46,7 @@ export const useConnectsStore = defineStore('connects', {
       switch (type) {
         case 'kindle': return newKindleConnect();
         case 'pdfls': return newPDFLocalStorageConnect();
+        case 'imgdirls': return newImgDirLocalStorageConnect();
       }
     },
 
@@ -80,6 +81,7 @@ export const useConnectsStore = defineStore('connects', {
       switch (connect.type) {
         case 'kindle': value = deproxyKindleConnect(connect as KindleConnect); break;
         case 'pdfls': value = deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect); break;
+        case 'imgdirls': value = deproxyImgDirLocalStorageConnect(connect as ImgDirLocalStorageConnect); break;
       }
       const key = CONFIG_CONNECTOR_KEY + '.' + connect.id;
       apiManager.configApi.saveConfig(settingsStore.settingPath, key, value);
@@ -105,6 +107,7 @@ export const useConnectsStore = defineStore('connects', {
       switch (connect.type) {
         case 'kindle': return deproxyKindleConnect(connect as KindleConnect);
         case 'pdfls': return deproxyPDFLocalStorageConnect(connect as PDFLocalStorageConnect);
+        case 'imgdirls': return deproxyImgDirLocalStorageConnect(connect as ImgDirLocalStorageConnect);
       }
     },
 
@@ -114,6 +117,7 @@ export const useConnectsStore = defineStore('connects', {
       switch (connect.type) {
         case 'kindle': return await apiManager.connectApi.testKindle((connect as KindleConnect).extends.email, (connect as KindleConnect).extends.password);
         case 'pdfls': return await apiManager.connectApi.testPdfLs((connect as PDFLocalStorageConnect).extends.path);
+        case  'imgdirls': return await apiManager.connectApi.testImgDirLs((connect as ImgDirLocalStorageConnect).extends.path);
       }
     },
 
@@ -130,11 +134,10 @@ export const useConnectsStore = defineStore('connects', {
     },
 
     // --------------------------------
-    //  PDFLocalStorage functions
+    //  PDF LocalStorage functions
     // --------------------------------
 
     async collectPDFLocalStorageConnect(connect: PDFLocalStorageConnect): Promise<number> {
-      // collect books
       const apiManager = useApiManager();
       const settingStore = useSettingsStore();
       const books = await apiManager.connectApi.collectPdfLs(deproxyPDFLocalStorageConnect(connect), settingStore.deproxy()) as PDFBook[];
@@ -142,6 +145,20 @@ export const useConnectsStore = defineStore('connects', {
       booksStore.add(books);
       return books.length;
     },
+
+    // --------------------------------
+    //  Image Directory LocalStorage functions
+    // --------------------------------
+
+    async collectImgDirLocalStorageConnect(connect: ImgDirLocalStorageConnect): Promise<number> {
+      const apiManager = useApiManager();
+      const settingStore = useSettingsStore();
+      const books = await apiManager.connectApi.collectImgDirLs(deproxyImgDirLocalStorageConnect(connect), settingStore.deproxy()) as ImgDirBook[];
+      const booksStore = useBooksStore();
+      booksStore.add(books);
+      return books.length;
+    },
+
   }
 });
 
@@ -153,7 +170,7 @@ const newKindleConnect = (): KindleConnect => {
     id: uuid(),
     name: '',
     lastCollect: null,
-    type: 'kindle' as ConnectType,
+    type: 'kindle',
     bookCount: -1,
     state: {
       test: 'none',
@@ -192,7 +209,7 @@ const newPDFLocalStorageConnect = (): PDFLocalStorageConnect => {
     id: uuid(),
     name: '',
     lastCollect: null,
-    type: 'pdfls' as ConnectType,
+    type: 'pdfls',
     bookCount: -1,
     state: {
       test: 'none',
@@ -205,6 +222,43 @@ const newPDFLocalStorageConnect = (): PDFLocalStorageConnect => {
 }
 
 const deproxyPDFLocalStorageConnect = (connect: PDFLocalStorageConnect): PDFLocalStorageConnect => {
+  return {
+    id: connect.id,
+    name: connect.name,
+    lastCollect: connect.lastCollect,
+    type: connect.type,
+    bookCount: connect.bookCount,
+    state: {
+      test: connect.state.test,
+      collect: connect.state.collect,
+    },
+    extends: {
+      path: connect.extends.path,
+    }
+  }
+}
+
+// --------------------------------
+//  Image Directory LocalStorage functions
+// --------------------------------
+const newImgDirLocalStorageConnect = (): ImgDirLocalStorageConnect => {
+  return {
+    id: uuid(),
+    name: '',
+    lastCollect: null,
+    type: 'imgdirls',
+    bookCount: -1,
+    state: {
+      test: 'none',
+      collect: 'none',
+    },
+    extends: {
+      path: '',
+    }
+  }
+}
+
+const deproxyImgDirLocalStorageConnect = (connect: ImgDirLocalStorageConnect): ImgDirLocalStorageConnect => {
   return {
     id: connect.id,
     name: connect.name,

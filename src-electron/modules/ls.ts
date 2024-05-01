@@ -1,5 +1,5 @@
 /**
- * Local Strage Library
+ * Local Stroage Library
  */
 
 import { app, IpcMainInvokeEvent, dialog } from 'electron';
@@ -40,7 +40,7 @@ export default {
    * @param option 
    * @returns 
    */
-  readdirSync: async (event: IpcMainInvokeEvent, path: string, option: object) => {
+  readdirSync: async (path: string, option: object) => {
     //Todo: ues option param
     return readdir(path, option);
   },
@@ -61,16 +61,17 @@ function readdir(dirPath: string, option: ReaddirSyncOption): string[] {
   //Todo: ues option param
   const list = [] as string[];
   for (const item of fs.readdirSync(dirPath, { withFileTypes: true })) {
-    if (item.isDirectory()) {
-      list.push(...readdir(path.join(dirPath, item.name), option));
-    }
-    if (item.isFile()) {
-      if (option.filter) {
-        if (option.filter.test(item.name)) {
-          list.push(path.join(dirPath, item.name));
+    if (option.type === 'dir' || option.type === 'all') {
+      if (item.isDirectory()) {
+        list.push(path.join(dirPath, item.name));      
+        if (option.recursive) {
+          list.push(...readdir(path.join(dirPath, item.name), option));
         }
-        continue;
-      } else {
+      }
+    }
+    if (option.type === 'file' || option.type === 'all') {
+      if (item.isFile()) {
+        if ((option.filter !== undefined) && !option.filter.test(item.name)) { continue; }
         list.push(path.join(dirPath, item.name));
       }
     }

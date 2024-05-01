@@ -17,6 +17,7 @@
     "axios": "^1.2.1",
     "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
+    "jimp": "^0.22.12",
     "pdf-lib": "^1.17.1",
     "pinia": "^2.0.11",
     "puppeteer-core": "^19.9.0",

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiManager } from 'src/stores/ApiManager';
-import { BookStore, Book, KindleBook, PDFBook, BookType, BookSortType, BookTypeDef } from 'src/stores/BookTypes';
+import { BookStore, Book, KindleBook, PDFBook, ImgDirBook, BookType, BookSortType, BookTypeDef } from 'src/stores/BookTypes';
 import { useSettingsStore } from 'src/stores/Settings';
 import { ShowAppType } from 'src/stores/SettingTypes';
 import { Queue } from 'src/components/Queue';
@@ -41,6 +41,7 @@ export const useBooksStore = defineStore('books', {
       switch (type) {
         case 'kindle': return newKindleBook();
         case 'pdf': return newPDFBook();
+        case 'imgdir': return newImgDirBook();
       }
     },
 
@@ -88,6 +89,10 @@ export const useBooksStore = defineStore('books', {
         case 'pdf':
           url = (book as PDFBook).extends.path;
           way = setting.showapp.pdf;
+          break;
+        case 'imgdir':
+          url = (book as ImgDirBook).extends.path;
+          way = setting.showapp.imgdir;
           break;
       }
       switch (way) {
@@ -166,6 +171,7 @@ const deproxyBook = (book: BookTypeDef): BookTypeDef => {
   switch (book.type) {
     case 'kindle': return deproxyKindleBook(book as KindleBook);
     case 'pdf': return deproxyPDFBook(book as PDFBook);
+    case 'imgdir': return deproxyImgDirBook(book as ImgDirBook);
   }
 }
 
@@ -257,6 +263,50 @@ const deproxyPDFBook = (book: PDFBook): PDFBook => {
       title: book.extends.title,
       author: book.extends.author,
       artworkPath: book.extends.artworkPath,
+    }
+  }
+}
+
+// --------------------------------
+//  image directory functions
+// --------------------------------
+
+const newImgDirBook = (): ImgDirBook => {
+  return {
+    id: '',
+    type: 'imgdir',
+    connectorId: '',
+    title: '',
+    author: '',
+    artwork: '',
+    labels: [] as string[],
+    extends: {
+      hash: '',
+      path: '',
+      title: '',
+      author: '',
+      artworkPath: '',
+      readingPath: '',
+    }
+  }
+}
+
+const deproxyImgDirBook = (book: ImgDirBook): ImgDirBook => {
+  return {
+    id: book.id,
+    type: book.type,
+    connectorId: book.connectorId,
+    title: book.title,
+    author: book.author,
+    artwork: book.artwork,
+    labels: book.labels.concat([]),
+    extends: {
+      hash: book.extends.hash,
+      path: book.extends.path,
+      title: book.extends.title,
+      author: book.extends.author,
+      artworkPath: book.extends.artworkPath,
+      readingPath: book.extends.readingPath,
     }
   }
 }

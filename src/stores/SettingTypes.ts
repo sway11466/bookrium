@@ -24,6 +24,7 @@ export type Storage = {
 export type ShowApp = {
   kindle: ShowAppType,
   pdf: ShowAppType,
+  imgdir: ShowAppType,
 };
 
 export type PlatformType = 'win32';
@@ -37,5 +38,6 @@ export type SettingUpdatable = {
   showapp: {
     kindle: ShowAppType,
     pdf: ShowAppType,
+    imgdir: ShowAppType,
   },
 }

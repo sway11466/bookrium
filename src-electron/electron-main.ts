@@ -78,13 +78,17 @@ for (const [k,v] of Object.entries(ls)) { ipcMain.handle(k, v) }
 import config from 'src-electron/modules/config/config';
 for (const [k,v] of Object.entries(config)) { ipcMain.handle(k, v) }
 
-// import and handle Connects
+// import and handle Connects(kindle)
 import kindle from 'src-electron/modules/connects/kindle';
 for (const [k,v] of Object.entries(kindle)) { ipcMain.handle(k, v) }
 
-// import and handle Connects
+// import and handle Connects(pdfls)
 import pdfls from 'src-electron/modules/connects/pdfls';
 for (const [k,v] of Object.entries(pdfls)) { ipcMain.handle(k, v) }
+
+// import and handle Connects(imgdirls)
+import imgdirfs from 'src-electron/modules/connects/imgdirls';
+for (const [k,v] of Object.entries(imgdirfs)) { ipcMain.handle(k, v) }
 
 // import and handle Connects
 import settings from 'src-electron/modules/settings/setting';

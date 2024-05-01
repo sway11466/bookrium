@@ -3,6 +3,7 @@
     <NewConnectSelector v-if="showSelector" />
     <KindleEditor v-if="showKindle" :mode="mode" />
     <PDFLocalStorageEditor v-if="showPdfls" :mode="mode" />
+    <ImgDirLocalStorageEditor v-if="showImgDirls" :mode="mode" />
   </q-page>
 </template>
 
@@ -12,6 +13,7 @@ import { useRoute } from 'vue-router';
 import NewConnectSelector from 'src/components/connects/NewConnectSelector.vue';
 import KindleEditor from 'src/components/connects/KindleEditor.vue';
 import PDFLocalStorageEditor from 'src/components/connects/PDFLocalStorageEditor.vue';
+import ImgDirLocalStorageEditor from 'src/components/connects/ImgDirLocalStorageEditor.vue';
 import { useConnectsStore } from 'src/stores/Connects';
 const route = useRoute();
 const connects = useConnectsStore();
@@ -33,5 +35,12 @@ const showPdfls = computed<boolean>(() => {
   const connectid = route.params.connectid as string;
   const connect = connects.get(connectid);
   return connect.type === 'pdfls';
+})
+
+const showImgDirls = computed<boolean>(() => {
+  if (route.path.includes('/new')) { return route.path.endsWith('/imgdirls'); }
+  const connectid = route.params.connectid as string;
+  const connect = connects.get(connectid);
+  return connect.type === 'imgdirls';
 })
 </script>

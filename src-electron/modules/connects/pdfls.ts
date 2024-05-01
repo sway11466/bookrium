@@ -26,12 +26,12 @@ import { PDFBook } from 'src/stores/BookTypes';
 export default {
 
   testPdfLs: async (event:IpcMainInvokeEvent, path:string) :Promise<boolean> => {
-    return (await ls.readdirSync(event, path, { filter: /.pdf$/ })).length > 0;
+    return (await ls.readdirSync(path, { filter: /.pdf$/ })).length > 0;
   },
 
   collectPdfLs: async (event:IpcMainInvokeEvent, connect: PDFLocalStorageConnect, setting: SettingStore): Promise<PDFBook[]> => {
     log.info('call collectPdfLs.');
-    const files = await ls.readdirSync(event, connect.path, { filter: /.pdf$/ });
+    const files = await ls.readdirSync(connect.extends.path, { filter: /.pdf$/ }); // Todo: retest
     const books = await collectMeta(files, connect, setting);
     // createArtworks(books);
     return books;
