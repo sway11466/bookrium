@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <BookCollections :books="bookCollection" />
+    <BookCollections :shelfid="id" />
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="menu" direction="up" vertical-actions-align="right" color="primary">
         <q-fab-action @click="addBook" icon="mdi-book-plus-multiple-outline" label="add books" color="primary"/>
@@ -13,26 +13,26 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import BookCollections from 'src/components/books/BookCollections.vue';
-import { useBooksStore } from 'src/stores/Books';
-import { useShelvesStore } from 'src/stores/Shelves';
+import BookCollections from 'src/components/shelves/BookCollections.vue';
+
 const router = useRouter();
-const shelves = useShelvesStore();
-const books = useBooksStore();
 const id = useRoute().params.shelfid as string;
-const shelf = shelves.get(id);
-const bookCollection = shelf.books.map((id) => books.get(id));
 
 function addBook() {
-  router.push({ path:`/shelves/${id}/addBook` });
+  const path = `/shelves/${id}/addBook`;
+  console.info(`[ShelfViewPage] add book button clicked. transition to ${path}`);
+  router.push({ path });
 }
 
 function sortBook() {
-  router.push({ path:`/shelves/${id}/sortBook` });
+  const path = `/shelves/${id}/sortBook`;
+  console.info(`[ShelfViewPage] sort book button clicked. transition to ${path}`);
+  router.push({ path });
 }
 
 function delBook() {
-  console.log('[ShelfViewPage] delete book button clicked');
-  router.push({ path:`/shelves/${id}/delBook` });
+  const path = `/shelves/${id}/delBook`;
+  console.info(`[ShelfViewPage] delete book button clicked. transition to ${path}`);
+  router.push({ path });
 }
 </script>
