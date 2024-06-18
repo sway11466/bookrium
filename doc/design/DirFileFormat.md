@@ -19,6 +19,10 @@
  |   | 
  |   +-- connecotrs.json
  |
+ +-- groups/
+ |   |
+ |   +-- [group.id].group.json
+ |
  +-- labels/
  |   |
  |   +-- labels.json
