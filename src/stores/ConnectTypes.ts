@@ -18,7 +18,7 @@ export type Connect = {
     test: ConnectStateTest
     collect: ConnectStateCollect
   }
-  extends: KindleExtends | PDFLocalStorageExtends
+  extends: KindleExtends | PDFLocalStorageExtends | ImgDirLocalStorageExtends
 };
 export type ConnectType = 'kindle' | 'pdfls' | 'imgdirls';
 export type ConnectStateTest = 'none' | 'testing' | 'ok' | 'error';

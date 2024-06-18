@@ -57,8 +57,9 @@ export default {
 
 }
 
+// todo: cause error on electron-main.ts
 function readdir(dirPath: string, option: ReaddirSyncOption): string[] {
-  //Todo: ues option param
+  //Todo: ues option paramk
   const list = [] as string[];
   for (const item of fs.readdirSync(dirPath, { withFileTypes: true })) {
     if (option.type === 'dir' || option.type === 'all') {

@@ -91,7 +91,7 @@ export type ImgDirBook = Book & {
  * 
  */
 export type BookType = 'kindle' | 'pdf' | 'imgdir';
-export type BookTypeDef = KindleBook | PDFBook | ImgDirBook;
+export type BookTypeDef = KindleBook | PDFBook | ImgDirBook; // Todo: delete
 
 /**
  * 
